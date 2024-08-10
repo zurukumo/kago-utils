@@ -5,8 +5,8 @@ import unittest
 import numpy as np
 from shanten_tools import shanten as external_shanten
 
-from src.hai import Hai34List, Hai136List
-from src.shanten import Shanten
+from kago_utils.hai import Hai34List, Hai136List
+from kago_utils.shanten import Shanten
 
 
 def generate_random_jun_tehai(jun_tehai_length: int):
@@ -85,10 +85,10 @@ class TestShantenRandomTehai(unittest.TestCase):
 # ref: https://mahjong.ara.black/etc/shanten/shanten9.htm
 class TestShantenAraTehai(unittest.TestCase):
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_normal_10000_txt = os.path.join(current_dir, '../data/p_normal_10000.txt')
-    p_hon_10000_txt = os.path.join(current_dir, '../data/p_hon_10000.txt')
-    p_tin_10000_txt = os.path.join(current_dir, '../data/p_tin_10000.txt')
-    p_koku_10000_txt = os.path.join(current_dir, '../data/p_koku_10000.txt')
+    p_normal_10000_txt = os.path.join(current_dir, 'data/p_normal_10000.txt')
+    p_hon_10000_txt = os.path.join(current_dir, 'data/p_hon_10000.txt')
+    p_tin_10000_txt = os.path.join(current_dir, 'data/p_tin_10000.txt')
+    p_koku_10000_txt = os.path.join(current_dir, 'data/p_koku_10000.txt')
 
     def test_shanten_normal_10000(self):
         with open(self.p_normal_10000_txt, 'rb') as f:

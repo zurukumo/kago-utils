@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kago-utils"
+dynamic = ["version"]
+authors = [
+  { name="zurukumo", email="zurukumo@gmail.com" },
+]
+description = "Mahjong Library for Python"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/zurukumo/kago-utils"
+Issues = "https://github.com/zurukumo/kago-utils/issues"
+
+[tool.hatch.version]
+source = "vcs"
