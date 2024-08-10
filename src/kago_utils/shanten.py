@@ -2,7 +2,7 @@
 import os
 import pickle
 
-from src.hai import Hai34, Hai34List, Hai34String
+from kago_utils.hai import Hai34, Hai34List, Hai34String
 
 
 class Shanten:
@@ -13,8 +13,8 @@ class Shanten:
     def load_patterns(cls):
         if cls.suuhai_patterns is None or cls.zihai_patterns is None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            suuhai_patterns_path = os.path.join(current_dir, '../data/suuhai_patterns.pickle')
-            zihai_patterns_path = os.path.join(current_dir, '../data/zihai_patterns.pickle')
+            suuhai_patterns_path = os.path.join(current_dir, 'data/suuhai_patterns.pickle')
+            zihai_patterns_path = os.path.join(current_dir, 'data/zihai_patterns.pickle')
 
             with open(suuhai_patterns_path, 'rb') as f:
                 cls.suuhai_patterns = pickle.load(f)

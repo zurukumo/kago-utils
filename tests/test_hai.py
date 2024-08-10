@@ -1,6 +1,6 @@
 import unittest
 
-from src.hai import Hai34Counter, Hai34List, Hai34String, Hai136List
+from kago_utils.hai import Hai34Counter, Hai34List, Hai34String, Hai136List
 
 
 class TestInit(unittest.TestCase):
