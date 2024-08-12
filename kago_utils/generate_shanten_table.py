@@ -99,11 +99,3 @@ if __name__ == '__main__':
     start_time = time.time()
     generate_patterns_pickle()
     print('Time:', time.time() - start_time)
-
-    # current_dir = os.path.dirname(os.path.abspath(__file__))
-    # suuhai_shanten_path = os.path.join(current_dir, 'data/suuhai_shanten.pickle')
-    # with open(suuhai_shanten_path, 'rb') as f:
-    #     a = pickle.load(f)
-
-    # for k, v in a.items():
-    #     print(k, v)
