@@ -1,8 +1,7 @@
-﻿import itertools
-import os
+﻿import os
 import pickle
 
-from kago_utils.hai import Hai34, Hai34List, Hai34String
+from kago_utils.hai import Hai34, Hai34String
 
 
 class Shanten:
@@ -13,8 +12,8 @@ class Shanten:
     def load_patterns(cls):
         if cls.suuhai_patterns is None or cls.zihai_patterns is None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            suuhai_patterns_path = os.path.join(current_dir, 'data/suuhai_patterns.pickle')
-            zihai_patterns_path = os.path.join(current_dir, 'data/zihai_patterns.pickle')
+            suuhai_patterns_path = os.path.join(current_dir, 'data/suuhai_shanten.pickle')
+            zihai_patterns_path = os.path.join(current_dir, 'data/zihai_shanten.pickle')
 
             with open(suuhai_patterns_path, 'rb') as f:
                 cls.suuhai_patterns = pickle.load(f)
@@ -30,52 +29,29 @@ class Shanten:
         )
         return min(shanten for shanten in shantens if shanten is not None)
 
-    @staticmethod
-    def calculate_shanten_for_regular(jun_tehai: Hai34, n_huuro: int):
-        jun_tehai = jun_tehai.to_hai34_counter()
-
-        shanten = Shanten.__calculate_tmp_shanten_for_regular(jun_tehai, n_huuro)
-
-        # waiting for 5th hai is not allowed
-        if shanten == 0 and sum(jun_tehai.data) % 3 == 1:
-            for i in range(34):
-                if jun_tehai.data[i] == 4:
-                    continue
-
-                if Shanten.__calculate_tmp_shanten_for_regular(jun_tehai + Hai34List([i]), n_huuro) == -1:
-                    return 0
-
-            return 1
-
-        return shanten
-
     @classmethod
-    def __calculate_tmp_shanten_for_regular(cls, jun_tehai: Hai34, n_huuro: int):
+    def calculate_shanten_for_regular(cls, jun_tehai: Hai34, n_huuro: int):
         cls.load_patterns()
 
         jun_tehai = jun_tehai.to_hai34_counter()
 
-        m_patterns = cls.suuhai_patterns.get(tuple(jun_tehai.data[0:9]))
-        p_patterns = cls.suuhai_patterns.get(tuple(jun_tehai.data[9:18]))
-        s_patterns = cls.suuhai_patterns.get(tuple(jun_tehai.data[18:27]))
-        z_patterns = cls.zihai_patterns.get(tuple(jun_tehai.data[27:34]))
+        manzu = tuple(jun_tehai.data[0:9])
+        pinzu = tuple(jun_tehai.data[9:18])
+        souzu = tuple(jun_tehai.data[18:27])
+        zihai = tuple(jun_tehai.data[27:34])
 
-        min_shanten = 8
-        for m, p, s, z in itertools.product(m_patterns, p_patterns, s_patterns, z_patterns):
-            n_mentsu = m[0] + p[0] + s[0] + z[0] + n_huuro
-            n_pre_mentsu = m[1] + p[1] + s[1] + z[1]
-            has_toitsu = m[2] or p[2] or s[2] or z[2]
-
-            # if having toitsu, use it as janto and adjust n_pre_mentsu
-            if has_toitsu:
-                n_pre_mentsu -= 1
-
-            # adjust n_pre_mentsu when mentsu over
-            if n_mentsu + n_pre_mentsu > 4:
-                n_pre_mentsu = 4 - n_mentsu
-
-            shanten = 8 - n_mentsu * 2 - n_pre_mentsu - (1 if has_toitsu else 0)
-            min_shanten = min(min_shanten, shanten)
+        min_shanten = float('inf')
+        n = 12 - n_huuro * 3
+        for n_manzu in range(0, n + 1, 3):
+            for n_pinzu in range(0, n + 1 - n_manzu, 3):
+                for n_souzu in range(0, n + 1 - n_manzu - n_pinzu, 3):
+                    n_zihai = n - n_manzu - n_pinzu - n_souzu
+                    for jantou_suit in range(4):
+                        m = cls.suuhai_patterns.get((manzu, n_manzu + (2 if jantou_suit == 0 else 0)))
+                        p = cls.suuhai_patterns.get((pinzu, n_pinzu + (2 if jantou_suit == 1 else 0)))
+                        s = cls.suuhai_patterns.get((souzu, n_souzu + (2 if jantou_suit == 2 else 0)))
+                        z = cls.zihai_patterns.get((zihai, n_zihai + (2 if jantou_suit == 3 else 0)))
+                        min_shanten = min(min_shanten, m + p + s + z - 1)
 
         return min_shanten
 
@@ -115,7 +91,3 @@ class Shanten:
                 has_toitsu = True
 
         return 13 - n_yaochu_hai - (1 if has_toitsu else 0)
-
-    @staticmethod
-    def check_waiting_for_5th_hai(jun_tehai: Hai34, n_huuro: int):
-        jun_tehai = jun_tehai.to_hai34_counter()

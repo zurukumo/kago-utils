@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 from shanten_tools import shanten as external_shanten
 
-from kago_utils.hai import Hai34List, Hai136List
+from kago_utils.hai import Hai34List, Hai34String, Hai136List
 from kago_utils.shanten import Shanten
 
 
@@ -143,6 +143,22 @@ class TestShantenAraTehai(unittest.TestCase):
                     Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
                 ]
                 expected = problem[14:]
+                msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
+                self.assertEqual(result, expected, msg)
+
+
+# Test for previously failed cases
+class TestShantenPreviouslyFailed(unittest.TestCase):
+    # format: (jun_tehai, expected)
+    test_cases = [
+        (Hai34String('23466669999m111z'), 1),
+        (Hai34String('1111345567m111z'), 1)
+    ]
+
+    def test_previously_failed(self):
+        for jun_tehai, expected in self.test_cases:
+            with self.subTest(jun_tehai=jun_tehai):
+                result = Shanten.calculate_shanten(jun_tehai, 0)
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
 
