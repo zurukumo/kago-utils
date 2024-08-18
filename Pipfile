@@ -10,7 +10,7 @@ numpy = "*"
 shanten-tools = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"
 
 [scripts]
 test = "python -m unittest discover -v tests"
