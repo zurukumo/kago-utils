@@ -1,12 +1,13 @@
 ﻿import os
 import pickle
+from typing import Optional
 
-from kago_utils.hai import Hai34, Hai34String
+from kago_utils.hai import Hai, Hai34String
 
 
 class Shanten:
-    suuhai_patterns: dict = None
-    zihai_patterns: dict = None
+    suuhai_patterns: Optional[dict[tuple, int]] = None
+    zihai_patterns: Optional[dict[tuple, int]] = None
 
     @classmethod
     def load_patterns(cls):
@@ -21,7 +22,7 @@ class Shanten:
                 cls.zihai_patterns = pickle.load(f)
 
     @staticmethod
-    def calculate_shanten(jun_tehai: Hai34, n_huuro: int):
+    def calculate_shanten(jun_tehai: Hai, n_huuro: int):
         shantens = (
             Shanten.calculate_shanten_for_regular(jun_tehai, n_huuro),
             Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
@@ -30,8 +31,10 @@ class Shanten:
         return min(shanten for shanten in shantens if shanten is not None)
 
     @classmethod
-    def calculate_shanten_for_regular(cls, jun_tehai: Hai34, n_huuro: int):
+    def calculate_shanten_for_regular(cls, jun_tehai: Hai, n_huuro: int):
         cls.load_patterns()
+        if cls.suuhai_patterns is None or cls.zihai_patterns is None:
+            raise RuntimeError('Patterns are not loaded')
 
         jun_tehai = jun_tehai.to_hai34_counter()
 
@@ -47,16 +50,16 @@ class Shanten:
                 for n_souzu in range(0, n + 1 - n_manzu - n_pinzu, 3):
                     n_zihai = n - n_manzu - n_pinzu - n_souzu
                     for jantou_suit in range(4):
-                        m = cls.suuhai_patterns.get((manzu, n_manzu + (2 if jantou_suit == 0 else 0)))
-                        p = cls.suuhai_patterns.get((pinzu, n_pinzu + (2 if jantou_suit == 1 else 0)))
-                        s = cls.suuhai_patterns.get((souzu, n_souzu + (2 if jantou_suit == 2 else 0)))
-                        z = cls.zihai_patterns.get((zihai, n_zihai + (2 if jantou_suit == 3 else 0)))
+                        m = cls.suuhai_patterns[(manzu, n_manzu + (2 if jantou_suit == 0 else 0))]
+                        p = cls.suuhai_patterns[(pinzu, n_pinzu + (2 if jantou_suit == 1 else 0))]
+                        s = cls.suuhai_patterns[(souzu, n_souzu + (2 if jantou_suit == 2 else 0))]
+                        z = cls.zihai_patterns[(zihai, n_zihai + (2 if jantou_suit == 3 else 0))]
                         min_shanten = min(min_shanten, m + p + s + z - 1)
 
         return min_shanten
 
     @staticmethod
-    def calculate_shanten_for_chiitoitsu(jun_tehai: Hai34):
+    def calculate_shanten_for_chiitoitsu(jun_tehai: Hai):
         jun_tehai = jun_tehai.to_hai34_counter()
 
         if not 13 <= sum(jun_tehai.data) <= 14:
@@ -74,7 +77,7 @@ class Shanten:
         return 6 - n_toitsu + (7 - n_unique_hai if n_unique_hai < 7 else 0)
 
     @staticmethod
-    def calculate_shanten_for_kokushimusou(jun_tehai: Hai34):
+    def calculate_shanten_for_kokushimusou(jun_tehai: Hai):
         jun_tehai = jun_tehai.to_hai34_counter()
 
         if not 13 <= sum(jun_tehai.data) <= 14:
