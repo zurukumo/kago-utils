@@ -29,5 +29,8 @@ jobs:
       - name: Install dependencies
         run: python -m pipenv install --dev
 
-      - name: Run tests
+      - name: Run test
         run: python -m pipenv run test
+
+      - name: Run typecheck
+        run: python -m pipenv run typecheck
