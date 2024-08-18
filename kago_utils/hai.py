@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
-
-T1 = TypeVar('T1', bound='Hai34')
-T2 = TypeVar('T2', bound='Hai136')
+from typing import Self
 
 
 class Hai(ABC):
@@ -11,6 +8,18 @@ class Hai(ABC):
 
     @abstractmethod
     def normalize(self, data):
+        pass
+
+    @abstractmethod
+    def to_hai34_counter(self) -> 'Hai34Counter':
+        pass
+
+    @abstractmethod
+    def to_hai34_list(self) -> 'Hai34List':
+        pass
+
+    @abstractmethod
+    def to_hai34_string(self) -> 'Hai34String':
         pass
 
     @abstractmethod
@@ -28,32 +37,20 @@ class Hai(ABC):
         return self.__str__()
 
 
-class Hai34(Hai, Generic[T1]):
+class Hai34(Hai):
+    @classmethod
     @abstractmethod
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> Self:
         pass
 
-    @abstractmethod
-    def to_hai34_list(self) -> 'Hai34List':
-        pass
-
-    @abstractmethod
-    def to_hai34_string(self) -> 'Hai34String':
-        pass
-
-    @staticmethod
-    @abstractmethod
-    def from_hai34_counter() -> T1:
-        pass
-
-    def __add__(self, other) -> T1:
+    def __add__(self, other) -> Self:
         if isinstance(other, (Hai34, Hai136)):
             new_data = [a + b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
             return self.__class__.from_hai34_counter(Hai34Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other) -> T1:
+    def __sub__(self, other) -> Self:
         if isinstance(other, (Hai34, Hai136)):
             new_data = [a - b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
             return self.__class__.from_hai34_counter(Hai34Counter(new_data))
@@ -61,36 +58,24 @@ class Hai34(Hai, Generic[T1]):
         raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
-class Hai136(Hai, Generic[T2]):
-    @abstractmethod
-    def to_hai34_counter(self) -> 'Hai34Counter':
-        pass
-
-    @abstractmethod
-    def to_hai34_list(self) -> 'Hai34List':
-        pass
-
-    @abstractmethod
-    def to_hai34_string(self) -> 'Hai34String':
-        pass
-
+class Hai136(Hai):
     @abstractmethod
     def to_hai136_list(self) -> 'Hai136List':
         pass
 
-    @staticmethod
+    @classmethod
     @abstractmethod
-    def from_hai136_list() -> T2:
+    def from_hai136_list(cls, hai136_list: 'Hai136List') -> Self:
         pass
 
-    def __add__(self, other) -> T2:
+    def __add__(self, other) -> Self:
         if isinstance(other, Hai136):
             new_data = self.to_hai136_list().data + other.to_hai136_list().data
             return self.__class__.from_hai136_list(Hai136List(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other) -> T2:
+    def __sub__(self, other) -> Self:
         if isinstance(other, Hai136):
             new_data = self.to_hai136_list().data.copy()
             for hai in other.to_hai136_list().data:
@@ -100,7 +85,7 @@ class Hai136(Hai, Generic[T2]):
         raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
-class Hai34Counter(Hai34['Hai34Counter']):
+class Hai34Counter(Hai34):
     def normalize(self, data):
         if len(data) != 34:
             raise ValueError(f"invalid data: len(data) = {len(data)} (expected 34)")
@@ -146,7 +131,7 @@ class Hai34Counter(Hai34['Hai34Counter']):
         return hai34_counter
 
 
-class Hai34List(Hai34['Hai34List']):
+class Hai34List(Hai34):
     def normalize(self, data):
         for hai in data:
             if not isinstance(hai, int):
@@ -176,7 +161,7 @@ class Hai34List(Hai34['Hai34List']):
         return hai34_counter.to_hai34_list()
 
 
-class Hai34String(Hai34['Hai34String']):
+class Hai34String(Hai34):
     def normalize(self, data):
         items = {'m': [0] * 9, 'p': [0] * 9, 's': [0] * 9, 'z': [0] * 9}
         suit = ''
@@ -233,7 +218,7 @@ class Hai34String(Hai34['Hai34String']):
         return hai34_counter.to_hai34_string()
 
 
-class Hai136List(Hai136['Hai136List']):
+class Hai136List(Hai136):
     def normalize(self, data):
         for hai in data:
             if not isinstance(hai, int):
