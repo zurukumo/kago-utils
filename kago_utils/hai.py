@@ -11,6 +11,18 @@ class Hai(ABC):
         pass
 
     @abstractmethod
+    def to_hai34_counter(self) -> 'Hai34Counter':
+        pass
+
+    @abstractmethod
+    def to_hai34_list(self) -> 'Hai34List':
+        pass
+
+    @abstractmethod
+    def to_hai34_string(self) -> 'Hai34String':
+        pass
+
+    @abstractmethod
     def __add__(self, other):
         pass
 
@@ -26,18 +38,6 @@ class Hai(ABC):
 
 
 class Hai34(Hai):
-    @abstractmethod
-    def to_hai34_counter(self) -> 'Hai34Counter':
-        pass
-
-    @abstractmethod
-    def to_hai34_list(self) -> 'Hai34List':
-        pass
-
-    @abstractmethod
-    def to_hai34_string(self) -> 'Hai34String':
-        pass
-
     @classmethod
     @abstractmethod
     def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> Self:
@@ -59,18 +59,6 @@ class Hai34(Hai):
 
 
 class Hai136(Hai):
-    @abstractmethod
-    def to_hai34_counter(self) -> 'Hai34Counter':
-        pass
-
-    @abstractmethod
-    def to_hai34_list(self) -> 'Hai34List':
-        pass
-
-    @abstractmethod
-    def to_hai34_string(self) -> 'Hai34String':
-        pass
-
     @abstractmethod
     def to_hai136_list(self) -> 'Hai136List':
         pass
