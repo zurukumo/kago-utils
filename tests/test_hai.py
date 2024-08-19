@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 from kago_utils.hai import (Hai34Counter, Hai34List, Hai34String,
                             Hai136Counter, Hai136List)
@@ -140,6 +141,12 @@ class TestConvert(unittest.TestCase):
             0, 0, 0, 0, 0, 0, 1, 1, 1,
             2, 0, 0, 0, 0, 0, 0
         ]
+        cls.hai136_counter_data = [
+            1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0,
+            1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ]
         cls.hai34_list_data = [0, 1, 2, 12, 13, 14, 24, 25, 26, 27, 27]
         cls.hai136_list_data = [0, 4, 8, 48, 52, 56, 96, 100, 104, 108, 109]
         cls.hai34_string_data = '123m456p789s11z'
@@ -189,6 +196,31 @@ class TestConvert(unittest.TestCase):
         expected = self.hai34_string_data
         self.assertEqual(result, expected)
 
+    def test_hai136_counter_to_hai34_counter(self):
+        result = Hai136Counter(self.hai136_counter_data).to_hai34_counter().data
+        expected = self.hai34_counter_data
+        self.assertEqual(result, expected)
+
+    def test_hai136_counter_to_hai34_list(self):
+        result = Hai136Counter(self.hai136_counter_data).to_hai34_list().data
+        expected = self.hai34_list_data
+        self.assertEqual(result, expected)
+
+    def test_hai136_counter_to_hai34_string(self):
+        result = Hai136Counter(self.hai136_counter_data).to_hai34_string().data
+        expected = self.hai34_string_data
+        self.assertEqual(result, expected)
+
+    def test_hai136_counter_to_hai136_counter(self):
+        result = Hai136Counter(self.hai136_counter_data).to_hai136_counter().data
+        expected = self.hai136_counter_data
+        self.assertEqual(result, expected)
+
+    def test_hai136_counter_to_hai136_list(self):
+        result = Hai136Counter(self.hai136_counter_data).to_hai136_list().data
+        expected = self.hai136_list_data
+        self.assertEqual(result, expected)
+
     def test_hai136_list_to_hai34_counter(self):
         result = Hai136List(self.hai136_list_data).to_hai34_counter().data
         expected = self.hai34_counter_data
@@ -199,34 +231,48 @@ class TestConvert(unittest.TestCase):
         expected = self.hai34_list_data
         self.assertEqual(result, expected)
 
-    def test_hai136_list_to_hai136_list(self):
-        result = Hai136List(self.hai136_list_data).to_hai136_list().data
-        expected = self.hai136_list_data
-        self.assertEqual(result, expected)
-
     def test_hai136_list_to_hai34_string(self):
         result = Hai136List(self.hai136_list_data).to_hai34_string().data
         expected = self.hai34_string_data
+        self.assertEqual(result, expected)
+
+    def test_hai136_list_to_hai136_counter(self):
+        result = Hai136List(self.hai136_list_data).to_hai136_counter().data
+        expected = self.hai136_counter_data
+        self.assertEqual(result, expected)
+
+    def test_hai136_list_to_hai136_list(self):
+        result = Hai136List(self.hai136_list_data).to_hai136_list().data
+        expected = self.hai136_list_data
         self.assertEqual(result, expected)
 
 
 class TestAdd(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        warnings.simplefilter("ignore", category=UserWarning)
+
         cls.hai34_string1 = Hai34String('123m456p789s11z')
         cls.hai34_counter1 = cls.hai34_string1.to_hai34_counter()
         cls.hai34_list1 = cls.hai34_string1.to_hai34_list()
         cls.hai136_list1 = Hai136List([0, 4, 8, 48, 52, 56, 96, 100, 104, 108, 109])
+        cls.hai136_counter1 = cls.hai136_list1.to_hai136_counter()
 
         cls.hai34_string2 = Hai34String('23m456p78s1z')
         cls.hai34_counter2 = cls.hai34_string2.to_hai34_counter()
         cls.hai34_list2 = cls.hai34_string2.to_hai34_list()
         cls.hai136_list2 = Hai136List([5, 9, 49, 53, 57, 97, 101, 110])
+        cls.hai136_counter2 = cls.hai136_list2.to_hai136_counter()
 
         cls.hai34_string_sum = Hai34String('12233m445566p77889s111z')
         cls.hai34_counter_sum = cls.hai34_string_sum.to_hai34_counter()
         cls.hai34_list_sum = cls.hai34_string_sum.to_hai34_list()
         cls.hai136_list_sum = Hai136List([0, 4, 5, 8, 9, 48, 49, 52, 53, 56, 57, 96, 97, 100, 101, 104, 108, 109, 110])
+        cls.hai136_counter_sum = cls.hai136_list_sum.to_hai136_counter()
+
+    @classmethod
+    def tearDownClass(cls):
+        warnings.simplefilter("default", category=UserWarning)
 
     def test_add_hai34_counter_and_hai34_counter(self):
         result = self.hai34_counter1 + self.hai34_counter2
@@ -243,10 +289,21 @@ class TestAdd(unittest.TestCase):
         expected = self.hai34_counter_sum
         self.assertEqual(result.data, expected.data)
 
+    def test_add_hai34_counter_and_hai136_counter(self):
+        result = self.hai34_counter1 + self.hai136_counter2
+        expected = self.hai34_counter_sum
+        self.assertEqual(result.data, expected.data)
+
     def test_add_hai34_counter_and_hai136_list(self):
         result = self.hai34_counter1 + self.hai136_list2
         expected = self.hai34_counter_sum
         self.assertEqual(result.data, expected.data)
+
+    def test_add_hai34_counter_and_hai34_counter_when_sum_is_too_large(self):
+        hai34_counter1 = Hai34Counter([1] + [0] * 33)
+        hai34_counter2 = Hai34Counter([4] + [0] * 33)
+        with self.assertRaises(ValueError):
+            hai34_counter1 + hai34_counter2
 
     def test_add_hai34_counter_and_int(self):
         with self.assertRaises(TypeError):
@@ -267,10 +324,21 @@ class TestAdd(unittest.TestCase):
         expected = self.hai34_list_sum
         self.assertEqual(result.data, expected.data)
 
+    def test_add_hai34_list_and_hai136_counter(self):
+        result = self.hai34_list1 + self.hai136_counter2
+        expected = self.hai34_list_sum
+        self.assertEqual(result.data, expected.data)
+
     def test_add_hai34_list_and_hai136_list(self):
         result = self.hai34_list1 + self.hai136_list2
         expected = self.hai34_list_sum
         self.assertEqual(result.data, expected.data)
+
+    def test_add_hai34_list_and_hai34_counter_when_sum_is_too_large(self):
+        hai34_list = Hai34List([0])
+        hai34_counter = Hai34Counter([4] + [0] * 33)
+        with self.assertRaises(ValueError):
+            hai34_list + hai34_counter
 
     def test_add_hai34_list_and_int(self):
         with self.assertRaises(TypeError):
@@ -291,31 +359,91 @@ class TestAdd(unittest.TestCase):
         expected = self.hai34_string_sum
         self.assertEqual(result.data, expected.data)
 
+    def test_add_hai34_string_and_hai136_counter(self):
+        result = self.hai34_string1 + self.hai136_counter2
+        expected = self.hai34_string_sum
+        self.assertEqual(result.data, expected.data)
+
     def test_add_hai34_string_and_hai136_list(self):
         result = self.hai34_string1 + self.hai136_list2
         expected = self.hai34_string_sum
         self.assertEqual(result.data, expected.data)
 
+    def test_add_hai34_string_and_hai34_counter_when_sum_is_too_large(self):
+        hai34_string = Hai34String('1m')
+        hai34_counter = Hai34Counter([4] + [0] * 33)
+        with self.assertRaises(ValueError):
+            hai34_string + hai34_counter
+
     def test_add_hai34_string_and_int(self):
         with self.assertRaises(TypeError):
             self.hai34_string1 + 1
 
-    def test_add_hai136_list_and_hai34_counter(self):
+    def test_add_hai136_counter_and_hai34_counter(self):
+        result = self.hai136_counter1 + self.hai34_counter2
+        expected = self.hai136_counter_sum
+        self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_counter_and_hai34_list(self):
+        result = self.hai136_counter1 + self.hai34_list2
+        expected = self.hai136_counter_sum
+        self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_counter_and_hai34_string(self):
+        result = self.hai136_counter1 + self.hai34_string2
+        expected = self.hai136_counter_sum
+        self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_counter_and_hai136_counter(self):
+        result = self.hai136_counter1 + self.hai136_counter2
+        expected = self.hai136_counter_sum
+        self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_counter_and_hai136_list(self):
+        result = self.hai136_counter1 + self.hai136_list2
+        expected = self.hai136_counter_sum
+        self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_counter_and_hai34_counter_when_sum_is_too_large(self):
+        hai136_counter = Hai136Counter([1] + [0] * 135)
+        hai34_counter = Hai34Counter([4] + [0] * 33)
+        with self.assertRaises(ValueError):
+            hai136_counter + hai34_counter
+
+    def test_add_hai136_counter_and_int(self):
         with self.assertRaises(TypeError):
-            self.hai136_list1 + self.hai34_counter2
+            self.hai136_counter1 + 1
+
+    def test_add_hai136_list_and_hai34_counter(self):
+        result = self.hai136_list1 + self.hai34_counter2
+        expected = self.hai136_list_sum
+        self.assertEqual(result.data, expected.data)
 
     def test_add_hai136_list_and_hai34_list(self):
-        with self.assertRaises(TypeError):
-            self.hai136_list1 + self.hai34_list2
+        result = self.hai136_list1 + self.hai34_list2
+        expected = self.hai136_list_sum
+        self.assertEqual(result.data, expected.data)
 
     def test_add_hai136_list_and_hai34_string(self):
-        with self.assertRaises(TypeError):
-            self.hai136_list1 + self.hai34_string2
+        result = self.hai136_list1 + self.hai34_string2
+        expected = self.hai136_list_sum
+        self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_list_and_hai136_counter(self):
+        result = self.hai136_list1 + self.hai136_counter2
+        expected = self.hai136_list_sum
+        self.assertEqual(result.data, expected.data)
 
     def test_add_hai136_list_and_hai136_list(self):
         result = self.hai136_list1 + self.hai136_list2
         expected = self.hai136_list_sum
         self.assertEqual(result.data, expected.data)
+
+    def test_add_hai136_list_and_hai34_counter_when_sum_is_too_large(self):
+        hai136_list = Hai136List([0])
+        hai34_counter = Hai34Counter([4] + [0] * 33)
+        with self.assertRaises(ValueError):
+            hai136_list + hai34_counter
 
     def test_add_hai136_list_and_int(self):
         hai136_list = self.hai136_list1
@@ -326,25 +454,29 @@ class TestAdd(unittest.TestCase):
 class TestSub(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        warnings.simplefilter("ignore", category=UserWarning)
+
         cls.hai34_string1 = Hai34String('123m456p789s11z')
         cls.hai34_counter1 = cls.hai34_string1.to_hai34_counter()
         cls.hai34_list1 = cls.hai34_string1.to_hai34_list()
         cls.hai136_list1 = Hai136List([0, 4, 8, 48, 52, 56, 96, 100, 104, 108, 109])
+        cls.hai136_counter1 = cls.hai136_list1.to_hai136_counter()
 
         cls.hai34_string2 = Hai34String('23m456p78s1z')
         cls.hai34_counter2 = cls.hai34_string2.to_hai34_counter()
         cls.hai34_list2 = cls.hai34_string2.to_hai34_list()
         cls.hai136_list2 = Hai136List([4, 8, 48, 52, 56, 96, 100, 108])
-
-        cls.hai34_string_not_exists = Hai34String('7z')
-        cls.hai34_counter_not_exists = cls.hai34_string_not_exists.to_hai34_counter()
-        cls.hai34_list_not_exists = cls.hai34_string_not_exists.to_hai34_list()
-        cls.hai136_list_not_exists = Hai136List([135])
+        cls.hai136_counter2 = cls.hai136_list2.to_hai136_counter()
 
         cls.hai34_string_diff = Hai34String('1m9s1z')
         cls.hai34_counter_diff = cls.hai34_string_diff.to_hai34_counter()
         cls.hai34_list_diff = cls.hai34_string_diff.to_hai34_list()
         cls.hai136_list_diff = Hai136List([0, 104, 109])
+        cls.hai136_counter_diff = cls.hai136_list_diff.to_hai136_counter()
+
+    @classmethod
+    def tearDownClass(cls):
+        warnings.simplefilter("default", category=UserWarning)
 
     def test_sub_hai34_counter_and_hai34_counter(self):
         result = self.hai34_counter1 - self.hai34_counter2
@@ -361,14 +493,21 @@ class TestSub(unittest.TestCase):
         expected = self.hai34_counter_diff
         self.assertEqual(result.data, expected.data)
 
+    def test_sub_hai34_counter_and_hai136_counter(self):
+        result = self.hai34_counter1 - self.hai136_counter2
+        expected = self.hai34_counter_diff
+        self.assertEqual(result.data, expected.data)
+
     def test_sub_hai34_counter_and_hai136_list(self):
         result = self.hai34_counter1 - self.hai136_list2
         expected = self.hai34_counter_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai34_counter_and_hai34_counter_not_exists(self):
+    def test_sub_hai34_counter_and_hai34_counter_when_diff_is_too_small(self):
+        hai34_counter1 = Hai34Counter([0] * 34)
+        hai34_counter2 = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
-            self.hai34_counter1 - self.hai34_counter_not_exists
+            hai34_counter1 - hai34_counter2
 
     def test_sub_hai34_counter_and_int(self):
         with self.assertRaises(TypeError):
@@ -389,14 +528,21 @@ class TestSub(unittest.TestCase):
         expected = self.hai34_list_diff
         self.assertEqual(result.data, expected.data)
 
+    def test_sub_hai34_list_and_hai136_counter(self):
+        result = self.hai34_list1 - self.hai136_counter2
+        expected = self.hai34_list_diff
+        self.assertEqual(result.data, expected.data)
+
     def test_sub_hai34_list_and_hai136_list(self):
         result = self.hai34_list1 - self.hai136_list2
         expected = self.hai34_list_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai34_list_and_hai34_list_not_exists(self):
+    def test_sub_hai34_list_and_hai34_counter_when_diff_is_too_small(self):
+        hai34_list = Hai34List([])
+        hai34_counter = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
-            self.hai34_list1 - self.hai34_list_not_exists
+            hai34_list - hai34_counter
 
     def test_sub_hai34_list_and_int(self):
         with self.assertRaises(TypeError):
@@ -417,39 +563,91 @@ class TestSub(unittest.TestCase):
         expected = self.hai34_string_diff
         self.assertEqual(result.data, expected.data)
 
+    def test_sub_hai34_string_and_hai136_counter(self):
+        result = self.hai34_string1 - self.hai136_counter2
+        expected = self.hai34_string_diff
+        self.assertEqual(result.data, expected.data)
+
     def test_sub_hai34_string_and_hai136_list(self):
         result = self.hai34_string1 - self.hai136_list2
         expected = self.hai34_string_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai34_string_and_hai34_string_not_exists(self):
+    def test_sub_hai34_string_and_hai34_counter_when_diff_is_too_small(self):
+        hai34_string = Hai34String('')
+        hai34_counter = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
-            self.hai34_string1 - self.hai34_string_not_exists
+            hai34_string - hai34_counter
 
     def test_sub_hai34_string_and_int(self):
         with self.assertRaises(TypeError):
             self.hai34_string1 - 1
 
-    def test_sub_hai136_list_and_hai34_counter(self):
+    def test_sub_hai136_counter_and_hai34_counter(self):
+        result = self.hai136_counter1 - self.hai34_counter2
+        expected = self.hai136_counter_diff
+        self.assertEqual(result.data, expected.data)
+
+    def test_sub_hai136_counter_and_hai34_list(self):
+        result = self.hai136_counter1 - self.hai34_list2
+        expected = self.hai136_counter_diff
+        self.assertEqual(result.data, expected.data)
+
+    def test_sub_hai136_counter_and_hai34_string(self):
+        result = self.hai136_counter1 - self.hai34_string2
+        expected = self.hai136_counter_diff
+        self.assertEqual(result.data, expected.data)
+
+    def test_sub_hai136_counter_and_hai136_counter(self):
+        result = self.hai136_counter1 - self.hai136_counter2
+        expected = self.hai136_counter_diff
+        self.assertEqual(result.data, expected.data)
+
+    def test_sub_hai136_counter_and_hai136_list(self):
+        result = self.hai136_counter1 - self.hai136_list2
+        expected = self.hai136_counter_diff
+        self.assertEqual(result.data, expected.data)
+
+    def test_sub_hai136_counter_and_hai34_counter_when_diff_is_too_small(self):
+        hai136_counter1 = Hai136Counter([0] * 136)
+        hai34_counter2 = Hai34Counter([1] + [0] * 33)
+        with self.assertRaises(ValueError):
+            hai136_counter1 - hai34_counter2
+
+    def test_sub_hai136_counter_and_int(self):
         with self.assertRaises(TypeError):
-            self.hai136_list1 - self.hai34_counter2
+            self.hai136_counter1 - 1
+
+    def test_sub_hai136_list_and_hai34_counter(self):
+        result = self.hai136_list1 - self.hai34_counter2
+        expected = self.hai136_list_diff
+        self.assertEqual(result.data, expected.data)
 
     def test_sub_hai136_list_and_hai34_list(self):
-        with self.assertRaises(TypeError):
-            self.hai136_list1 - self.hai34_list2
+        result = self.hai136_list1 - self.hai34_list2
+        expected = self.hai136_list_diff
+        self.assertEqual(result.data, expected.data)
 
     def test_sub_hai136_list_and_hai34_string(self):
-        with self.assertRaises(TypeError):
-            self.hai136_list1 - self.hai34_string2
+        result = self.hai136_list1 - self.hai34_string2
+        expected = self.hai136_list_diff
+        self.assertEqual(result.data, expected.data)
+
+    def test_sub_hai136_list_and_hai136_counter(self):
+        result = self.hai136_list1 - self.hai136_counter2
+        expected = self.hai136_list_diff
+        self.assertEqual(result.data, expected.data)
 
     def test_sub_hai136_list_and_hai136_list(self):
         result = self.hai136_list1 - self.hai136_list2
         expected = self.hai136_list_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai136_list_and_hai136_list_not_exists(self):
+    def test_sub_hai136_list_and_hai34_counter_when_diff_is_too_small(self):
+        hai136_list = Hai136List([])
+        hai34_counter = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
-            self.hai136_list1 - self.hai136_list_not_exists
+            hai136_list - hai34_counter
 
     def test_sub_hai136_list_and_int(self):
         hai136_list = self.hai136_list1
