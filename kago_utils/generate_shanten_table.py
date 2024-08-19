@@ -10,7 +10,7 @@ N_SUUHAI_KIND = 9
 N_ZIHAI_KIND = 7
 
 
-def list_suuhai_agari_patterns():
+def list_suuhai_agari_patterns() -> list[tuple[int, ...]]:
     patterns = []
     for n_shuntsu in range(MAX_N_MENTSU + 1):
         for n_kootsu in range(MAX_N_MENTSU - n_shuntsu + 1):
@@ -32,7 +32,7 @@ def list_suuhai_agari_patterns():
     return patterns
 
 
-def list_zihai_agari_patterns():
+def list_zihai_agari_patterns() -> list[tuple[int, ...]]:
     patterns = []
     for n_kootsu in range(MAX_N_MENTSU + 1):
         for n_jantou in range(MAX_N_JANTOU + 1):
@@ -48,7 +48,7 @@ def list_zihai_agari_patterns():
     return patterns
 
 
-def list_suuhai_patterns():
+def list_suuhai_patterns() -> list[tuple[int, ...]]:
     patterns = []
     for pattern in product(range(5), repeat=N_SUUHAI_KIND):
         if sum(pattern) <= 14:
@@ -56,7 +56,7 @@ def list_suuhai_patterns():
     return patterns
 
 
-def list_zihai_patterns():
+def list_zihai_patterns() -> list[tuple[int, ...]]:
     patterns = []
     for pattern in product(range(5), repeat=N_ZIHAI_KIND):
         if sum(pattern) <= 14:
@@ -64,13 +64,13 @@ def list_zihai_patterns():
     return patterns
 
 
-def distance_between_patterns(before, after):
+def distance_between_patterns(before: tuple[int, ...], after: tuple[int, ...]) -> int:
     return sum([max(a - b, 0) for b, a in zip(before, after)])
 
 
-def generate_patterns_pickle():
-    suuhai_shanten = dict()
-    zihai_shanten = dict()
+def generate_patterns_pickle() -> None:
+    suuhai_shanten: dict[tuple[tuple[int, ...], int], int] = dict()
+    zihai_shanten: dict[tuple[tuple[int, ...], int], int] = dict()
 
     suuhai_patterns = list_suuhai_patterns()
     zihai_patterns = list_zihai_patterns()

@@ -1,16 +1,15 @@
 ﻿import os
 import pickle
-from typing import Optional
 
 from kago_utils.hai import Hai, Hai34String
 
 
 class Shanten:
-    suuhai_patterns: Optional[dict[tuple, int]] = None
-    zihai_patterns: Optional[dict[tuple, int]] = None
+    suuhai_patterns: dict[tuple[tuple[int, ...], int], int] | None = None
+    zihai_patterns: dict[tuple[tuple[int, ...], int], int] | None = None
 
     @classmethod
-    def load_patterns(cls):
+    def load_patterns(cls) -> None:
         if cls.suuhai_patterns is None or cls.zihai_patterns is None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
             suuhai_patterns_path = os.path.join(current_dir, 'data/suuhai_shanten.pickle')
@@ -22,7 +21,7 @@ class Shanten:
                 cls.zihai_patterns = pickle.load(f)
 
     @staticmethod
-    def calculate_shanten(jun_tehai: Hai, n_huuro: int):
+    def calculate_shanten(jun_tehai: Hai, n_huuro: int) -> int:
         shantens = (
             Shanten.calculate_shanten_for_regular(jun_tehai, n_huuro),
             Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
@@ -31,7 +30,7 @@ class Shanten:
         return min(shanten for shanten in shantens if shanten is not None)
 
     @classmethod
-    def calculate_shanten_for_regular(cls, jun_tehai: Hai, n_huuro: int):
+    def calculate_shanten_for_regular(cls, jun_tehai: Hai, n_huuro: int) -> int:
         cls.load_patterns()
         if cls.suuhai_patterns is None or cls.zihai_patterns is None:
             raise RuntimeError('Patterns are not loaded')
@@ -43,7 +42,7 @@ class Shanten:
         souzu = tuple(jun_tehai.data[18:27])
         zihai = tuple(jun_tehai.data[27:34])
 
-        min_shanten = float('inf')
+        min_shanten = 8
         n = 12 - n_huuro * 3
         for n_manzu in range(0, n + 1, 3):
             for n_pinzu in range(0, n + 1 - n_manzu, 3):
@@ -59,7 +58,7 @@ class Shanten:
         return min_shanten
 
     @staticmethod
-    def calculate_shanten_for_chiitoitsu(jun_tehai: Hai):
+    def calculate_shanten_for_chiitoitsu(jun_tehai: Hai) -> int | None:
         jun_tehai = jun_tehai.to_hai34_counter()
 
         if not 13 <= sum(jun_tehai.data) <= 14:
@@ -77,7 +76,7 @@ class Shanten:
         return 6 - n_toitsu + (7 - n_unique_hai if n_unique_hai < 7 else 0)
 
     @staticmethod
-    def calculate_shanten_for_kokushimusou(jun_tehai: Hai):
+    def calculate_shanten_for_kokushimusou(jun_tehai: Hai) -> int | None:
         jun_tehai = jun_tehai.to_hai34_counter()
 
         if not 13 <= sum(jun_tehai.data) <= 14:

@@ -3,13 +3,6 @@ from typing import Self
 
 
 class Hai(ABC):
-    def __init__(self, data):
-        self.data = self.normalize(data)
-
-    @abstractmethod
-    def normalize(self, data):
-        pass
-
     @abstractmethod
     def to_hai34_counter(self) -> 'Hai34Counter':
         pass
@@ -23,18 +16,12 @@ class Hai(ABC):
         pass
 
     @abstractmethod
-    def __add__(self, other):
+    def __str__(self) -> str:
         pass
 
     @abstractmethod
-    def __sub__(self, other):
+    def __repr__(self) -> str:
         pass
-
-    def __str__(self):
-        return f"[{self.__class__.__name__}] {self.data}"
-
-    def __repr__(self):
-        return self.__str__()
 
 
 class Hai34(Hai):
@@ -43,15 +30,15 @@ class Hai34(Hai):
     def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> Self:
         pass
 
-    def __add__(self, other) -> Self:
-        if isinstance(other, (Hai34, Hai136)):
+    def __add__(self, other: Hai) -> Self:
+        if isinstance(other, Hai):
             new_data = [a + b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
             return self.__class__.from_hai34_counter(Hai34Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other) -> Self:
-        if isinstance(other, (Hai34, Hai136)):
+    def __sub__(self, other: Hai) -> Self:
+        if isinstance(other, Hai):
             new_data = [a - b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
             return self.__class__.from_hai34_counter(Hai34Counter(new_data))
 
@@ -68,14 +55,14 @@ class Hai136(Hai):
     def from_hai136_list(cls, hai136_list: 'Hai136List') -> Self:
         pass
 
-    def __add__(self, other) -> Self:
+    def __add__(self, other: 'Hai136') -> Self:
         if isinstance(other, Hai136):
             new_data = self.to_hai136_list().data + other.to_hai136_list().data
             return self.__class__.from_hai136_list(Hai136List(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other) -> Self:
+    def __sub__(self, other: 'Hai136') -> Self:
         if isinstance(other, Hai136):
             new_data = self.to_hai136_list().data.copy()
             for hai in other.to_hai136_list().data:
@@ -86,7 +73,12 @@ class Hai136(Hai):
 
 
 class Hai34Counter(Hai34):
-    def normalize(self, data):
+    data: list[int]
+
+    def __init__(self, data: list[int]):
+        self.data = self.normalize(data)
+
+    def normalize(self, data: list[int]) -> list[int]:
         if len(data) != 34:
             raise ValueError(f"invalid data: len(data) = {len(data)} (expected 34)")
         for k, v in enumerate(data):
@@ -97,18 +89,18 @@ class Hai34Counter(Hai34):
 
         return data
 
-    def to_hai34_counter(self):
+    def to_hai34_counter(self) -> 'Hai34Counter':
         return self
 
-    def to_hai34_list(self):
+    def to_hai34_list(self) -> 'Hai34List':
         hai_list = []
         for hai, count in enumerate(self.data):
             for _ in range(count):
                 hai_list.append(hai)
         return Hai34List(hai_list)
 
-    def to_hai34_string(self):
-        items = {'m': [], 'p': [], 's': [], 'z': []}
+    def to_hai34_string(self) -> 'Hai34String':
+        items: dict[str, list[int]] = {'m': [], 'p': [], 's': [], 'z': []}
         for hai, count in enumerate(self.data):
             for _ in range(count):
                 if hai < 9:
@@ -126,13 +118,24 @@ class Hai34Counter(Hai34):
                 hai_string += f"{''.join(map(str, items[suit]))}{suit}"
         return Hai34String(hai_string)
 
-    @staticmethod
-    def from_hai34_counter(hai34_counter: 'Hai34Counter'):
+    @classmethod
+    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34Counter':
         return hai34_counter
+
+    def __str__(self) -> str:
+        return f"[{self.__class__.__name__}] {self.data}"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Hai34List(Hai34):
-    def normalize(self, data):
+    data: list[int]
+
+    def __init__(self, data: list[int]):
+        self.data = self.normalize(data)
+
+    def normalize(self, data: list[int]) -> list[int]:
         for hai in data:
             if not isinstance(hai, int):
                 raise ValueError(f"invalid data: type({hai}) = {type(hai)} (expected int)")
@@ -144,25 +147,36 @@ class Hai34List(Hai34):
                 raise ValueError(f"invalid data: count({i}) = {data.count(i)} (expected 0 <= count <= 4)")
         return sorted(data)
 
-    def to_hai34_counter(self):
+    def to_hai34_counter(self) -> 'Hai34Counter':
         hai_counter = [0] * 34
         for hai in self.data:
             hai_counter[hai] += 1
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self):
+    def to_hai34_list(self) -> 'Hai34List':
         return self
 
-    def to_hai34_string(self):
+    def to_hai34_string(self) -> 'Hai34String':
         return self.to_hai34_counter().to_hai34_string()
 
-    @ staticmethod
-    def from_hai34_counter(hai34_counter: 'Hai34Counter'):
+    @classmethod
+    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34List':
         return hai34_counter.to_hai34_list()
+
+    def __str__(self) -> str:
+        return f"[{self.__class__.__name__}] {self.data}"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Hai34String(Hai34):
-    def normalize(self, data):
+    data: str
+
+    def __init__(self, data: str):
+        self.data = self.normalize(data)
+
+    def normalize(self, data: str) -> str:
         items = {'m': [0] * 9, 'p': [0] * 9, 's': [0] * 9, 'z': [0] * 9}
         suit = ''
         for c in reversed(data):
@@ -189,7 +203,7 @@ class Hai34String(Hai34):
 
         return data
 
-    def to_hai34_counter(self):
+    def to_hai34_counter(self) -> 'Hai34Counter':
         hai_counter = [0] * 34
         suit = ''
         for c in reversed(self.data):
@@ -207,19 +221,30 @@ class Hai34String(Hai34):
                 suit = c
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self):
+    def to_hai34_list(self) -> 'Hai34List':
         return self.to_hai34_counter().to_hai34_list()
 
-    def to_hai34_string(self):
+    def to_hai34_string(self) -> 'Hai34String':
         return self
 
-    @ staticmethod
-    def from_hai34_counter(hai34_counter: 'Hai34Counter'):
+    @classmethod
+    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34String':
         return hai34_counter.to_hai34_string()
+
+    def __str__(self) -> str:
+        return f"[{self.__class__.__name__}] {self.data}"
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Hai136List(Hai136):
-    def normalize(self, data):
+    data: list[int]
+
+    def __init__(self, data: list[int]):
+        self.data = self.normalize(data)
+
+    def normalize(self, data: list[int]) -> list[int]:
         for hai in data:
             if not isinstance(hai, int):
                 raise ValueError(f"invalid data: type({hai}) = {type(hai)} (expected int)")
@@ -231,21 +256,27 @@ class Hai136List(Hai136):
                 raise ValueError(f"invalid data: count({i}) = {data.count(i)} (expected 0 <= count <= 1)")
         return sorted(data)
 
-    def to_hai34_counter(self):
+    def to_hai34_counter(self) -> 'Hai34Counter':
         hai_counter = [0] * 34
         for hai in self.data:
             hai_counter[hai // 4] += 1
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self):
+    def to_hai34_list(self) -> 'Hai34List':
         return self.to_hai34_counter().to_hai34_list()
 
-    def to_hai34_string(self):
+    def to_hai34_string(self) -> 'Hai34String':
         return self.to_hai34_counter().to_hai34_string()
 
-    def to_hai136_list(self):
+    def to_hai136_list(self) -> 'Hai136List':
         return self
 
-    @ staticmethod
-    def from_hai136_list(hai136_list: 'Hai136List'):
+    @classmethod
+    def from_hai136_list(cls, hai136_list: 'Hai136List') -> 'Hai136List':
         return hai136_list
+
+    def __str__(self) -> str:
+        return f"[{self.__class__.__name__}] {self.data}"
+
+    def __repr__(self) -> str:
+        return self.__str__()
