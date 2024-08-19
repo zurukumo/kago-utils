@@ -1,35 +1,36 @@
 import unittest
 
-from kago_utils.hai import Hai34Counter, Hai34List, Hai34String, Hai136List
+from kago_utils.hai import (Hai34Counter, Hai34List, Hai34String,
+                            Hai136Counter, Hai136List)
 
 
 class TestInit(unittest.TestCase):
     def test_hai34_counter_valid(self):
-        data = [1] + [0] * 33
+        data = [1] * 34
         Hai34Counter(data)
 
     def test_hai34_counter_too_short_length(self):
-        data = [1]
+        data = [0] * 33
         with self.assertRaises(ValueError):
             Hai34Counter(data)
 
     def test_hai34_counter_too_long_length(self):
-        data = [1] + [0] * 34
+        data = [0] * 35
         with self.assertRaises(ValueError):
             Hai34Counter(data)
 
     def test_hai34_counter_too_large_value(self):
-        data = [5] + [0] * 33
+        data = [5] * 34
         with self.assertRaises(ValueError):
             Hai34Counter(data)
 
     def test_hai34_counter_too_small_value(self):
-        data = [-1] + [0] * 33
+        data = [-1] * 34
         with self.assertRaises(ValueError):
             Hai34Counter(data)
 
     def test_hai34_counter_float_value(self):
-        data = [0.5] + [0] * 33
+        data = [0.5] * 34
         with self.assertRaises(ValueError):
             Hai34Counter(data)
 
@@ -75,6 +76,35 @@ class TestInit(unittest.TestCase):
         data = '11111m'
         with self.assertRaises(ValueError):
             Hai34String(data)
+
+    def test_hai136_counter_valid(self):
+        data = [1] * 136
+        Hai136Counter(data)
+
+    def test_hai136_counter_too_short_length(self):
+        data = [1] * 135
+        with self.assertRaises(ValueError):
+            Hai136Counter(data)
+
+    def test_hai136_counter_too_long_length(self):
+        data = [1] * 137
+        with self.assertRaises(ValueError):
+            Hai136Counter(data)
+
+    def test_hai136_counter_too_large_value(self):
+        data = [2] * 136
+        with self.assertRaises(ValueError):
+            Hai136Counter(data)
+
+    def test_hai136_counter_too_small_value(self):
+        data = [-1] * 136
+        with self.assertRaises(ValueError):
+            Hai136Counter(data)
+
+    def test_hai136_counter_float_value(self):
+        data = [0.5] * 136
+        with self.assertRaises(ValueError):
+            Hai136Counter(data)
 
     def test_hai136_list_valid(self):
         data = [0]
