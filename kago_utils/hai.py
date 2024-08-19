@@ -1,3 +1,4 @@
+import warnings
 from abc import ABC, abstractmethod
 from typing import Self
 
@@ -59,16 +60,46 @@ class Hai136(Hai):
     def from_hai136_counter(cls, hai136_list: 'Hai136Counter') -> Self:
         pass
 
-    def __add__(self, other: 'Hai136') -> Self:
+    def __add__(self, other: 'Hai') -> Self:
         if isinstance(other, Hai136):
             new_data = [a + b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
+            return self.__class__.from_hai136_counter(Hai136Counter(new_data))
+        elif isinstance(other, Hai34):
+            warnings.warn(
+                f"The right-hand operand is an instance of the {other.__class__.__name__} class. "
+                f"It will be automatically converted to the {self.__class__.__name__} class, "
+                "which may result in data inconsistency.",
+                UserWarning,
+                stacklevel=2,
+            )
+            new_data = self.to_hai136_counter().data.copy()
+            for hai, count in enumerate(other.to_hai34_counter().data):
+                for _ in range(count):
+                    min_index = new_data[hai*4:hai*4+4].index(min(new_data[hai*4:hai*4+4]))
+                    new_data[hai*4+min_index] += 1
+
             return self.__class__.from_hai136_counter(Hai136Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other: 'Hai136') -> Self:
+    def __sub__(self, other: 'Hai') -> Self:
         if isinstance(other, Hai136):
             new_data = [a - b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
+            return self.__class__.from_hai136_counter(Hai136Counter(new_data))
+        elif isinstance(other, Hai34):
+            warnings.warn(
+                f"The right-hand operand is an instance of the {other.__class__.__name__} class. "
+                f"It will be automatically converted to the {self.__class__.__name__} class, "
+                "which may result in data inconsistency.",
+                UserWarning,
+                stacklevel=2,
+            )
+            new_data = self.to_hai136_counter().data.copy()
+            for hai, count in enumerate(other.to_hai34_counter().data):
+                for _ in range(count):
+                    max_index = new_data[hai*4:hai*4+4].index(max(new_data[hai*4:hai*4+4]))
+                    new_data[hai*4+max_index] -= 1
+
             return self.__class__.from_hai136_counter(Hai136Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
