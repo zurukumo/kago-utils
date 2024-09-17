@@ -56,7 +56,7 @@ class TestShantenRandomTehai(unittest.TestCase):
             with self.subTest(jun_tehai_length=jun_tehai_length, n_huuro=n_huuro):
                 for _ in range(self.n_assertion):
                     jun_tehai = generate_random_jun_tehai(jun_tehai_length)
-                    result = Shanten.calculate_shanten(jun_tehai, n_huuro)
+                    result = Shanten.calculate_shanten(jun_tehai)
                     expected = calculate_shanten_external(jun_tehai)
                     msg = f"jun_tehai: {jun_tehai.to_hai34_string()}, n_huuro: {n_huuro}"
                     self.assertEqual(result, expected, msg)
@@ -66,7 +66,7 @@ class TestShantenRandomTehai(unittest.TestCase):
             with self.subTest(jun_tehai_length=jun_tehai_length, n_huuro=n_huuro):
                 for _ in range(self.n_assertion):
                     jun_tehai = generate_random_jun_tehai_for_honitsu(jun_tehai_length)
-                    result = Shanten.calculate_shanten(jun_tehai, n_huuro)
+                    result = Shanten.calculate_shanten(jun_tehai)
                     expected = calculate_shanten_external(jun_tehai)
                     msg = f"jun_tehai: {jun_tehai.to_hai34_string()}, n_huuro: {n_huuro}"
                     self.assertEqual(result, expected, msg)
@@ -76,7 +76,7 @@ class TestShantenRandomTehai(unittest.TestCase):
             with self.subTest(jun_tehai_length=jun_tehai_length, n_huuro=n_huuro):
                 for _ in range(self.n_assertion):
                     jun_tehai = generate_random_jun_tehai_for_chinitsu(jun_tehai_length)
-                    result = Shanten.calculate_shanten(jun_tehai, n_huuro)
+                    result = Shanten.calculate_shanten(jun_tehai)
                     expected = calculate_shanten_external(jun_tehai)
                     msg = f"jun_tehai: {jun_tehai.to_hai34_string()}, n_huuro: {n_huuro}"
                     self.assertEqual(result, expected, msg)
@@ -96,7 +96,7 @@ class TestShantenAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai, 0),
+                    Shanten.calculate_shanten_for_regular(jun_tehai),
                     Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
                     Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
                 ]
@@ -110,7 +110,7 @@ class TestShantenAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai, 0),
+                    Shanten.calculate_shanten_for_regular(jun_tehai),
                     Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
                     Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
                 ]
@@ -124,7 +124,7 @@ class TestShantenAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai, 0),
+                    Shanten.calculate_shanten_for_regular(jun_tehai),
                     Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
                     Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
                 ]
@@ -138,7 +138,7 @@ class TestShantenAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai, 0),
+                    Shanten.calculate_shanten_for_regular(jun_tehai),
                     Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
                     Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
                 ]
@@ -158,7 +158,7 @@ class TestShantenPreviouslyFailed(unittest.TestCase):
     def test_previously_failed(self):
         for jun_tehai, expected in self.test_cases:
             with self.subTest(jun_tehai=jun_tehai):
-                result = Shanten.calculate_shanten(jun_tehai, 0)
+                result = Shanten.calculate_shanten(jun_tehai)
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
 

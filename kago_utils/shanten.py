@@ -21,16 +21,16 @@ class Shanten:
                 cls.zihai_patterns = pickle.load(f)
 
     @staticmethod
-    def calculate_shanten(jun_tehai: Hai, n_huuro: int) -> int:
+    def calculate_shanten(jun_tehai: Hai) -> int:
         shantens = (
-            Shanten.calculate_shanten_for_regular(jun_tehai, n_huuro),
+            Shanten.calculate_shanten_for_regular(jun_tehai),
             Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
             Shanten.calculate_shanten_for_kokushimusou(jun_tehai)
         )
         return min(shanten for shanten in shantens if shanten is not None)
 
     @classmethod
-    def calculate_shanten_for_regular(cls, jun_tehai: Hai, n_huuro: int) -> int:
+    def calculate_shanten_for_regular(cls, jun_tehai: Hai) -> int:
         cls.load_patterns()
         if cls.suuhai_patterns is None or cls.zihai_patterns is None:
             raise RuntimeError('Patterns are not loaded')
@@ -43,11 +43,12 @@ class Shanten:
         zihai = tuple(jun_tehai.data[27:34])
 
         min_shanten = 8
-        n = 12 - n_huuro * 3
-        for n_manzu in range(0, n + 1, 3):
-            for n_pinzu in range(0, n + 1 - n_manzu, 3):
-                for n_souzu in range(0, n + 1 - n_manzu - n_pinzu, 3):
-                    n_zihai = n - n_manzu - n_pinzu - n_souzu
+        n_huuro = (14 - sum(jun_tehai.data)) // 3
+        n_hai = 12 - n_huuro * 3
+        for n_manzu in range(0, n_hai + 1, 3):
+            for n_pinzu in range(0, n_hai + 1 - n_manzu, 3):
+                for n_souzu in range(0, n_hai + 1 - n_manzu - n_pinzu, 3):
+                    n_zihai = n_hai - n_manzu - n_pinzu - n_souzu
                     for jantou_suit in range(4):
                         m = cls.suuhai_patterns[(manzu, n_manzu + (2 if jantou_suit == 0 else 0))]
                         p = cls.suuhai_patterns[(pinzu, n_pinzu + (2 if jantou_suit == 1 else 0))]
