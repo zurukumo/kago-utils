@@ -34,6 +34,8 @@ class Shanten:
 
     @classmethod
     def calculate_shanten_for_regular(cls, jun_tehai: Hai) -> int:
+        jun_tehai.validate_as_jun_tehai()
+
         cls.load_patterns()
         if cls.suuhai_patterns is None or cls.zihai_patterns is None:
             raise RuntimeError('Patterns are not loaded')
@@ -63,6 +65,7 @@ class Shanten:
 
     @staticmethod
     def calculate_shanten_for_chiitoitsu(jun_tehai: Hai) -> int | None:
+        jun_tehai.validate_as_jun_tehai()
         jun_tehai = jun_tehai.to_hai34_counter()
 
         if not 13 <= sum(jun_tehai.data) <= 14:
@@ -81,6 +84,7 @@ class Shanten:
 
     @staticmethod
     def calculate_shanten_for_kokushimusou(jun_tehai: Hai) -> int | None:
+        jun_tehai.validate_as_jun_tehai()
         jun_tehai = jun_tehai.to_hai34_counter()
 
         if not 13 <= sum(jun_tehai.data) <= 14:
@@ -100,8 +104,13 @@ class Shanten:
 
     @staticmethod
     def calculate_yuukouhai(jun_tehai: H) -> H:
-        current_shanten = Shanten.calculate_shanten(jun_tehai)
+        jun_tehai.validate_as_jun_tehai()
+
         jun_tehai_counter = jun_tehai.to_hai34_counter()
+        if sum(jun_tehai_counter.data) % 3 != 1:
+            raise ValueError(f"Invalid data: the total count of hais should be 3n+1. Data: {jun_tehai.__repr__()}")
+
+        current_shanten = Shanten.calculate_shanten(jun_tehai)
 
         yuukouhai = []
         for i in range(34):

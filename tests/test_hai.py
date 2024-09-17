@@ -19,12 +19,7 @@ class TestInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Hai34Counter(data)
 
-    def test_hai34_counter_too_large_value(self):
-        data = [5] * 34
-        with self.assertRaises(ValueError):
-            Hai34Counter(data)
-
-    def test_hai34_counter_too_small_value(self):
+    def test_hai34_counter_negative_value(self):
         data = [-1] * 34
         with self.assertRaises(ValueError):
             Hai34Counter(data)
@@ -38,7 +33,7 @@ class TestInit(unittest.TestCase):
         data = [0]
         Hai34List(data)
 
-    def test_hai34_list_too_small_value(self):
+    def test_hai34_list_negative_value(self):
         data = [-1]
         with self.assertRaises(ValueError):
             Hai34List(data)
@@ -50,11 +45,6 @@ class TestInit(unittest.TestCase):
 
     def test_hai34_list_float_value(self):
         data = [0.5]
-        with self.assertRaises(ValueError):
-            Hai34List(data)
-
-    def test_hai34_list_too_large_count(self):
-        data = [0] * 5
         with self.assertRaises(ValueError):
             Hai34List(data)
 
@@ -72,11 +62,6 @@ class TestInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Hai34String(data)
 
-    def test_hai34_string_too_large_count(self):
-        data = '11111m'
-        with self.assertRaises(ValueError):
-            Hai34String(data)
-
     def test_hai136_counter_valid(self):
         data = [1] * 136
         Hai136Counter(data)
@@ -91,12 +76,7 @@ class TestInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Hai136Counter(data)
 
-    def test_hai136_counter_too_large_value(self):
-        data = [2] * 136
-        with self.assertRaises(ValueError):
-            Hai136Counter(data)
-
-    def test_hai136_counter_too_small_value(self):
+    def test_hai136_counter_negative_value(self):
         data = [-1] * 136
         with self.assertRaises(ValueError):
             Hai136Counter(data)
@@ -110,7 +90,7 @@ class TestInit(unittest.TestCase):
         data = [0]
         Hai136List(data)
 
-    def test_hai136_list_too_small_value(self):
+    def test_hai136_list_negative_value(self):
         data = [-1]
         with self.assertRaises(ValueError):
             Hai136List(data)
@@ -122,11 +102,6 @@ class TestInit(unittest.TestCase):
 
     def test_hai136_list_float_value(self):
         data = [0.5]
-        with self.assertRaises(ValueError):
-            Hai136List(data)
-
-    def test_hai136_list_too_large_count(self):
-        data = [0] * 2
         with self.assertRaises(ValueError):
             Hai136List(data)
 
@@ -292,12 +267,6 @@ class TestAdd(unittest.TestCase):
         expected = self.hai34_counter_sum
         self.assertEqual(result.data, expected.data)
 
-    def test_add_hai34_counter_and_hai34_counter_when_sum_is_too_large(self):
-        hai34_counter1 = Hai34Counter([1] + [0] * 33)
-        hai34_counter2 = Hai34Counter([4] + [0] * 33)
-        with self.assertRaises(ValueError):
-            hai34_counter1 + hai34_counter2
-
     def test_add_hai34_counter_and_int(self):
         with self.assertRaises(TypeError):
             self.hai34_counter1 + 1
@@ -326,12 +295,6 @@ class TestAdd(unittest.TestCase):
         result = self.hai34_list1 + self.hai136_list2
         expected = self.hai34_list_sum
         self.assertEqual(result.data, expected.data)
-
-    def test_add_hai34_list_and_hai34_counter_when_sum_is_too_large(self):
-        hai34_list = Hai34List([0])
-        hai34_counter = Hai34Counter([4] + [0] * 33)
-        with self.assertRaises(ValueError):
-            hai34_list + hai34_counter
 
     def test_add_hai34_list_and_int(self):
         with self.assertRaises(TypeError):
@@ -362,12 +325,6 @@ class TestAdd(unittest.TestCase):
         expected = self.hai34_string_sum
         self.assertEqual(result.data, expected.data)
 
-    def test_add_hai34_string_and_hai34_counter_when_sum_is_too_large(self):
-        hai34_string = Hai34String('1m')
-        hai34_counter = Hai34Counter([4] + [0] * 33)
-        with self.assertRaises(ValueError):
-            hai34_string + hai34_counter
-
     def test_add_hai34_string_and_int(self):
         with self.assertRaises(TypeError):
             self.hai34_string1 + 1
@@ -382,12 +339,6 @@ class TestAdd(unittest.TestCase):
         expected = self.hai136_counter_sum
         self.assertEqual(result.data, expected.data)
 
-    def test_add_hai136_counter_and_hai136_counter_when_sum_is_too_large(self):
-        hai136_counter1 = Hai136Counter([1] + [0] * 135)
-        hai136_counter2 = Hai136Counter([1] + [0] * 135)
-        with self.assertRaises(ValueError):
-            hai136_counter1 + hai136_counter2
-
     def test_add_hai136_counter_and_int(self):
         with self.assertRaises(TypeError):
             self.hai136_counter1 + 1
@@ -401,12 +352,6 @@ class TestAdd(unittest.TestCase):
         result = self.hai136_list1 + self.hai136_list2
         expected = self.hai136_list_sum
         self.assertEqual(result.data, expected.data)
-
-    def test_add_hai136_list_and_hai136_counter_when_sum_is_too_large(self):
-        hai136_list = Hai136List([0])
-        hai136_counter = Hai136Counter([1] + [0] * 135)
-        with self.assertRaises(ValueError):
-            hai136_list + hai136_counter
 
     def test_add_hai136_list_and_int(self):
         hai136_list = self.hai136_list1
@@ -460,7 +405,7 @@ class TestSub(unittest.TestCase):
         expected = self.hai34_counter_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai34_counter_and_hai34_counter_when_diff_is_too_small(self):
+    def test_sub_hai34_counter_and_hai34_counter_when_diff_is_negative(self):
         hai34_counter1 = Hai34Counter([0] * 34)
         hai34_counter2 = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
@@ -495,7 +440,7 @@ class TestSub(unittest.TestCase):
         expected = self.hai34_list_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai34_list_and_hai34_counter_when_diff_is_too_small(self):
+    def test_sub_hai34_list_and_hai34_counter_when_diff_is_negative(self):
         hai34_list = Hai34List([])
         hai34_counter = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
@@ -530,7 +475,7 @@ class TestSub(unittest.TestCase):
         expected = self.hai34_string_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai34_string_and_hai34_counter_when_diff_is_too_small(self):
+    def test_sub_hai34_string_and_hai34_counter_when_diff_is_negative(self):
         hai34_string = Hai34String('')
         hai34_counter = Hai34Counter([1] + [0] * 33)
         with self.assertRaises(ValueError):
@@ -550,7 +495,7 @@ class TestSub(unittest.TestCase):
         expected = self.hai136_counter_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai136_counter_and_hai136_counter_when_diff_is_too_small(self):
+    def test_sub_hai136_counter_and_hai136_counter_when_diff_is_negative(self):
         hai136_counter1 = Hai136Counter([0] * 136)
         hai136_counter2 = Hai136Counter([1] + [0] * 135)
         with self.assertRaises(ValueError):
@@ -570,7 +515,7 @@ class TestSub(unittest.TestCase):
         expected = self.hai136_list_diff
         self.assertEqual(result.data, expected.data)
 
-    def test_sub_hai136_list_and_hai136_counter_when_diff_is_too_small(self):
+    def test_sub_hai136_list_and_hai136_counter_when_diff_is_negative(self):
         hai136_list = Hai136List([])
         hai136_counter = Hai136Counter([1] + [0] * 135)
         with self.assertRaises(ValueError):
@@ -580,6 +525,23 @@ class TestSub(unittest.TestCase):
         hai136_list = self.hai136_list1
         with self.assertRaises(TypeError):
             hai136_list + 1
+
+
+class TestValidateAsJunTehai(unittest.TestCase):
+    def test_valid_jun_tehai(self):
+        Hai34String('11123455678999m').validate_as_jun_tehai()
+
+    def test_jun_tehai_whose_length_is_not_invalid(self):
+        with self.assertRaises(ValueError):
+            Hai34String('111m').validate_as_jun_tehai()
+
+    def test_jun_tehai_whose_length_is_too_long(self):
+        with self.assertRaises(ValueError):
+            Hai34String('111234556789999m').validate_as_jun_tehai()
+
+    def test_jun_tehai_which_has_5th_hai(self):
+        with self.assertRaises(ValueError):
+            Hai34String('11111m').validate_as_jun_tehai()
 
 
 if __name__ == '__main__':

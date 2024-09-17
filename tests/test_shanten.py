@@ -35,7 +35,7 @@ def calculate_shanten_external(jun_tehai: Hai136List):
     return external_shanten(np.array(jun_tehai.data, dtype=np.uint8)) - 1
 
 
-class TestShantenRandomTehai(unittest.TestCase):
+class TestCalculateShantenWithRandomTehai(unittest.TestCase):
     n_assertion = 10000
     # format: (jun_tehai_length, n_huuro)
     tehai_patterns = [
@@ -83,7 +83,7 @@ class TestShantenRandomTehai(unittest.TestCase):
 
 
 # ref: https://mahjong.ara.black/etc/shanten/shanten9.htm
-class TestShantenAraTehai(unittest.TestCase):
+class TestCalculateShantenWithAraTehai(unittest.TestCase):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     p_normal_10000_txt = os.path.join(current_dir, 'data/p_normal_10000.txt')
     p_hon_10000_txt = os.path.join(current_dir, 'data/p_hon_10000.txt')
@@ -147,15 +147,14 @@ class TestShantenAraTehai(unittest.TestCase):
                 self.assertEqual(result, expected, msg)
 
 
-# Test for previously failed cases
-class TestShantenPreviouslyFailed(unittest.TestCase):
+class TestCalculateShantenWithHandmadeTehai(unittest.TestCase):
     # format: (jun_tehai, expected)
     test_cases = [
         (Hai34String('23466669999m111z'), 1),
         (Hai34String('1111345567m111z'), 1)
     ]
 
-    def test_previously_failed(self):
+    def test_shanten(self):
         for jun_tehai, expected in self.test_cases:
             with self.subTest(jun_tehai=jun_tehai):
                 result = Shanten.calculate_shanten(jun_tehai)
@@ -163,7 +162,23 @@ class TestShantenPreviouslyFailed(unittest.TestCase):
                 self.assertEqual(result, expected, msg)
 
 
-class TestYuukouhai(unittest.TestCase):
+class TestCalculateShantenWithInvalidTehai(unittest.TestCase):
+    test_cases = [
+        Hai34String(''),
+        Hai34String('111m'),
+        Hai34String('111m111s'),
+        Hai34String('111m111s111p'),
+        Hai34String('111m111s111p111z'),
+    ]
+
+    def test_shanten(self):
+        for jun_tehai in self.test_cases:
+            with self.subTest(jun_tehai=jun_tehai):
+                with self.assertRaises(ValueError):
+                    Shanten.calculate_shanten(jun_tehai)
+
+
+class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
     # format: (jun_tehai, expected)
     test_cases = [
         (Hai34String('6688m117p699s134z'), Hai34String('7p6s134z').data),
@@ -184,6 +199,13 @@ class TestYuukouhai(unittest.TestCase):
                 result = Shanten.calculate_yuukouhai(jun_tehai).data
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
+
+
+class TestCalculateYuukouhaiWithInvalidTehai(unittest.TestCase):
+    def test_yuukouhai_when_jun_tehai_length_is_14(self):
+        jun_tehai = Hai34String('11123455678999m')
+        with self.assertRaises(ValueError):
+            Shanten.calculate_yuukouhai(jun_tehai)
 
 
 if __name__ == '__main__':
