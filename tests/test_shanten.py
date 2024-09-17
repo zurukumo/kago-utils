@@ -163,5 +163,28 @@ class TestShantenPreviouslyFailed(unittest.TestCase):
                 self.assertEqual(result, expected, msg)
 
 
+class TestYuukouhai(unittest.TestCase):
+    # format: (jun_tehai, expected)
+    test_cases = [
+        (Hai34String('6688m117p699s134z'), Hai34String('7p6s134z').data),
+        (Hai34String('123577m3479p79s6z'), Hai34String('258p8s').data),
+        (Hai34String('2233m2267p1368s1z'), Hai34String('1234m25678p123678s1z').data),
+        (Hai34String('179m4479p13444s5z'), Hai34String('8m8p2s').data),
+        (Hai34String('1111m257p578s156z'), Hai34String('23m12346p3456789s156z').data),
+        (Hai34String('2557m38p1578s237z'), Hai34String('27m38p1578s237z').data),
+        (Hai34String('124699m126p1s233z'), Hai34String('359m3p3z').data),
+        (Hai34String('449m67p4568s1226z'), Hai34String('4789m58p36789s126z').data),
+        (Hai34String('358m4579p6678s25z'), Hai34String('48m368p69s25z').data),
+        (Hai34String('234m12p47s133466z'), Hai34String('3p23456789s1346z').data)
+    ]
+
+    def test_yuukouhai(self):
+        for jun_tehai, expected in self.test_cases:
+            with self.subTest(jun_tehai=jun_tehai):
+                result = Shanten.calculate_yuukouhai(jun_tehai).data
+                msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
+                self.assertEqual(result, expected, msg)
+
+
 if __name__ == '__main__':
     unittest.main()

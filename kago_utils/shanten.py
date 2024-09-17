@@ -1,7 +1,10 @@
 ﻿import os
 import pickle
+from typing import TypeVar
 
-from kago_utils.hai import Hai, Hai34String
+from kago_utils.hai import Hai, Hai34Counter, Hai34List, Hai34String
+
+H = TypeVar('H', Hai34Counter, Hai34List, Hai34String)
 
 
 class Shanten:
@@ -94,3 +97,19 @@ class Shanten:
                 has_toitsu = True
 
         return 13 - n_yaochu_hai - (1 if has_toitsu else 0)
+
+    @staticmethod
+    def calculate_yuukouhai(jun_tehai: H) -> H:
+        current_shanten = Shanten.calculate_shanten(jun_tehai)
+        jun_tehai_counter = jun_tehai.to_hai34_counter()
+
+        yuukouhai = []
+        for i in range(34):
+            if jun_tehai_counter.data[i] >= 4:
+                continue
+            jun_tehai_counter.data[i] += 1
+            if Shanten.calculate_shanten(jun_tehai_counter) < current_shanten:
+                yuukouhai.append(i)
+            jun_tehai_counter.data[i] -= 1
+
+        return jun_tehai.__class__.from_hai34(Hai34List(yuukouhai))
