@@ -27,20 +27,20 @@ class Hai(ABC):
 class Hai34(Hai):
     @classmethod
     @abstractmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> Self:
+    def from_hai34(cls, hai34: 'Hai34') -> Self:
         pass
 
     def __add__(self, other: Hai) -> Self:
         if isinstance(other, Hai):
             new_data = [a + b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
-            return self.__class__.from_hai34_counter(Hai34Counter(new_data))
+            return self.__class__.from_hai34(Hai34Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: Hai) -> Self:
         if isinstance(other, Hai):
             new_data = [a - b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
-            return self.__class__.from_hai34_counter(Hai34Counter(new_data))
+            return self.__class__.from_hai34(Hai34Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
@@ -56,20 +56,20 @@ class Hai136(Hai):
 
     @classmethod
     @abstractmethod
-    def from_hai136_counter(cls, hai136_list: 'Hai136Counter') -> Self:
+    def from_hai136(cls, hai136: 'Hai136') -> Self:
         pass
 
     def __add__(self, other: 'Hai136') -> Self:
         if isinstance(other, Hai136):
             new_data = [a + b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
-            return self.__class__.from_hai136_counter(Hai136Counter(new_data))
+            return self.__class__.from_hai136(Hai136Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: 'Hai136') -> Self:
         if isinstance(other, Hai136):
             new_data = [a - b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
-            return self.__class__.from_hai136_counter(Hai136Counter(new_data))
+            return self.__class__.from_hai136(Hai136Counter(new_data))
 
         raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
@@ -121,8 +121,8 @@ class Hai34Counter(Hai34):
         return Hai34String(hai_string)
 
     @classmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34Counter':
-        return hai34_counter
+    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34Counter':
+        return hai34.to_hai34_counter()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -162,8 +162,8 @@ class Hai34List(Hai34):
         return self.to_hai34_counter().to_hai34_string()
 
     @classmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34List':
-        return hai34_counter.to_hai34_list()
+    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34List':
+        return hai34.to_hai34_list()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -230,8 +230,8 @@ class Hai34String(Hai34):
         return self
 
     @classmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34String':
-        return hai34_counter.to_hai34_string()
+    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34String':
+        return hai34.to_hai34_string()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -280,8 +280,8 @@ class Hai136Counter(Hai136):
         return Hai136List(hai_list)
 
     @classmethod
-    def from_hai136_counter(cls, hai136_counter: 'Hai136Counter') -> 'Hai136Counter':
-        return hai136_counter
+    def from_hai136(cls, hai136: 'Hai136') -> 'Hai136Counter':
+        return hai136.to_hai136_counter()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -330,8 +330,8 @@ class Hai136List(Hai136):
         return self
 
     @classmethod
-    def from_hai136_counter(cls, hai136_counter: 'Hai136Counter') -> 'Hai136List':
-        return hai136_counter.to_hai136_list()
+    def from_hai136(cls, hai136: 'Hai136') -> 'Hai136List':
+        return hai136.to_hai136_list()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
