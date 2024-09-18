@@ -1,10 +1,8 @@
 ﻿import os
 import pickle
-from typing import TypeVar
 
-from kago_utils.hai import Hai, Hai34Counter, Hai34List, Hai34String
-
-H = TypeVar('H', Hai34Counter, Hai34List, Hai34String)
+from kago_utils.hai import (Hai, Hai34, Hai34List, Hai34String, Hai136,
+                            Hai136List)
 
 
 class Shanten:
@@ -103,14 +101,22 @@ class Shanten:
         return 13 - n_yaochu_hai - (1 if has_toitsu else 0)
 
     @staticmethod
-    def calculate_yuukouhai(jun_tehai: H) -> H:
+    def calculate_yuukouhai[T: Hai](jun_tehai: T) -> T:
         jun_tehai.validate_as_jun_tehai()
-
-        jun_tehai_counter = jun_tehai.to_hai34_counter()
-        if sum(jun_tehai_counter.data) % 3 != 1:
+        if sum(jun_tehai.to_hai34_counter().data) % 3 != 1:
             raise ValueError(f"Invalid data: the total count of hais should be 3n+1. Data: {jun_tehai.__repr__()}")
 
+        if isinstance(jun_tehai, Hai34):
+            return Shanten.__calculate_yuukouhai_for_hai34(jun_tehai)
+        elif isinstance(jun_tehai, Hai136):
+            return Shanten.__calculate_yuukouhai_for_hai136(jun_tehai)
+
+        raise ValueError(f"Invalid data: {jun_tehai.__repr__()}")
+
+    @staticmethod
+    def __calculate_yuukouhai_for_hai34[T: Hai34](jun_tehai: T) -> T:
         current_shanten = Shanten.calculate_shanten(jun_tehai)
+        jun_tehai_counter = jun_tehai.to_hai34_counter()
 
         yuukouhai = []
         for i in range(34):
@@ -122,3 +128,18 @@ class Shanten:
             jun_tehai_counter.data[i] -= 1
 
         return jun_tehai.__class__.from_hai34(Hai34List(yuukouhai))
+
+    @staticmethod
+    def __calculate_yuukouhai_for_hai136[T: Hai136](jun_tehai: T) -> T:
+        jun_tehai_list = jun_tehai.to_hai136_list()
+
+        # Convert yuukouhai from Hai34 format to Hai136 format
+        yuukouhai34_list = Shanten.__calculate_yuukouhai_for_hai34(jun_tehai.to_hai34_list())
+        yuukouhai = []
+        for hai34 in yuukouhai34_list.data:
+            for i in range(4):
+                hai136 = hai34 * 4 + i
+                if hai136 not in jun_tehai_list.data:
+                    yuukouhai.append(hai136)
+
+        return jun_tehai.__class__.from_hai136(Hai136List(yuukouhai))

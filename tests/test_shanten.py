@@ -190,7 +190,16 @@ class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
         (Hai34String('124699m126p1s233z'), Hai34String('359m3p3z').data),
         (Hai34String('449m67p4568s1226z'), Hai34String('4789m58p36789s126z').data),
         (Hai34String('358m4579p6678s25z'), Hai34String('48m368p69s25z').data),
-        (Hai34String('234m12p47s133466z'), Hai34String('3p23456789s1346z').data)
+        (Hai34String('234m12p47s133466z'), Hai34String('3p23456789s1346z').data),
+        (Hai136List([0, 4, 5, 8, 36, 40, 44, 60, 64, 68, 76, 80, 84]), Hai136List([6, 7]).data),
+        (Hai136List([12, 16, 20, 24, 25, 28, 32, 33, 44, 72, 76, 100, 101]),
+         Hai136List([29, 30, 31, 80, 81, 82, 83]).data),
+        (Hai136List([0, 12, 20, 21, 24, 28, 36, 40, 80, 84, 92, 93, 96]),
+         Hai136List([16, 17, 18, 19, 44, 45, 46, 47, 76, 77, 78, 79, 88, 89, 90, 91]).data),
+        (Hai136List([16, 17, 18, 76, 77, 78, 88, 89, 108, 109, 110, 128, 129]),
+         Hai136List([90, 91, 130, 131]).data),
+        (Hai136List([20, 28, 36, 40, 64, 72, 73, 92, 96, 100, 101, 128, 129]),
+         Hai136List([24, 25, 26, 27, 44, 45, 46, 47, 74, 75, 130, 131]).data)
     ]
 
     def test_yuukouhai(self):
