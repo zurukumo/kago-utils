@@ -26,14 +26,14 @@ class Shanten:
     @staticmethod
     def calculate_shanten(jun_tehai: Hai) -> int:
         shantens = (
-            Shanten.calculate_shanten_for_regular(jun_tehai),
-            Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
-            Shanten.calculate_shanten_for_kokushimusou(jun_tehai)
+            Shanten.calculate_regular_shanten(jun_tehai),
+            Shanten.calculate_chiitoitsu_shanten(jun_tehai),
+            Shanten.calculate_kokushimusou_shanten(jun_tehai)
         )
         return min(shanten for shanten in shantens if shanten is not None)
 
     @classmethod
-    def calculate_shanten_for_regular(cls, jun_tehai: Hai) -> int:
+    def calculate_regular_shanten(cls, jun_tehai: Hai) -> int:
         jun_tehai.validate_as_jun_tehai()
 
         cls.load_patterns()
@@ -64,7 +64,7 @@ class Shanten:
         return min_shanten
 
     @staticmethod
-    def calculate_shanten_for_chiitoitsu(jun_tehai: Hai) -> int | None:
+    def calculate_chiitoitsu_shanten(jun_tehai: Hai) -> int | None:
         jun_tehai.validate_as_jun_tehai()
         jun_tehai = jun_tehai.to_hai34_counter()
 
@@ -83,7 +83,7 @@ class Shanten:
         return 6 - n_toitsu + (7 - n_unique_hai if n_unique_hai < 7 else 0)
 
     @staticmethod
-    def calculate_shanten_for_kokushimusou(jun_tehai: Hai) -> int | None:
+    def calculate_kokushimusou_shanten(jun_tehai: Hai) -> int | None:
         jun_tehai.validate_as_jun_tehai()
         jun_tehai = jun_tehai.to_hai34_counter()
 

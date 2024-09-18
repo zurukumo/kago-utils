@@ -96,9 +96,9 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai),
-                    Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
-                    Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
+                    Shanten.calculate_regular_shanten(jun_tehai),
+                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
+                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
                 ]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
@@ -110,9 +110,9 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai),
-                    Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
-                    Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
+                    Shanten.calculate_regular_shanten(jun_tehai),
+                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
+                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
                 ]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
@@ -124,9 +124,9 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai),
-                    Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
-                    Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
+                    Shanten.calculate_regular_shanten(jun_tehai),
+                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
+                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
                 ]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
@@ -138,9 +138,9 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
                 result = [
-                    Shanten.calculate_shanten_for_regular(jun_tehai),
-                    Shanten.calculate_shanten_for_kokushimusou(jun_tehai),
-                    Shanten.calculate_shanten_for_chiitoitsu(jun_tehai),
+                    Shanten.calculate_regular_shanten(jun_tehai),
+                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
+                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
                 ]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
