@@ -56,7 +56,7 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
             with self.subTest(jun_tehai_length=jun_tehai_length, n_huuro=n_huuro):
                 for _ in range(self.n_assertion):
                     jun_tehai = generate_random_jun_tehai(jun_tehai_length)
-                    result = Shanten.calculate_shanten(jun_tehai)
+                    result = Shanten(jun_tehai).shanten
                     expected = calculate_shanten_external(jun_tehai)
                     msg = f"jun_tehai: {jun_tehai.to_hai34_string()}, n_huuro: {n_huuro}"
                     self.assertEqual(result, expected, msg)
@@ -66,7 +66,7 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
             with self.subTest(jun_tehai_length=jun_tehai_length, n_huuro=n_huuro):
                 for _ in range(self.n_assertion):
                     jun_tehai = generate_random_jun_tehai_for_honitsu(jun_tehai_length)
-                    result = Shanten.calculate_shanten(jun_tehai)
+                    result = Shanten(jun_tehai).shanten
                     expected = calculate_shanten_external(jun_tehai)
                     msg = f"jun_tehai: {jun_tehai.to_hai34_string()}, n_huuro: {n_huuro}"
                     self.assertEqual(result, expected, msg)
@@ -76,7 +76,7 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
             with self.subTest(jun_tehai_length=jun_tehai_length, n_huuro=n_huuro):
                 for _ in range(self.n_assertion):
                     jun_tehai = generate_random_jun_tehai_for_chinitsu(jun_tehai_length)
-                    result = Shanten.calculate_shanten(jun_tehai)
+                    result = Shanten(jun_tehai).shanten
                     expected = calculate_shanten_external(jun_tehai)
                     msg = f"jun_tehai: {jun_tehai.to_hai34_string()}, n_huuro: {n_huuro}"
                     self.assertEqual(result, expected, msg)
@@ -95,11 +95,8 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
-                result = [
-                    Shanten.calculate_regular_shanten(jun_tehai),
-                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
-                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
-                ]
+                shanten = Shanten(jun_tehai)
+                result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
@@ -109,11 +106,8 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
-                result = [
-                    Shanten.calculate_regular_shanten(jun_tehai),
-                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
-                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
-                ]
+                shanten = Shanten(jun_tehai)
+                result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
@@ -123,11 +117,8 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
-                result = [
-                    Shanten.calculate_regular_shanten(jun_tehai),
-                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
-                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
-                ]
+                shanten = Shanten(jun_tehai)
+                result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
@@ -137,11 +128,8 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 jun_tehai = Hai34List(problem[:14])
-                result = [
-                    Shanten.calculate_regular_shanten(jun_tehai),
-                    Shanten.calculate_kokushimusou_shanten(jun_tehai),
-                    Shanten.calculate_chiitoitsu_shanten(jun_tehai),
-                ]
+                shanten = Shanten(jun_tehai)
+                result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
@@ -157,7 +145,7 @@ class TestCalculateShantenWithHandmadeTehai(unittest.TestCase):
     def test_shanten(self):
         for jun_tehai, expected in self.test_cases:
             with self.subTest(jun_tehai=jun_tehai):
-                result = Shanten.calculate_shanten(jun_tehai)
+                result = Shanten(jun_tehai).shanten
                 msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
                 self.assertEqual(result, expected, msg)
 
@@ -175,7 +163,7 @@ class TestCalculateShantenWithInvalidTehai(unittest.TestCase):
         for jun_tehai in self.test_cases:
             with self.subTest(jun_tehai=jun_tehai):
                 with self.assertRaises(ValueError):
-                    Shanten.calculate_shanten(jun_tehai)
+                    Shanten(jun_tehai).shanten
 
 
 class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
@@ -205,8 +193,8 @@ class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
     def test_yuukouhai(self):
         for jun_tehai, expected in self.test_cases:
             with self.subTest(jun_tehai=jun_tehai):
-                result = Shanten.calculate_yuukouhai(jun_tehai).data
-                msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
+                result = Shanten(jun_tehai).yuukouhai.data
+                msg = f"jun_tehai: {jun_tehai}"
                 self.assertEqual(result, expected, msg)
 
 
@@ -214,7 +202,7 @@ class TestCalculateYuukouhaiWithInvalidTehai(unittest.TestCase):
     def test_yuukouhai_when_jun_tehai_length_is_14(self):
         jun_tehai = Hai34String('11123455678999m')
         with self.assertRaises(ValueError):
-            Shanten.calculate_yuukouhai(jun_tehai)
+            Shanten(jun_tehai).yuukouhai
 
 
 if __name__ == '__main__':
