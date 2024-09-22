@@ -1,5 +1,6 @@
 ﻿import os
 import pickle
+from typing import cast
 
 from kago_utils.hai import (Hai, Hai34, Hai34List, Hai34String, Hai136,
                             Hai136List)
@@ -153,6 +154,8 @@ class Shanten[T: Hai]:
         elif isinstance(self.jun_tehai, Hai136):
             return self.__calculate_yuukouhai_for_hai136()
 
+        raise TypeError(f"jun_tehai should be Hai34 or Hai136, but {self.jun_tehai.__class__.__name__}")
+
     def __calculate_yuukouhai_for_hai34(self) -> T:
         if not isinstance(self.jun_tehai, Hai34):
             raise ValueError(f"Invalid data: {self.jun_tehai.__repr__()}")
@@ -169,7 +172,7 @@ class Shanten[T: Hai]:
                 yuukouhai.append(i)
             jun_tehai_counter.data[i] -= 1
 
-        return self.jun_tehai.__class__.from_hai34(Hai34List(yuukouhai))
+        return cast(T, self.jun_tehai.__class__.from_hai34(Hai34List(yuukouhai)))
 
     def __calculate_yuukouhai_for_hai136(self) -> T:
         if not isinstance(self.jun_tehai, Hai136):
@@ -190,4 +193,4 @@ class Shanten[T: Hai]:
                         yuukouhai.append(i * 4 + j)
             jun_tehai34_counter.data[i] -= 1
 
-        return self.jun_tehai.__class__.from_hai136(Hai136List(yuukouhai))
+        return cast(T, self.jun_tehai.__class__.from_hai136(Hai136List(yuukouhai)))
