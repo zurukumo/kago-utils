@@ -142,11 +142,11 @@ class TestCalculateShantenWithHandmadeTehai(unittest.TestCase):
         (Hai34String('1111345567m111z'), 1)
     ]
 
-    def test_shanten(self):
+    def test_shanten_when_jun_tehai_length_is_invalid(self):
         for jun_tehai, expected in self.test_cases:
             with self.subTest(jun_tehai=jun_tehai):
                 result = Shanten(jun_tehai).shanten
-                msg = f"jun_tehai: {jun_tehai.to_hai34_string()}"
+                msg = f"jun_tehai: {jun_tehai}"
                 self.assertEqual(result, expected, msg)
 
 
@@ -168,7 +168,7 @@ class TestCalculateShantenWithInvalidTehai(unittest.TestCase):
 
 class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
     # format: (jun_tehai, expected)
-    test_cases = [
+    test_cases: list[tuple[Hai34String, str]] | list[tuple[Hai136List, list[int]]] = [
         # 14枚 Hai34String
         (Hai34String('1111m257p578s156z'), Hai34String('23m12346p3456789s156z').data),
         (Hai34String('2233m2267p1368s1z'), Hai34String('1234m25678p123678s1z').data),
@@ -259,10 +259,23 @@ class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
 
 
 class TestCalculateYuukouhaiWithInvalidTehai(unittest.TestCase):
-    def test_yuukouhai_when_jun_tehai_length_is_14(self):
-        jun_tehai = Hai34String('11123455678999m')
-        with self.assertRaises(ValueError):
-            Shanten(jun_tehai).yuukouhai
+    test_cases = [
+        Hai34String(''),
+        Hai34String('11m'),
+        Hai34String('111m'),
+        Hai34String('111m11s'),
+        Hai34String('111m111s'),
+        Hai34String('111m111s11p'),
+        Hai34String('111m111s111p'),
+        Hai34String('111m111s111p11z'),
+        Hai34String('111m111s111p111z'),
+    ]
+
+    def test_yuukouhai_when_jun_tehai_length_is_invalid(self):
+        for jun_tehai in self.test_cases:
+            with self.subTest(jun_tehai=jun_tehai):
+                with self.assertRaises(ValueError):
+                    Shanten(jun_tehai).yuukouhai
 
 
 if __name__ == '__main__':
