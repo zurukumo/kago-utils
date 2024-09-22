@@ -7,7 +7,7 @@ name = "pypi"
 
 [dev-packages]
 mypy = "*"
-numpy = "*"
+numpy = "< 2.0.0"
 shanten-tools = "*"
 
 [requires]

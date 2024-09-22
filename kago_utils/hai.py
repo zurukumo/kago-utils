@@ -16,6 +16,10 @@ class Hai(ABC):
         pass
 
     @abstractmethod
+    def validate_as_jun_tehai(self) -> None:
+        pass
+
+    @abstractmethod
     def __str__(self) -> str:
         pass
 
@@ -27,22 +31,31 @@ class Hai(ABC):
 class Hai34(Hai):
     @classmethod
     @abstractmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> Self:
+    def from_hai34(cls, hai34: 'Hai34') -> Self:
         pass
+
+    def validate_as_jun_tehai(self) -> None:
+        hai34_counter = self.to_hai34_counter()
+        if sum(hai34_counter.data) > 14:
+            raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
+        if sum(hai34_counter.data) % 3 == 0:
+            raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
+        if any(not 0 <= count <= 4 for count in hai34_counter.data):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
 
     def __add__(self, other: Hai) -> Self:
         if isinstance(other, Hai):
             new_data = [a + b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
-            return self.__class__.from_hai34_counter(Hai34Counter(new_data))
+            return self.__class__.from_hai34(Hai34Counter(new_data))
 
-        raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
+        raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: Hai) -> Self:
         if isinstance(other, Hai):
             new_data = [a - b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
-            return self.__class__.from_hai34_counter(Hai34Counter(new_data))
+            return self.__class__.from_hai34(Hai34Counter(new_data))
 
-        raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
+        raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
 class Hai136(Hai):
@@ -56,22 +69,33 @@ class Hai136(Hai):
 
     @classmethod
     @abstractmethod
-    def from_hai136_counter(cls, hai136_list: 'Hai136Counter') -> Self:
+    def from_hai136(cls, hai136: 'Hai136') -> Self:
         pass
+
+    def validate_as_jun_tehai(self) -> None:
+        hai136_counter = self.to_hai136_counter()
+        if sum(hai136_counter.data) > 14:
+            raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
+
+        if sum(hai136_counter.data) % 3 == 0:
+            raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
+
+        if any(not 0 <= count <= 1 for count in hai136_counter.data):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
     def __add__(self, other: 'Hai136') -> Self:
         if isinstance(other, Hai136):
             new_data = [a + b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
-            return self.__class__.from_hai136_counter(Hai136Counter(new_data))
+            return self.__class__.from_hai136(Hai136Counter(new_data))
 
-        raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
+        raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: 'Hai136') -> Self:
         if isinstance(other, Hai136):
             new_data = [a - b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
-            return self.__class__.from_hai136_counter(Hai136Counter(new_data))
+            return self.__class__.from_hai136(Hai136Counter(new_data))
 
-        raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
+        raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
 class Hai34Counter(Hai34):
@@ -82,12 +106,13 @@ class Hai34Counter(Hai34):
 
     def normalize(self, data: list[int]) -> list[int]:
         if len(data) != 34:
-            raise ValueError(f"invalid data: len(data) = {len(data)} (expected 34)")
-        for k, v in enumerate(data):
-            if not isinstance(v, int):
-                raise ValueError(f"invalid data: type(data[{k}]) = {type(v)} (expected int)")
-            if not 0 <= v <= 4:
-                raise ValueError(f"invalid data: data[{k}] = {v} (expected 0 <= v <= 4)")
+            raise ValueError(f"Invalid data: length of data is {len(data)}, but expected 34.")
+
+        if any(v < 0 for v in data):
+            raise ValueError(f"Invalid data: found negative values in data. Data: {data}")
+
+        if any(not isinstance(v, int) for v in data):
+            raise ValueError(f"Invalid data: found non-integer values in data. Data: {data}")
 
         return data
 
@@ -121,8 +146,8 @@ class Hai34Counter(Hai34):
         return Hai34String(hai_string)
 
     @classmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34Counter':
-        return hai34_counter
+    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34Counter':
+        return hai34.to_hai34_counter()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -138,15 +163,12 @@ class Hai34List(Hai34):
         self.data = self.normalize(data)
 
     def normalize(self, data: list[int]) -> list[int]:
-        for hai in data:
-            if not isinstance(hai, int):
-                raise ValueError(f"invalid data: type({hai}) = {type(hai)} (expected int)")
-            if not 0 <= hai <= 33:
-                raise ValueError(f"invalid data: {hai} (expected 0 <= value <= 33)")
+        if any(not isinstance(v, int) for v in data):
+            raise ValueError(f"Invalid data: found non-integer values in data. Data: {data}")
 
-        for i in range(34):
-            if not 0 <= data.count(i) <= 4:
-                raise ValueError(f"invalid data: count({i}) = {data.count(i)} (expected 0 <= count <= 4)")
+        if any(not 0 <= v <= 33 for v in data):
+            raise ValueError(f"Invalid data: values should be between 0 and 33. Data: {data}")
+
         return sorted(data)
 
     def to_hai34_counter(self) -> 'Hai34Counter':
@@ -162,8 +184,8 @@ class Hai34List(Hai34):
         return self.to_hai34_counter().to_hai34_string()
 
     @classmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34List':
-        return hai34_counter.to_hai34_list()
+    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34List':
+        return hai34.to_hai34_list()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -184,17 +206,15 @@ class Hai34String(Hai34):
         for c in reversed(data):
             if c in '123456789':
                 if suit == '':
-                    raise ValueError("invalid data: there is a number without suit")
+                    raise ValueError("Invalid data: found values without suit. Data: {data}")
                 items[suit][int(c) - 1] += 1
             elif c in 'mpsz':
                 suit = c
             else:
-                raise ValueError(f"invalid data: {c} (expected 'mpsz' or '123456789')")
-
-        for suit in items:
-            for k, v in enumerate(items[suit]):
-                if not 0 <= v <= 4:
-                    raise ValueError(f"invalid data: count({suit}{k + 1}) = {v} (expected 0 <= count <= 4)")
+                raise ValueError(
+                    f"Invalid data: found invalid character '{c}'. "
+                    f"Expected 'm', 'p', 's', 'z', or '1'-'9'. Data: {data}"
+                )
 
         data = ''
         for suit in items:
@@ -230,8 +250,8 @@ class Hai34String(Hai34):
         return self
 
     @classmethod
-    def from_hai34_counter(cls, hai34_counter: 'Hai34Counter') -> 'Hai34String':
-        return hai34_counter.to_hai34_string()
+    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34String':
+        return hai34.to_hai34_string()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -248,12 +268,13 @@ class Hai136Counter(Hai136):
 
     def normalize(self, data: list[int]) -> list[int]:
         if len(data) != 136:
-            raise ValueError(f"invalid data: len(data) = {len(data)} (expected 136)")
-        for k, v in enumerate(data):
-            if not isinstance(v, int):
-                raise ValueError(f"invalid data: type(data[{k}]) = {type(v)} (expected int)")
-            if not 0 <= v <= 1:
-                raise ValueError(f"invalid data: data[{k}] = {v} (expected 0 <= v <= 1)")
+            raise ValueError(f"Invalid data: length of data is {len(data)}, but expected 136.")
+
+        if any(v < 0 for v in data):
+            raise ValueError(f"Invalid data: found negative values in data. Data: {data}")
+
+        if any(not isinstance(v, int) for v in data):
+            raise ValueError(f"Invalid data: found non-integer values in data. Data: {data}")
 
         return data
 
@@ -280,8 +301,8 @@ class Hai136Counter(Hai136):
         return Hai136List(hai_list)
 
     @classmethod
-    def from_hai136_counter(cls, hai136_counter: 'Hai136Counter') -> 'Hai136Counter':
-        return hai136_counter
+    def from_hai136(cls, hai136: 'Hai136') -> 'Hai136Counter':
+        return hai136.to_hai136_counter()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
@@ -297,15 +318,12 @@ class Hai136List(Hai136):
         self.data = self.normalize(data)
 
     def normalize(self, data: list[int]) -> list[int]:
-        for hai in data:
-            if not isinstance(hai, int):
-                raise ValueError(f"invalid data: type({hai}) = {type(hai)} (expected int)")
-            if not 0 <= hai <= 135:
-                raise ValueError(f"invalid data: {hai} (expected 0 <= value <= 135)")
+        if any(not isinstance(v, int) for v in data):
+            raise ValueError(f"Invalid data: found non-integer values in data. Data: {data}")
 
-        for i in range(136):
-            if not 0 <= data.count(i) <= 1:
-                raise ValueError(f"invalid data: count({i}) = {data.count(i)} (expected 0 <= count <= 1)")
+        if any(not 0 <= v <= 135 for v in data):
+            raise ValueError(f"Invalid data: values should be between 0 and 135. Data: {data}")
+
         return sorted(data)
 
     def to_hai34_counter(self) -> 'Hai34Counter':
@@ -330,8 +348,8 @@ class Hai136List(Hai136):
         return self
 
     @classmethod
-    def from_hai136_counter(cls, hai136_counter: 'Hai136Counter') -> 'Hai136List':
-        return hai136_counter.to_hai136_list()
+    def from_hai136(cls, hai136: 'Hai136') -> 'Hai136List':
+        return hai136.to_hai136_list()
 
     def __str__(self) -> str:
         return f"[{self.__class__.__name__}] {self.data}"
