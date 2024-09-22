@@ -9,11 +9,13 @@ pip install kago-utils
 ### 牌番号
 以下の牌の番号を定義します。
 
-牌番号(34index)は見た目が同じ4つの牌の区別をしないもので、牌番号(136index)は区別をするものです。
+34インデックス牌番号は見た目が同じ4つの牌の区別をしないものです。
 
-牌番号(136index)の19、55、91は赤牌を表します。
+136インデックス牌番号は見た目が同じ4つの牌の区別をするものです。
 
-| 牌 | 牌番号(34index) | 牌番号(136index) |
+136インデックス牌番号の19、55、91は赤牌を表します。
+
+| 牌 | 34インデックス | 136インデックス |
 | --- | --- | --- |
 | 1m | 0 | 0 ~ 3 |
 | 2m | 1 | 4 ~ 7 |
@@ -51,18 +53,13 @@ pip install kago-utils
 | 中 | 33 | 132 ~ 135 |
 
 ## 使い方
-### `Hai`クラス
+### `Hai`系クラス
 牌の集合を表現するクラスです。
 
-サブクラスに`Hai34`と`Hai136`があります。
-更にHai34クラスのサブクラスとして`Hai34Counter`、`Hai34List`、`Hai34String`が、Hai136クラスのサブクラスとして`Hai136Counter`、`Hai136List`が存在します。
+#### `Hai34Counter`クラス
+牌の集合を表現するクラスです。同じ種類の牌の区別をしません。
 
-`Hai`や`Hai34`や`Hai136`は抽象クラスなので、実際にインスタンス化して利用するのは`Hai34Counter`、`Hai34List`、`Hai34String`、`Hai136Counter`、`Hai136List`だけです。
-
-牌姿を34indexで表現したい場合はHai34系を、136indexで表現したい場合はHai136系を使います。
-
-### `Hai34Counter`
-長さ34の配列に各牌の枚数を格納することで牌姿を表現する形式です。配列のインデックスが牌番号(34index)に対応しています。
+長さ34の配列で牌の集合を表現します。配列のインデックスが牌の種類(34インデックス牌番号)に、値が牌の枚数に対応しています。
 
 以下のようにしてインスタンスを生成します。引数はint型の配列です。
 ```python
@@ -76,8 +73,10 @@ hai34_counter = Hai34Counter([
 ])
 ```
 
-### `Hai34List`
-可変長の配列に牌番号(34index)を格納することで牌姿を表現する形式です。
+#### `Hai34List`クラス
+牌の集合を表現するクラスです。同じ種類の牌の区別をしません。
+
+可変長の配列で牌の集合を表現します。配列の値が牌そのものに対応しています。牌の種類は34インデックス牌番号で表現します。
 
 以下のようにしてインスタンスを生成します。引数はint型の配列です。
 ```python
@@ -86,8 +85,10 @@ from kago_utils.hai import Hai34List
 hai34_list = Hai34List([0, 1, 2, 12, 13, 14, 24, 25, 26, 27, 27, 27, 28, 28])
 ```
 
-### `Hai34String`
-文字列で牌姿を表現する形式です。フォーマットは[天鳳の牌理](https://tenhou.net/2/)とほぼ同じです。赤牌だけは未対応です。
+#### `Hai34String`クラス
+牌の集合を表現するクラスです。同じ種類の牌の区別をしません。
+
+文字列で牌の集合を表現します。フォーマットは[天鳳の牌理](https://tenhou.net/2/)とほぼ同じです。赤牌だけは未対応です。
 
 以下のようにしてインスタンスを生成します。引数はstr型です。
 ```python
@@ -96,8 +97,10 @@ from kago_utils.hai import Hai34String
 hai34_string = Hai34String("123m456p789s11122z")
 ```
 
-### `Hai136Counter`
-`Hai34Counter`の牌番号(136index)版です。
+#### `Hai136Counter`クラス
+牌の集合を表現するクラスです。同じ種類の牌の区別をします。
+
+`Hai34Counter`クラスの136インデックス牌番号版です。
 
 以下のようにしてインスタンスを生成します。引数はint型の配列です。
 ```python
@@ -111,8 +114,10 @@ hai136_counter = Hai136Counter([
 ])
 ```
 
-### `Hai136List`
-`Hai34List`の牌番号(136index)版です。
+#### `Hai136List`クラス
+牌の集合を表現するクラスです。同じ種類の牌の区別をします。
+
+`Hai34List`クラスの136インデックス牌番号版です。
 
 以下のようにしてインスタンスを生成します。引数はint型の配列です。
 ```python
@@ -121,7 +126,7 @@ from kago_utils.hai import Hai136List
 hai136_list = Hai136List([0, 4, 8, 48, 52, 56, 96, 100, 104, 108, 109, 110, 112, 113])
 ```
 
-#### データの取得
+#### `Hai`系クラスのデータの取得
 `data`メンバでデータを取得できます。
 ```python
 from kago_utils.hai import Hai34List, Hai34String
@@ -136,10 +141,10 @@ print(hai34_string.data)
 # 123m456p789s11122z
 ```
 
-#### クラスの変換
-`to_hai34_counter`、`to_hai34_list`、`to_hai34_string`、`to_hai136_counter`、`to_hai136_list`メソッドを使うことでクラスの変換ができます。
+#### `Hai`系クラスから`Hai`系クラスへの変換
+`to_hai34_counter`、`to_hai34_list`、`to_hai34_string`、`to_hai136_counter`、`to_hai136_list`メソッドを使うことでそれぞれのクラスに変換することができます。
 
-ただし、Hai34系からHai136系への変換はできない仕様になっています。
+ただし、`Hai34`系のクラスから`Hai136`系のクラスへの変換はできない仕様になっています。
 ```python
 from kago_utils.hai import Hai34Counter, Hai34List, Hai34String, Hai136Counter
 
@@ -158,50 +163,54 @@ hai136_counter = Hai136Counter([
     1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ])
 
-print(hai34_counter.to_hai34_list().data)
-# [0, 1, 2, 12, 13, 14, 24, 25, 26, 27, 27, 27, 28, 28]
+print(hai34_counter.to_hai34_list())
+# [Hai34List] [0, 1, 2, 12, 13, 14, 24, 25, 26, 27, 27, 27, 28, 28]
 
-print(hai34_list.to_hai34_string().data)
-# 123m456p789s11122z
+print(hai34_list.to_hai34_string())
+# [Hai34String] 123m456p789s11122z
 
-print(hai136_counter.to_hai34_string().data)
-# 123m456p789s11122z
+print(hai136_counter.to_hai34_string())
+# [Hai34String] 123m456p789s11122z
 
-print(hai136_counter.to_hai136_list().data)
-# [0, 4, 8, 48, 52, 56, 96, 100, 104, 108, 109, 110, 112, 113]
-
+print(hai136_counter.to_hai136_list())
+# [Hai136List] [0, 4, 8, 48, 52, 56, 96, 100, 104, 108, 109, 110, 112, 113]
 ```
 
 #### 加算
-`Hai`クラスのサブクラス同士は加算することができます。
+`Hai`系のクラス同士は加算することができます。
 
-`Hai34Counter`や`Hai34String`のようにクラスが異なっていても加算ができます。異なるクラス同士の加算をすると結果のクラスは左辺のクラスと同じになります。
+`Hai34Counter`や`Hai34String`のようにクラスが異なっていても加算ができます。
+
+異なるクラス同士の加算をすると結果のクラスは左辺のクラスと同じになります。
 
 ただし、左辺が`Hai136`系、右辺が`Hai34`系の場合は加算できません。
 
 ```python
-from kago_utils.hai import Hai34Counter, Hai34List, Hai34String, Hai136Counter, Hai136List
+from kago_utils.hai import (Hai34Counter, Hai34List, Hai34String,
+                            Hai136Counter, Hai136List)
 
 a = Hai34List([0, 1, 2]) + Hai34String("123m")
-print(a.data)
-# [0, 0, 1, 1, 2, 2]
+print(a)
+# [Hai34List] [0, 0, 1, 1, 2, 2]
 
 b = Hai34Counter([1, 1, 1] + [0] * 31) + Hai136List([0, 4, 8])
-print(b.data)
-# [2, 2, 2, 0, 0, ...]
+print(b)
+# [Hai34Counter] [2, 2, 2, 0, 0, ...]
 
 c = Hai136Counter([1, 0, 0, 0] + [0] * 132) + Hai136List([1, 2, 3])
-print(c.data)
-# [1, 1, 1, 1, 0, ...]
+print(c)
+# [Hai136Counter] [1, 1, 1, 1, 0, ...]
 
 d = Hai136List([0, 1, 4, 5, 8, 10]) + Hai34String('123m')
 # TypeError: unsupported operand type(s) for +: 'Hai136List' and 'Hai34String'
 ```
 
 #### 減算
-`Hai`クラスのサブクラス同士は減算することができます。
+`Hai`系のクラス同士は減算することができます。
 
-`Hai34Counter`や`Hai34String`のようにクラスが異なっていても減算ができます。異なるクラス同士の減算をすると結果のクラスは左辺のクラスと同じになります。
+`Hai34Counter`や`Hai34String`のようにクラスが異なっていても減算ができます。
+
+異なるクラス同士の減算をすると結果のクラスは左辺のクラスと同じになります。
 
 ただし、左辺が`Hai136`系、右辺が`Hai34`系の場合は減算できません。
 
@@ -209,16 +218,16 @@ d = Hai136List([0, 1, 4, 5, 8, 10]) + Hai34String('123m')
 from kago_utils.hai import Hai34Counter, Hai34List, Hai34String, Hai136Counter, Hai136List
 
 a = Hai34List([0, 1, 2]) - Hai34String("12m")
-print(a.data)
-# [2]
+print(a)
+# [Hai34List] [2]
 
 b = Hai34Counter([1, 1, 1] + [0] * 31) - Hai136List([4, 8])
-print(b.data)
-# [1, 0, 0, 0, 0, ...]
+print(b)
+# [Hai34Counter] [1, 0, 0, 0, 0, ...]
 
 c = Hai136Counter([1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0] + [0] * 124) - Hai136List([4, 8])
-print(c.data)
-# [1, 0, 0, 0, 0, ...]
+print(c)
+# [Hai136Counter] [1, 0, 0, 0, 0, ...]
 
 d = Hai136List([0, 1, 4, 5, 8, 10]) - Hai34String('123m')
 # TypeError: unsupported operand type(s) for -: 'Hai136List' and 'Hai34String'
@@ -227,9 +236,8 @@ d = Hai136List([0, 1, 4, 5, 8, 10]) - Hai34String('123m')
 ### Shantenクラス
 向聴数や有効牌を計算するクラスです。
 
-#### Shantenクラスのインスタンス化
-`Shanten`クラスのインスタンスを生成します。
-引数は`Hai`クラスのインスタンスである必要があります。
+#### インスタンス化
+引数は`Hai`系クラスのインスタンスである必要があります。
 ```python
 from kago_utils.hai import Hai34String
 from kago_utils.shanten import Shanten
@@ -240,6 +248,7 @@ shanten = Shanten(jun_tehai)
 
 #### 向聴数の取得
 `shanten`メンバで向聴数を取得できます。
+
 向聴数の計算は初回のみ行われ、以降は結果をキャッシュしています。
 
 ```python
@@ -265,6 +274,7 @@ print(shanten.regular_shanten, shanten.chiitoitsu_shanten, shanten.kokushimusou_
 
 #### 有効牌の取得
 `yuukouhai`メンバで有効牌を取得できます。
+
 有効牌の計算は初回のみ行われ、以降は結果をキャッシュしています。
 
 ```python
