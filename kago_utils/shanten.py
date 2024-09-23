@@ -1,4 +1,5 @@
-﻿import os
+﻿import gzip
+import os
 import pickle
 from typing import cast
 
@@ -7,8 +8,8 @@ from kago_utils.hai import (Hai, Hai34, Hai34List, Hai34String, Hai136,
 
 
 class Shanten[T: Hai]:
-    suuhai_patterns: dict[tuple[tuple[int, ...], int], int] | None = None
-    zihai_patterns: dict[tuple[tuple[int, ...], int], int] | None = None
+    suuhai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
+    zihai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
 
     __slots__ = ('jun_tehai',
                  '_shanten', '_regular_shanten', '_chiitoitsu_shanten', '_kokushimusou_shanten',
@@ -63,15 +64,15 @@ class Shanten[T: Hai]:
 
     @classmethod
     def load_patterns(cls) -> None:
-        if cls.suuhai_patterns is None or cls.zihai_patterns is None:
+        if cls.suuhai_distance_table is None or cls.zihai_distance_table is None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            suuhai_patterns_path = os.path.join(current_dir, 'data/suuhai_shanten.pickle')
-            zihai_patterns_path = os.path.join(current_dir, 'data/zihai_shanten.pickle')
+            suuhai_distance_table_path = os.path.join(current_dir, 'data/suuhai_distance_table.pickle.gz')
+            zihai_distance_table_path = os.path.join(current_dir, 'data/zihai_distance_table.pickle.gz')
 
-            with open(suuhai_patterns_path, 'rb') as f:
-                cls.suuhai_patterns = pickle.load(f)
-            with open(zihai_patterns_path, 'rb') as f:
-                cls.zihai_patterns = pickle.load(f)
+            with gzip.open(suuhai_distance_table_path, 'rb') as f:
+                cls.suuhai_distance_table = pickle.load(f)
+            with gzip.open(zihai_distance_table_path, 'rb') as f:
+                cls.zihai_distance_table = pickle.load(f)
 
     def __calculate_shanten(self) -> int:
         shanten = self.regular_shanten
@@ -83,7 +84,7 @@ class Shanten[T: Hai]:
 
     def __calculate_regular_shanten(self) -> int:
         Shanten.load_patterns()
-        if Shanten.suuhai_patterns is None or Shanten.zihai_patterns is None:
+        if Shanten.suuhai_distance_table is None or Shanten.zihai_distance_table is None:
             raise RuntimeError('Patterns are not loaded')
 
         jun_tehai = self.jun_tehai.to_hai34_counter()
@@ -101,10 +102,10 @@ class Shanten[T: Hai]:
                 for n_souzu in range(0, n_hai + 1 - n_manzu - n_pinzu, 3):
                     n_zihai = n_hai - n_manzu - n_pinzu - n_souzu
                     for jantou_suit in range(4):
-                        m = Shanten.suuhai_patterns[(manzu, n_manzu + (2 if jantou_suit == 0 else 0))]
-                        p = Shanten.suuhai_patterns[(pinzu, n_pinzu + (2 if jantou_suit == 1 else 0))]
-                        s = Shanten.suuhai_patterns[(souzu, n_souzu + (2 if jantou_suit == 2 else 0))]
-                        z = Shanten.zihai_patterns[(zihai, n_zihai + (2 if jantou_suit == 3 else 0))]
+                        m = Shanten.suuhai_distance_table[(manzu, n_manzu + (2 if jantou_suit == 0 else 0))]
+                        p = Shanten.suuhai_distance_table[(pinzu, n_pinzu + (2 if jantou_suit == 1 else 0))]
+                        s = Shanten.suuhai_distance_table[(souzu, n_souzu + (2 if jantou_suit == 2 else 0))]
+                        z = Shanten.zihai_distance_table[(zihai, n_zihai + (2 if jantou_suit == 3 else 0))]
                         min_shanten = min(min_shanten, m + p + s + z - 1)
 
         return min_shanten
