@@ -57,10 +57,6 @@ class DistanceTableGenerator:
                     patterns.append(pattern)
         return patterns
 
-    @staticmethod
-    def distance_between_patterns(before: tuple[int, ...], after: tuple[int, ...]) -> int:
-        return sum([max(a - b, 0) for b, a in zip(before, after)])
-
     def update_table_and_queue(self, distance: int, pattern: list[int], length: int) -> None:
         key = (tuple(pattern), length)
         if key not in self.distance_table or distance < self.distance_table[key]:
