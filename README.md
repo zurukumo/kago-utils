@@ -1,4 +1,7 @@
 # kago-utils
+Python用の麻雀ライブラリ。
+
+Mahjong library for Python.
 
 ## インストール
 ```sh
@@ -285,3 +288,12 @@ jun_tehai = Hai34String("67m699p16s122345z")
 shanten = Shanten(jun_tehai)
 print(shanten.yuukouhai)
 # [Hai34String] 67m6p16s1345z
+```
+
+## 謝辞
+- `tests/data/p_hon_10000.txt`
+- `tests/data/p_koku_10000.txt`
+- `tests/data/p_normal_10000.txt`
+- `tests/data/p_tin_10000.txt`
+
+は、[あらの一人麻雀研究所](https://mahjong.ara.black/etc/shanten/shanten9.htm) からお借りしました。
