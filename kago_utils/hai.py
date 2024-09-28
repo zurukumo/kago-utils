@@ -1,39 +1,51 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Self
+from typing import Self, override
 
 
-class Hai(ABC):
+class Hai[T](ABC):
+    data: T
+
+    __slots__ = ('data',)
+
+    def __init__(self, data: T) -> None:
+        self.data = self.normalize(data)
+
     @abstractmethod
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    def normalize(self, data: T) -> T:
+        return data
+
+    @abstractmethod
+    def to_hai34_counter(self) -> Hai34Counter:
         pass
 
     @abstractmethod
-    def to_hai34_list(self) -> 'Hai34List':
+    def to_hai34_list(self) -> Hai34List:
         pass
 
     @abstractmethod
-    def to_hai34_string(self) -> 'Hai34String':
+    def to_hai34_string(self) -> Hai34String:
         pass
 
     @abstractmethod
     def validate_as_jun_tehai(self) -> None:
         pass
 
-    @abstractmethod
     def __str__(self) -> str:
-        pass
+        return f"[{self.__class__.__name__}] {self.data}"
 
-    @abstractmethod
     def __repr__(self) -> str:
-        pass
+        return self.__str__()
 
 
-class Hai34(Hai):
+class Hai34[T](Hai[T]):
     @classmethod
     @abstractmethod
-    def from_hai34(cls, hai34: 'Hai34') -> Self:
+    def from_hai34(cls, hai34: Hai34Counter | Hai34List | Hai34String) -> Self:
         pass
 
+    @override
     def validate_as_jun_tehai(self) -> None:
         hai34_counter = self.to_hai34_counter()
         if sum(hai34_counter.data) > 14:
@@ -43,35 +55,36 @@ class Hai34(Hai):
         if any(not 0 <= count <= 4 for count in hai34_counter.data):
             raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
 
-    def __add__(self, other: Hai) -> Self:
-        if isinstance(other, Hai):
+    def __add__(self, other: Hai34Counter | Hai34List | Hai34String | Hai136Counter | Hai136List) -> Self:
+        if isinstance(other, (Hai34Counter, Hai34List, Hai34String, Hai136Counter, Hai136List)):
             new_data = [a + b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
             return self.__class__.from_hai34(Hai34Counter(new_data))
 
         raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other: Hai) -> Self:
-        if isinstance(other, Hai):
+    def __sub__(self, other: Hai34Counter | Hai34List | Hai34String | Hai136Counter | Hai136List) -> Self:
+        if isinstance(other, (Hai34Counter, Hai34List, Hai34String, Hai136Counter, Hai136List)):
             new_data = [a - b for a, b in zip(self.to_hai34_counter().data, other.to_hai34_counter().data)]
             return self.__class__.from_hai34(Hai34Counter(new_data))
 
         raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
-class Hai136(Hai):
+class Hai136[T](Hai[T]):
     @abstractmethod
-    def to_hai136_counter(self) -> 'Hai136Counter':
+    def to_hai136_counter(self) -> Hai136Counter:
         pass
 
     @abstractmethod
-    def to_hai136_list(self) -> 'Hai136List':
+    def to_hai136_list(self) -> Hai136List:
         pass
 
     @classmethod
     @abstractmethod
-    def from_hai136(cls, hai136: 'Hai136') -> Self:
+    def from_hai136(cls, hai136: Hai136Counter | Hai136List) -> Self:
         pass
 
+    @override
     def validate_as_jun_tehai(self) -> None:
         hai136_counter = self.to_hai136_counter()
         if sum(hai136_counter.data) > 14:
@@ -83,27 +96,23 @@ class Hai136(Hai):
         if any(not 0 <= count <= 1 for count in hai136_counter.data):
             raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
-    def __add__(self, other: 'Hai136') -> Self:
-        if isinstance(other, Hai136):
+    def __add__(self, other: Hai136Counter | Hai136List) -> Self:
+        if isinstance(other, (Hai136Counter, Hai136List)):
             new_data = [a + b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
             return self.__class__.from_hai136(Hai136Counter(new_data))
 
         raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
-    def __sub__(self, other: 'Hai136') -> Self:
-        if isinstance(other, Hai136):
+    def __sub__(self, other: Hai136Counter | Hai136List) -> Self:
+        if isinstance(other, (Hai136Counter, Hai136List)):
             new_data = [a - b for a, b in zip(self.to_hai136_counter().data, other.to_hai136_counter().data)]
             return self.__class__.from_hai136(Hai136Counter(new_data))
 
         raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
-class Hai34Counter(Hai34):
-    data: list[int]
-
-    def __init__(self, data: list[int]):
-        self.data = self.normalize(data)
-
+class Hai34Counter(Hai34[list[int]]):
+    @override
     def normalize(self, data: list[int]) -> list[int]:
         if len(data) != 34:
             raise ValueError(f"Invalid data: length of data is {len(data)}, but expected 34.")
@@ -116,17 +125,20 @@ class Hai34Counter(Hai34):
 
         return data
 
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    @override
+    def to_hai34_counter(self) -> Hai34Counter:
         return self
 
-    def to_hai34_list(self) -> 'Hai34List':
+    @override
+    def to_hai34_list(self) -> Hai34List:
         hai_list = []
         for hai, count in enumerate(self.data):
             for _ in range(count):
                 hai_list.append(hai)
         return Hai34List(hai_list)
 
-    def to_hai34_string(self) -> 'Hai34String':
+    @override
+    def to_hai34_string(self) -> Hai34String:
         items: dict[str, list[int]] = {'m': [], 'p': [], 's': [], 'z': []}
         for hai, count in enumerate(self.data):
             for _ in range(count):
@@ -146,22 +158,13 @@ class Hai34Counter(Hai34):
         return Hai34String(hai_string)
 
     @classmethod
-    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34Counter':
+    @override
+    def from_hai34(cls, hai34: Hai34Counter | Hai34List | Hai34String) -> Hai34Counter:
         return hai34.to_hai34_counter()
 
-    def __str__(self) -> str:
-        return f"[{self.__class__.__name__}] {self.data}"
 
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class Hai34List(Hai34):
-    data: list[int]
-
-    def __init__(self, data: list[int]):
-        self.data = self.normalize(data)
-
+class Hai34List(Hai34[list[int]]):
+    @override
     def normalize(self, data: list[int]) -> list[int]:
         if any(not isinstance(v, int) for v in data):
             raise ValueError(f"Invalid data: found non-integer values in data. Data: {data}")
@@ -171,35 +174,29 @@ class Hai34List(Hai34):
 
         return sorted(data)
 
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    @override
+    def to_hai34_counter(self) -> Hai34Counter:
         hai_counter = [0] * 34
         for hai in self.data:
             hai_counter[hai] += 1
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self) -> 'Hai34List':
+    @override
+    def to_hai34_list(self) -> Hai34List:
         return self
 
-    def to_hai34_string(self) -> 'Hai34String':
+    @override
+    def to_hai34_string(self) -> Hai34String:
         return self.to_hai34_counter().to_hai34_string()
 
     @classmethod
-    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34List':
+    @override
+    def from_hai34(cls, hai34: Hai34Counter | Hai34List | Hai34String) -> Hai34List:
         return hai34.to_hai34_list()
 
-    def __str__(self) -> str:
-        return f"[{self.__class__.__name__}] {self.data}"
 
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class Hai34String(Hai34):
-    data: str
-
-    def __init__(self, data: str):
-        self.data = self.normalize(data)
-
+class Hai34String(Hai34[str]):
+    @override
     def normalize(self, data: str) -> str:
         items = {'m': [0] * 9, 'p': [0] * 9, 's': [0] * 9, 'z': [0] * 9}
         suit = ''
@@ -225,7 +222,8 @@ class Hai34String(Hai34):
 
         return data
 
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    @override
+    def to_hai34_counter(self) -> Hai34Counter:
         hai_counter = [0] * 34
         suit = ''
         for c in reversed(self.data):
@@ -243,29 +241,22 @@ class Hai34String(Hai34):
                 suit = c
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self) -> 'Hai34List':
+    @override
+    def to_hai34_list(self) -> Hai34List:
         return self.to_hai34_counter().to_hai34_list()
 
-    def to_hai34_string(self) -> 'Hai34String':
+    @override
+    def to_hai34_string(self) -> Hai34String:
         return self
 
     @classmethod
-    def from_hai34(cls, hai34: 'Hai34') -> 'Hai34String':
+    @override
+    def from_hai34(cls, hai34: Hai34Counter | Hai34List | Hai34String) -> Hai34String:
         return hai34.to_hai34_string()
 
-    def __str__(self) -> str:
-        return f"[{self.__class__.__name__}] {self.data}"
 
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class Hai136Counter(Hai136):
-    data: list[int]
-
-    def __init__(self, data: list[int]):
-        self.data = self.normalize(data)
-
+class Hai136Counter(Hai136[list[int]]):
+    @override
     def normalize(self, data: list[int]) -> list[int]:
         if len(data) != 136:
             raise ValueError(f"Invalid data: length of data is {len(data)}, but expected 136.")
@@ -278,22 +269,27 @@ class Hai136Counter(Hai136):
 
         return data
 
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    @override
+    def to_hai34_counter(self) -> Hai34Counter:
         hai_counter = [0] * 34
         for hai, count in enumerate(self.data):
             hai_counter[hai // 4] += count
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self) -> 'Hai34List':
+    @override
+    def to_hai34_list(self) -> Hai34List:
         return self.to_hai34_counter().to_hai34_list()
 
-    def to_hai34_string(self) -> 'Hai34String':
+    @override
+    def to_hai34_string(self) -> Hai34String:
         return self.to_hai34_counter().to_hai34_string()
 
-    def to_hai136_counter(self) -> 'Hai136Counter':
+    @override
+    def to_hai136_counter(self) -> Hai136Counter:
         return self
 
-    def to_hai136_list(self) -> 'Hai136List':
+    @override
+    def to_hai136_list(self) -> Hai136List:
         hai_list = []
         for hai, count in enumerate(self.data):
             if count == 1:
@@ -301,22 +297,13 @@ class Hai136Counter(Hai136):
         return Hai136List(hai_list)
 
     @classmethod
-    def from_hai136(cls, hai136: 'Hai136') -> 'Hai136Counter':
+    @override
+    def from_hai136(cls, hai136: Hai136Counter | Hai136List) -> Hai136Counter:
         return hai136.to_hai136_counter()
 
-    def __str__(self) -> str:
-        return f"[{self.__class__.__name__}] {self.data}"
 
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class Hai136List(Hai136):
-    data: list[int]
-
-    def __init__(self, data: list[int]):
-        self.data = self.normalize(data)
-
+class Hai136List(Hai136[list[int]]):
+    @override
     def normalize(self, data: list[int]) -> list[int]:
         if any(not isinstance(v, int) for v in data):
             raise ValueError(f"Invalid data: found non-integer values in data. Data: {data}")
@@ -326,33 +313,33 @@ class Hai136List(Hai136):
 
         return sorted(data)
 
-    def to_hai34_counter(self) -> 'Hai34Counter':
+    @override
+    def to_hai34_counter(self) -> Hai34Counter:
         hai_counter = [0] * 34
         for hai in self.data:
             hai_counter[hai // 4] += 1
         return Hai34Counter(hai_counter)
 
-    def to_hai34_list(self) -> 'Hai34List':
+    @override
+    def to_hai34_list(self) -> Hai34List:
         return self.to_hai34_counter().to_hai34_list()
 
-    def to_hai34_string(self) -> 'Hai34String':
+    @override
+    def to_hai34_string(self) -> Hai34String:
         return self.to_hai34_counter().to_hai34_string()
 
-    def to_hai136_counter(self) -> 'Hai136Counter':
+    @override
+    def to_hai136_counter(self) -> Hai136Counter:
         hai_counter = [0] * 136
         for hai in self.data:
             hai_counter[hai] += 1
         return Hai136Counter(hai_counter)
 
-    def to_hai136_list(self) -> 'Hai136List':
+    @override
+    def to_hai136_list(self) -> Hai136List:
         return self
 
     @classmethod
-    def from_hai136(cls, hai136: 'Hai136') -> 'Hai136List':
+    @override
+    def from_hai136(cls, hai136: Hai136Counter | Hai136List) -> Hai136List:
         return hai136.to_hai136_list()
-
-    def __str__(self) -> str:
-        return f"[{self.__class__.__name__}] {self.data}"
-
-    def __repr__(self) -> str:
-        return self.__str__()
