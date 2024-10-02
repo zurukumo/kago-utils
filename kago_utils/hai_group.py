@@ -75,7 +75,7 @@ class Hai34Group(HaiGroupBase):
 
     @classmethod
     def from_counter(cls, counter: list[int]) -> Self:
-        cls.validate_counter(counter)
+        cls.__validate_counter(counter)
         hais = []
         for hai, count in enumerate(counter):
             for _ in range(count):
@@ -88,8 +88,8 @@ class Hai34Group(HaiGroupBase):
             counter[hai.id] += 1
         return counter
 
-    @classmethod
-    def validate_counter(cls, counter: list[int]) -> None:
+    @staticmethod
+    def __validate_counter(counter: list[int]) -> None:
         if len(counter) != 34:
             raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 34.")
 
@@ -101,14 +101,14 @@ class Hai34Group(HaiGroupBase):
 
     @classmethod
     def from_list(cls, _list: list[int]) -> Self:
-        cls.validate_list(_list)
+        cls.__validate_list(_list)
         return cls([Hai34(hai) for hai in _list])
 
     def to_list(self) -> list[int]:
         return [hai.id for hai in self.hais]
 
-    @classmethod
-    def validate_list(cls, _list: list[int]) -> None:
+    @staticmethod
+    def __validate_list(_list: list[int]) -> None:
         if any(not isinstance(v, int) for v in _list):
             raise ValueError(f"Invalid list: found non-integer values in list. Data: {_list}")
 
@@ -117,7 +117,7 @@ class Hai34Group(HaiGroupBase):
 
     @classmethod
     def from_string(cls, string: str) -> Self:
-        cls.validate_string(string)
+        cls.__validate_string(string)
         hais = []
         suit = ''
         for c in reversed(string):
@@ -141,8 +141,8 @@ class Hai34Group(HaiGroupBase):
                 string += suit
         return string
 
-    @classmethod
-    def validate_string(cls, string: str) -> None:
+    @staticmethod
+    def __validate_string(string: str) -> None:
         suit = ''
         for c in reversed(string):
             if c in '123456789':
@@ -235,7 +235,7 @@ class Hai136Group(HaiGroupBase):
 
     @classmethod
     def from_counter(cls, counter: list[int]) -> Self:
-        cls.validate_counter(counter)
+        cls.__validate_counter(counter)
         hais = []
         for hai, count in enumerate(counter):
             for _ in range(count):
@@ -248,8 +248,8 @@ class Hai136Group(HaiGroupBase):
             counter[hai.id] += 1
         return counter
 
-    @classmethod
-    def validate_counter(cls, counter: list[int]) -> None:
+    @staticmethod
+    def __validate_counter(counter: list[int]) -> None:
         if len(counter) != 136:
             raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 136.")
 
@@ -261,14 +261,14 @@ class Hai136Group(HaiGroupBase):
 
     @classmethod
     def from_list(cls, _list: list[int]) -> Self:
-        cls.validate_list(_list)
+        cls.__validate_list(_list)
         return cls([Hai136(hai) for hai in sorted(_list)])
 
     def to_list(self) -> list[int]:
         return [hai.id for hai in self.hais]
 
-    @classmethod
-    def validate_list(cls, _list: list[int]) -> None:
+    @staticmethod
+    def __validate_list(_list: list[int]) -> None:
         if any(not isinstance(v, int) for v in _list):
             raise ValueError(f"Invalid list: found non-integer values in list. Data: {_list}")
 
