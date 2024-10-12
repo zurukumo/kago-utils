@@ -178,26 +178,34 @@ class Hai34Group(HaiGroupBase):
         raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __add__(self, other: object) -> Self:
-        if isinstance(other, Hai34Group):
-            new_hais = self.hais + other.hais
-            return self.__class__(new_hais)
-        elif isinstance(other, Hai136Group):
-            new_hais = self.hais + other.to_hai34_group().hais
-            return self.__class__(new_hais)
+        match other:
+            case Hai34() | Hai136():
+                new_hais = self.hais + [other.to_hai34()]
+                return self.__class__(new_hais)
+            case Hai34Group() | Hai136Group():
+                new_hais = self.hais + other.to_hai34_group().hais
+                return self.__class__(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: object) -> Self:
-        if isinstance(other, Hai34Group):
-            new_hais = self.hais.copy()
-            for hai in other.hais:
-                new_hais.remove(hai)
-            return self.__class__(new_hais)
-        elif isinstance(other, Hai136Group):
-            new_hais = self.hais.copy()
-            for hai in other.to_hai34_group().hais:
-                new_hais.remove(hai)
-            return self.__class__(new_hais)
+        match other:
+            case Hai34() | Hai136():
+                new_hais = self.hais.copy()
+                removed_hai = other.to_hai34()
+                if removed_hai not in new_hais:
+                    raise ValueError(f"Invalid data: {removed_hai} is not in left-hand data, so cannot be subtracted.")
+                new_hais.remove(removed_hai)
+                return self.__class__(new_hais)
+            case Hai34Group() | Hai136Group():
+                new_hais = self.hais.copy()
+                removed_hais = other.to_hai34_group().hais
+                for removed_hai in removed_hais:
+                    if removed_hai not in new_hais:
+                        raise ValueError(
+                            f"Invalid data: {removed_hai} is not in left-hand data, so cannot be subtracted.")
+                    new_hais.remove(removed_hai)
+                return self.__class__(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
@@ -300,21 +308,32 @@ class Hai136Group(HaiGroupBase):
         raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __add__(self, other: object) -> Self:
-        if isinstance(other, Hai136Group):
-            new_hais = self.hais + other.hais
-            return self.__class__(new_hais)
+        match other:
+            case Hai136():
+                new_hais = self.hais + [other]
+                return self.__class__(new_hais)
+            case Hai136Group():
+                new_hais = self.hais + other.hais
+                return self.__class__(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: object) -> Self:
-        if isinstance(other, Hai136Group):
-            new_hais = self.hais.copy()
-            for hai in other.hais:
-                try:
+        match other:
+            case Hai136():
+                new_hais = self.hais.copy()
+                if other not in new_hais:
+                    raise ValueError(f"Invalid data: {other} is not in left-hand side data, so cannot be subtracted.")
+                new_hais.remove(other)
+                return self.__class__(new_hais)
+            case Hai136Group():
+                new_hais = self.hais.copy()
+                for hai in other.hais:
+                    if hai not in new_hais:
+                        raise ValueError(
+                            f"Invalid data: {hai} is not in left-hand side data, so cannot be subtracted.")
                     new_hais.remove(hai)
-                except ValueError:
-                    raise ValueError(f"Invalid data: {hai} is not in left-hand side data, so cannot subtract.")
-            return self.__class__(new_hais)
+                return self.__class__(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
