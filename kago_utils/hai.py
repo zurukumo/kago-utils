@@ -82,6 +82,10 @@ class Hai34(HaiBase):
     def number(self) -> int:
         return self.id % 9
 
+    @property
+    def face(self) -> str:
+        return f"{self.number + 1}{self.suit}"
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai34):
             return self.id == other.id
@@ -156,6 +160,10 @@ class Hai136(HaiBase):
     @property
     def number(self) -> int:
         return (self.id // 4) % 9
+
+    @property
+    def face(self) -> str:
+        return f"{self.number + 1}{self.suit}"
 
     def is_aka(self) -> bool:
         return self.id in (16, 52, 88)
