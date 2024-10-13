@@ -229,6 +229,9 @@ class Hai34Group(HaiGroupBase):
 
         raise TypeError(f"Unsupported operand type(s) for &: '{type(self).__name__}' and '{type(other).__name__}'")
 
+    def __getitem__(self, key: int) -> Hai34:
+        return self.hais[key]
+
 
 class Hai136Group(HaiGroupBase):
     hais: list[Hai136]
@@ -350,3 +353,6 @@ class Hai136Group(HaiGroupBase):
             return self.__class__.from_counter(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for &: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __getitem__(self, key: int) -> Hai136:
+        return self.hais[key]
