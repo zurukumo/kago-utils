@@ -425,6 +425,18 @@ class TestHai136GroupAnd(unittest.TestCase):
             hai_group1 & hai_group2
 
 
+class TestHai34GroupLen(unittest.TestCase):
+    def test_len(self):
+        hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
+        self.assertEqual(len(hai_group), 3)
+
+
+class TestHai136GroupLen(unittest.TestCase):
+    def test_len(self):
+        hai_group = Hai136Group([Hai136(0), Hai136(1), Hai136(2)])
+        self.assertEqual(len(hai_group), 3)
+
+
 class TestHai34GroupGetitem(unittest.TestCase):
     def test_getitem(self):
         hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
