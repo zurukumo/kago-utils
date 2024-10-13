@@ -1,50 +1,9 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from typing import Literal
 
 
-class HaiBase(ABC):
-    @abstractmethod
-    def to_hai34(self) -> Hai34:
-        pass
-
-    @property
-    @abstractmethod
-    def suit(self) -> Literal['m', 'p', 's', 'z']:
-        pass
-
-    @property
-    @abstractmethod
-    def number(self) -> int:
-        pass
-
-    @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __ne__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __lt__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __le__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __gt__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __ge__(self, other: object) -> bool:
-        pass
-
-
-class Hai34(HaiBase):
+class Hai34:
     id: int
 
     __slots__ = ('id',)
@@ -81,6 +40,10 @@ class Hai34(HaiBase):
     @property
     def number(self) -> int:
         return self.id % 9
+
+    @property
+    def face(self) -> str:
+        return f"{self.number + 1}{self.suit}"
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai34):
@@ -119,7 +82,7 @@ class Hai34(HaiBase):
         raise TypeError(f"Unsupported operand type(s) for >=: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
-class Hai136(HaiBase):
+class Hai136:
     id: int
 
     __slots__ = ('id',)
@@ -156,6 +119,10 @@ class Hai136(HaiBase):
     @property
     def number(self) -> int:
         return (self.id // 4) % 9
+
+    @property
+    def face(self) -> str:
+        return f"{self.number + 1}{self.suit}"
 
     def is_aka(self) -> bool:
         return self.id in (16, 52, 88)

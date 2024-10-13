@@ -88,6 +88,30 @@ class TestHai136Number(unittest.TestCase):
             self.assertEqual(Hai136(id).number, (id // 4) % 9)
 
 
+class TestHai34Face(unittest.TestCase):
+    def test_face(self):
+        faces = [
+            '1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m',
+            '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p',
+            '1s', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s',
+            '1z', '2z', '3z', '4z', '5z', '6z', '7z'
+        ]
+        for id in range(34):
+            self.assertEqual(Hai34(id).face, faces[id])
+
+
+class TestHai136Face(unittest.TestCase):
+    def test_face(self):
+        faces = [
+            '1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m',
+            '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p',
+            '1s', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s',
+            '1z', '2z', '3z', '4z', '5z', '6z', '7z'
+        ]
+        for id in range(136):
+            self.assertEqual(Hai136(id).face, faces[id//4])
+
+
 class TestHai136IsAka(unittest.TestCase):
     def test_is_aka(self):
         for id in range(136):
