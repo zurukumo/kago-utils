@@ -41,6 +41,22 @@ class Chii:
         if not (self.hais[0].suit == self.hais[1].suit == self.hais[2].suit):
             raise ValueError('Invalid Chii: should be the same suit')
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Chii):
+            return all((
+                self.hais == other.hais,
+                self.stolen == other.stolen,
+                self.from_who == other.from_who
+            ))
+
+        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Chii):
+            return not self == other
+
+        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+
 
 class Pon:
     hais: Hai136Group
@@ -80,6 +96,22 @@ class Pon:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face):
             raise ValueError('Invalid Pon: should be the same hai')
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Pon):
+            return all((
+                self.hais == other.hais,
+                self.stolen == other.stolen,
+                self.from_who == other.from_who
+            ))
+
+        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Pon):
+            return not self == other
+
+        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+
 
 class Kakan:
     hais: Hai136Group
@@ -109,11 +141,30 @@ class Kakan:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
             raise ValueError('Invalid Kakan: should be the same hai')
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Kakan):
+            return all((
+                self.hais == other.hais,
+                self.stolen == other.stolen,
+                self.added == other.added,
+                self.from_who == other.from_who
+            ))
+
+        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Kakan):
+            return not self == other
+
+        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+
 
 class Daiminkan:
     hais: Hai136Group
     stolen: Hai136
     from_who: Zaichi
+
+    __slots__ = ('hais', 'stolen', 'from_who')
 
     def __init__(self, hais: Hai136Group, stolen: Hai136, from_who: Zaichi) -> None:
         self.hais = hais
@@ -133,6 +184,22 @@ class Daiminkan:
     def __validate_same_face(self) -> None:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
             raise ValueError('Invalid Daiminkan: should be the same hai')
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Daiminkan):
+            return all((
+                self.hais == other.hais,
+                self.stolen == other.stolen,
+                self.from_who == other.from_who
+            ))
+
+        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Daiminkan):
+            return not self == other
+
+        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
 
 
 class Ankan:
@@ -158,3 +225,18 @@ class Ankan:
     def __validate_same_face(self) -> None:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
             raise ValueError('Invalid Ankan: should be the same hai')
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Ankan):
+            return all((
+                self.hais == other.hais,
+                self.from_who == other.from_who
+            ))
+
+        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Ankan):
+            return not self == other
+
+        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
