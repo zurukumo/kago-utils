@@ -1,68 +1,11 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from typing import Self
 
 from kago_utils.hai import Hai34, Hai136
 
 
-class HaiGroupBase(ABC):
-    @abstractmethod
-    def to_hai34_group(self) -> Hai34Group:
-        pass
-
-    @classmethod
-    @abstractmethod
-    def from_counter(cls, counter: list[int]) -> Self:
-        pass
-
-    @classmethod
-    @abstractmethod
-    def from_list(cls, _list: list[int]) -> Self:
-        pass
-
-    @abstractmethod
-    def to_counter(self) -> list[int]:
-        pass
-
-    @abstractmethod
-    def to_list(self) -> list[int]:
-        pass
-
-    @abstractmethod
-    def to_string(self) -> str:
-        pass
-
-    @abstractmethod
-    def validate_as_jun_tehai(self) -> None:
-        pass
-
-    @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __ne__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __add__(self, other: object) -> Self:
-        pass
-
-    @abstractmethod
-    def __sub__(self, other: object) -> Self:
-        pass
-
-    @abstractmethod
-    def __or__(self, other: object) -> Self:
-        pass
-
-    @abstractmethod
-    def __and__(self, other: object) -> Self:
-        pass
-
-
-class Hai34Group(HaiGroupBase):
+class Hai34Group:
     hais: list[Hai34]
 
     __slots__ = ('hais',)
@@ -240,7 +183,7 @@ class Hai34Group(HaiGroupBase):
         raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
 
 
-class Hai136Group(HaiGroupBase):
+class Hai136Group:
     hais: list[Hai136]
 
     __slots__ = ('hais',)
