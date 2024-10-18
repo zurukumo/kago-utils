@@ -69,14 +69,14 @@ class Pon:
         )
 
     def __validate(self) -> None:
-        self.validate_length_3()
-        self.validate_same_face()
+        self.__validate_length_3()
+        self.__validate_same_face()
 
-    def validate_length_3(self) -> None:
+    def __validate_length_3(self) -> None:
         if len(self.hais) != 3:
             raise ValueError('Invalid Pon: length should be 3')
 
-    def validate_same_face(self) -> None:
+    def __validate_same_face(self) -> None:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face):
             raise ValueError('Invalid Pon: should be the same hai')
 
