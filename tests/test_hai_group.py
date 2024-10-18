@@ -453,5 +453,29 @@ class TestHai136GroupGetitem(unittest.TestCase):
         self.assertEqual(hai_group[2], Hai136(2))
 
 
+class TestHai34GroupIn(unittest.TestCase):
+    def test_in(self):
+        hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
+        self.assertEqual(Hai34(0) in hai_group, True)
+        self.assertEqual(Hai34(3) in hai_group, False)
+
+    def test_in_with_int(self):
+        hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
+        with self.assertRaises(TypeError):
+            0 in hai_group
+
+
+class TestHai136GroupIn(unittest.TestCase):
+    def test_in(self):
+        hai_group = Hai136Group([Hai136(0), Hai136(1), Hai136(2)])
+        self.assertEqual(Hai136(0) in hai_group, True)
+        self.assertEqual(Hai136(3) in hai_group, False)
+
+    def test_in_with_int(self):
+        hai_group = Hai136Group([Hai136(0), Hai136(1), Hai136(2)])
+        with self.assertRaises(TypeError):
+            0 in hai_group
+
+
 if __name__ == '__main__':
     unittest.main()
