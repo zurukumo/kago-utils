@@ -22,6 +22,7 @@ class Chii:
     def __validate(self) -> None:
         self.__validate_length_3()
         self.__validate_consecutive()
+        self.__validate_suuhai()
         self.__validate_same_suit()
 
     def __validate_length_3(self) -> None:
@@ -31,6 +32,10 @@ class Chii:
     def __validate_consecutive(self) -> None:
         if not (self.hais[0].number == self.hais[1].number - 1 == self.hais[2].number - 2):
             raise ValueError('Invalid Chii: should be consecutive')
+
+    def __validate_suuhai(self) -> None:
+        if 'z' in (self.hais[0].suit, self.hais[1].suit, self.hais[2].suit):
+            raise ValueError('Invalid Chii: should not contain zihai')
 
     def __validate_same_suit(self) -> None:
         if not (self.hais[0].suit == self.hais[1].suit == self.hais[2].suit):
@@ -49,6 +54,8 @@ class Pon:
         self.stolen = stolen
         self.from_who = from_who
 
+        self.__validate()
+
     def to_kakan(self) -> Kakan:
         base_id = self.hais[0].id - (self.hais[0].id % 4)
         new_hais = Hai136Group.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])
@@ -61,7 +68,7 @@ class Pon:
             from_who=self.from_who,
         )
 
-    def validate(self) -> None:
+    def __validate(self) -> None:
         self.validate_length_3()
         self.validate_same_face()
 
