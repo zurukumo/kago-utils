@@ -49,6 +49,18 @@ class Pon:
         self.stolen = stolen
         self.from_who = from_who
 
+    def to_kakan(self) -> Kakan:
+        base_id = self.hais[0].id - (self.hais[0].id % 4)
+        new_hais = Hai136Group.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])
+        added = (new_hais - self.hais)[0]
+
+        return Kakan(
+            hais=new_hais,
+            stolen=self.stolen,
+            added=added,
+            from_who=self.from_who,
+        )
+
     def validate(self) -> None:
         self.validate_length_3()
         self.validate_same_face()
