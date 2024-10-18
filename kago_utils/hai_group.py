@@ -235,6 +235,12 @@ class Hai34Group(HaiGroupBase):
     def __getitem__(self, key: int) -> Hai34:
         return self.hais[key]
 
+    def __contains__(self, item: object) -> bool:
+        if isinstance(item, Hai34):
+            return item in self.hais
+
+        raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
+
 
 class Hai136Group(HaiGroupBase):
     hais: list[Hai136]
@@ -362,3 +368,9 @@ class Hai136Group(HaiGroupBase):
 
     def __getitem__(self, key: int) -> Hai136:
         return self.hais[key]
+
+    def __contains__(self, item: object) -> bool:
+        if isinstance(item, Hai136):
+            return item in self.hais
+
+        raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
