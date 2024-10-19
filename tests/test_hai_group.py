@@ -175,6 +175,28 @@ class TestHai136GroupToString(unittest.TestCase):
         self.assertEqual(Hai136Group(hais).to_string(), string)
 
 
+class TestHai34GroupValidate(unittest.TestCase):
+    def test_validate(self):
+        hai_group = Hai34Group.from_list([0, 0, 0])
+        hai_group.validate()
+
+    def test_validate_when_5th_hai_exists(self):
+        hai_group = Hai34Group.from_list([0, 0, 0, 0, 0])
+        with self.assertRaises(ValueError):
+            hai_group.validate()
+
+
+class TestHai136GroupValidate(unittest.TestCase):
+    def test_validate(self):
+        hai_group = Hai136Group.from_list([0, 1, 2])
+        hai_group.validate()
+
+    def test_validate_when_2nd_hai_exists(self):
+        hai_group = Hai136Group.from_list([0, 0, 1, 2])
+        with self.assertRaises(ValueError):
+            hai_group.validate()
+
+
 class TestHai34GroupValidateAsJunTehai(unittest.TestCase):
     def test_validate_as_jun_tehai(self):
         hai_group = Hai34Group.from_list(list(range(14)))

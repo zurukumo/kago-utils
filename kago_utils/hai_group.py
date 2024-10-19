@@ -99,14 +99,19 @@ class Hai34Group:
                     f"Expected 'm', 'p', 's', 'z', or '1'-'9'. Data: {string}"
                 )
 
+    def validate(self) -> None:
+        counter = self.to_counter()
+        if any(not 0 <= v <= 4 for v in counter):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
+
     def validate_as_jun_tehai(self) -> None:
+        self.validate()
+
         counter = self.to_counter()
         if sum(counter) > 14:
             raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
         if sum(counter) % 3 == 0:
             raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
-        if any(not 0 <= v <= 4 for v in counter):
-            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai34Group):
@@ -239,14 +244,19 @@ class Hai136Group:
     def to_string(self) -> str:
         return self.to_hai34_group().to_string()
 
+    def validate(self) -> None:
+        counter = self.to_counter()
+        if any(not 0 <= v <= 1 for v in counter):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
+
     def validate_as_jun_tehai(self) -> None:
+        self.validate()
+
         counter = self.to_counter()
         if sum(counter) > 14:
             raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
         if sum(counter) % 3 == 0:
             raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
-        if any(not 0 <= v <= 1 for v in counter):
-            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai136Group):
