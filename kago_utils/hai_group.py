@@ -247,7 +247,7 @@ class Hai136Group:
     def validate(self) -> None:
         counter = self.to_counter()
         if any(not 0 <= v <= 1 for v in counter):
-            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
     def validate_as_jun_tehai(self) -> None:
         self.validate()
