@@ -20,26 +20,38 @@ class Chii:
         self.__validate()
 
     def __validate(self) -> None:
-        self.__validate_length_3()
-        self.__validate_consecutive()
-        self.__validate_suuhai()
-        self.__validate_same_suit()
+        self.hais.validate()
 
-    def __validate_length_3(self) -> None:
+        self.__validate_length_of_hais_is_3()
+        self.__validate_hais_are_consecutive()
+        self.__validate_hais_are_not_zihai()
+        self.__validate_hais_are_same_suit()
+        self.__validate_hais_contain_stolen()
+        self.__validate_from_who_is_kamicha()
+
+    def __validate_length_of_hais_is_3(self) -> None:
         if len(self.hais) != 3:
-            raise ValueError('Invalid Chii: length should be 3')
+            raise ValueError('Invalid Chii: length of hais should be 3')
 
-    def __validate_consecutive(self) -> None:
+    def __validate_hais_are_consecutive(self) -> None:
         if not (self.hais[0].number == self.hais[1].number - 1 == self.hais[2].number - 2):
-            raise ValueError('Invalid Chii: should be consecutive')
+            raise ValueError('Invalid Chii: hais should be consecutive')
 
-    def __validate_suuhai(self) -> None:
+    def __validate_hais_are_not_zihai(self) -> None:
         if 'z' in (self.hais[0].suit, self.hais[1].suit, self.hais[2].suit):
-            raise ValueError('Invalid Chii: should not contain zihai')
+            raise ValueError('Invalid Chii: hais should not contain zihai')
 
-    def __validate_same_suit(self) -> None:
+    def __validate_hais_are_same_suit(self) -> None:
         if not (self.hais[0].suit == self.hais[1].suit == self.hais[2].suit):
-            raise ValueError('Invalid Chii: should be the same suit')
+            raise ValueError('Invalid Chii: hais should be the same suit')
+
+    def __validate_hais_contain_stolen(self) -> None:
+        if self.stolen not in self.hais:
+            raise ValueError('Invalid Chii: hais should contain stolen hai')
+
+    def __validate_from_who_is_kamicha(self) -> None:
+        if self.from_who != Zaichi.KAMICHA:
+            raise ValueError('Invalid Chii: from_who should be Zaichi.KAMICHA')
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Chii):
@@ -72,6 +84,30 @@ class Pon:
 
         self.__validate()
 
+    def __validate(self) -> None:
+        self.hais.validate()
+
+        self.__validate_length_of_hais_is_3()
+        self.__validate_hais_are_same_face()
+        self.__validate_hais_contain_stolen()
+        self.__validate_from_who_is_taacha()
+
+    def __validate_length_of_hais_is_3(self) -> None:
+        if len(self.hais) != 3:
+            raise ValueError('Invalid Pon: length of hais should be 3')
+
+    def __validate_hais_are_same_face(self) -> None:
+        if not (self.hais[0].face == self.hais[1].face == self.hais[2].face):
+            raise ValueError('Invalid Pon: hais should be the same face')
+
+    def __validate_hais_contain_stolen(self) -> None:
+        if self.stolen not in self.hais:
+            raise ValueError('Invalid Pon: hais should contain stolen hai')
+
+    def __validate_from_who_is_taacha(self) -> None:
+        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
+            raise ValueError('Invalid Pon: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA')
+
     def to_kakan(self) -> Kakan:
         base_id = self.hais[0].id - (self.hais[0].id % 4)
         new_hais = Hai136Group.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])
@@ -83,18 +119,6 @@ class Pon:
             added=added,
             from_who=self.from_who,
         )
-
-    def __validate(self) -> None:
-        self.__validate_length_3()
-        self.__validate_same_face()
-
-    def __validate_length_3(self) -> None:
-        if len(self.hais) != 3:
-            raise ValueError('Invalid Pon: length should be 3')
-
-    def __validate_same_face(self) -> None:
-        if not (self.hais[0].face == self.hais[1].face == self.hais[2].face):
-            raise ValueError('Invalid Pon: should be the same hai')
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Pon):
@@ -130,16 +154,33 @@ class Kakan:
         self.__validate()
 
     def __validate(self) -> None:
-        self.__validate_length_4()
-        self.__validate_same_face()
+        self.hais.validate()
 
-    def __validate_length_4(self) -> None:
+        self.__validate_length_of_hais_is_4()
+        self.__validate_hais_are_same_face()
+        self.__validate_hais_contain_stolen()
+        self.__validate_hais_contain_added()
+        self.__validate_from_who_is_taacha()
+
+    def __validate_length_of_hais_is_4(self) -> None:
         if len(self.hais) != 4:
-            raise ValueError('Invalid Kakan: length should be 4')
+            raise ValueError('Invalid Kakan: length of hais should be 4')
 
-    def __validate_same_face(self) -> None:
+    def __validate_hais_are_same_face(self) -> None:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
-            raise ValueError('Invalid Kakan: should be the same hai')
+            raise ValueError('Invalid Kakan: hais should be the same face')
+
+    def __validate_hais_contain_stolen(self) -> None:
+        if self.stolen not in self.hais:
+            raise ValueError('Invalid Kakan: hais should contain stolen hai')
+
+    def __validate_hais_contain_added(self) -> None:
+        if self.added not in self.hais:
+            raise ValueError('Invalid Kakan: hais should contain added hai')
+
+    def __validate_from_who_is_taacha(self) -> None:
+        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
+            raise ValueError('Invalid Kakan: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA')
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Kakan):
@@ -174,16 +215,28 @@ class Daiminkan:
         self.__validate()
 
     def __validate(self) -> None:
-        self.__validate_length_4()
-        self.__validate_same_face()
+        self.hais.validate()
 
-    def __validate_length_4(self) -> None:
+        self.__validate_length_of_hais_is_4()
+        self.__validate_hais_are_same_face()
+        self.__validate_hais_contain_stolen()
+        self.__validate_from_who_is_taacha()
+
+    def __validate_length_of_hais_is_4(self) -> None:
         if len(self.hais) != 4:
-            raise ValueError('Invalid Daiminkan: length should be 4')
+            raise ValueError('Invalid Daiminkan: length of hais should be 4')
 
-    def __validate_same_face(self) -> None:
+    def __validate_hais_are_same_face(self) -> None:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
-            raise ValueError('Invalid Daiminkan: should be the same hai')
+            raise ValueError('Invalid Daiminkan: hais should be the same face')
+
+    def __validate_hais_contain_stolen(self) -> None:
+        if self.stolen not in self.hais:
+            raise ValueError('Invalid Daiminkan: hais should contain stolen hai')
+
+    def __validate_from_who_is_taacha(self) -> None:
+        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
+            raise ValueError('Invalid Daiminkan: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA')
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Daiminkan):
@@ -215,16 +268,23 @@ class Ankan:
         self.__validate()
 
     def __validate(self) -> None:
-        self.__validate_length_4()
-        self.__validate_same_face()
+        self.hais.validate()
 
-    def __validate_length_4(self) -> None:
+        self.__validate_length_of_hais_is_4()
+        self.__validate_hais_are_same_face()
+        self.__validate_from_who_is_jicha()
+
+    def __validate_length_of_hais_is_4(self) -> None:
         if len(self.hais.to_list()) != 4:
-            raise ValueError('Invalid Ankan: length should be 4')
+            raise ValueError('Invalid Ankan: length of hais should be 4')
 
-    def __validate_same_face(self) -> None:
+    def __validate_hais_are_same_face(self) -> None:
         if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
-            raise ValueError('Invalid Ankan: should be the same hai')
+            raise ValueError('Invalid Ankan: hais should be the same face')
+
+    def __validate_from_who_is_jicha(self) -> None:
+        if self.from_who != Zaichi.JICHA:
+            raise ValueError('Invalid Ankan: from_who should be Zaichi.JICHA')
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Ankan):
