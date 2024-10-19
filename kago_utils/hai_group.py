@@ -1,68 +1,11 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from typing import Self
 
 from kago_utils.hai import Hai34, Hai136
 
 
-class HaiGroupBase(ABC):
-    @abstractmethod
-    def to_hai34_group(self) -> Hai34Group:
-        pass
-
-    @classmethod
-    @abstractmethod
-    def from_counter(cls, counter: list[int]) -> Self:
-        pass
-
-    @classmethod
-    @abstractmethod
-    def from_list(cls, _list: list[int]) -> Self:
-        pass
-
-    @abstractmethod
-    def to_counter(self) -> list[int]:
-        pass
-
-    @abstractmethod
-    def to_list(self) -> list[int]:
-        pass
-
-    @abstractmethod
-    def to_string(self) -> str:
-        pass
-
-    @abstractmethod
-    def validate_as_jun_tehai(self) -> None:
-        pass
-
-    @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __ne__(self, other: object) -> bool:
-        pass
-
-    @abstractmethod
-    def __add__(self, other: object) -> Self:
-        pass
-
-    @abstractmethod
-    def __sub__(self, other: object) -> Self:
-        pass
-
-    @abstractmethod
-    def __or__(self, other: object) -> Self:
-        pass
-
-    @abstractmethod
-    def __and__(self, other: object) -> Self:
-        pass
-
-
-class Hai34Group(HaiGroupBase):
+class Hai34Group:
     hais: list[Hai34]
 
     __slots__ = ('hais',)
@@ -156,14 +99,19 @@ class Hai34Group(HaiGroupBase):
                     f"Expected 'm', 'p', 's', 'z', or '1'-'9'. Data: {string}"
                 )
 
+    def validate(self) -> None:
+        counter = self.to_counter()
+        if any(not 0 <= v <= 4 for v in counter):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
+
     def validate_as_jun_tehai(self) -> None:
+        self.validate()
+
         counter = self.to_counter()
         if sum(counter) > 14:
             raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
         if sum(counter) % 3 == 0:
             raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
-        if any(not 0 <= v <= 4 for v in counter):
-            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 4. Data: {self.__repr__()}")
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai34Group):
@@ -179,32 +127,30 @@ class Hai34Group(HaiGroupBase):
 
     def __add__(self, other: object) -> Self:
         match other:
-            case Hai34() | Hai136():
-                new_hais = self.hais + [other.to_hai34()]
+            case Hai34():
+                new_hais = self.hais + [other]
                 return self.__class__(new_hais)
-            case Hai34Group() | Hai136Group():
-                new_hais = self.hais + other.to_hai34_group().hais
+            case Hai34Group():
+                new_hais = self.hais + other.hais
                 return self.__class__(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __sub__(self, other: object) -> Self:
         match other:
-            case Hai34() | Hai136():
+            case Hai34():
                 new_hais = self.hais.copy()
-                removed_hai = other.to_hai34()
-                if removed_hai not in new_hais:
-                    raise ValueError(f"Invalid data: {removed_hai} is not in left-hand data, so cannot be subtracted.")
-                new_hais.remove(removed_hai)
+                if other not in new_hais:
+                    raise ValueError(f"Invalid data: {other} is not in left-hand data, so cannot be subtracted.")
+                new_hais.remove(other)
                 return self.__class__(new_hais)
-            case Hai34Group() | Hai136Group():
+            case Hai34Group():
                 new_hais = self.hais.copy()
-                removed_hais = other.to_hai34_group().hais
-                for removed_hai in removed_hais:
-                    if removed_hai not in new_hais:
+                for hai in other.hais:
+                    if hai not in new_hais:
                         raise ValueError(
-                            f"Invalid data: {removed_hai} is not in left-hand data, so cannot be subtracted.")
-                    new_hais.remove(removed_hai)
+                            f"Invalid data: {hai} is not in left-hand data, so cannot be subtracted.")
+                    new_hais.remove(hai)
                 return self.__class__(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
@@ -235,8 +181,14 @@ class Hai34Group(HaiGroupBase):
     def __getitem__(self, key: int) -> Hai34:
         return self.hais[key]
 
+    def __contains__(self, item: object) -> bool:
+        if isinstance(item, Hai34):
+            return item in self.hais
 
-class Hai136Group(HaiGroupBase):
+        raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
+
+
+class Hai136Group:
     hais: list[Hai136]
 
     __slots__ = ('hais',)
@@ -292,14 +244,19 @@ class Hai136Group(HaiGroupBase):
     def to_string(self) -> str:
         return self.to_hai34_group().to_string()
 
+    def validate(self) -> None:
+        counter = self.to_counter()
+        if any(not 0 <= v <= 1 for v in counter):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
+
     def validate_as_jun_tehai(self) -> None:
+        self.validate()
+
         counter = self.to_counter()
         if sum(counter) > 14:
             raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
         if sum(counter) % 3 == 0:
             raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
-        if any(not 0 <= v <= 1 for v in counter):
-            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai136Group):
@@ -362,3 +319,9 @@ class Hai136Group(HaiGroupBase):
 
     def __getitem__(self, key: int) -> Hai136:
         return self.hais[key]
+
+    def __contains__(self, item: object) -> bool:
+        if isinstance(item, Hai136):
+            return item in self.hais
+
+        raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
