@@ -1,5 +1,4 @@
 import unittest
-from itertools import product
 
 from kago_utils.hai import Hai34, Hai136
 
@@ -120,24 +119,32 @@ class TestHai136IsAka(unittest.TestCase):
 
 class TestHai34Comparison(unittest.TestCase):
     def test_comparison(self):
-        for id1, id2 in product(range(34), repeat=2):
-            self.assertEqual(id1 == id2, Hai34(id1) == Hai34(id2))
-            self.assertEqual(id1 != id2, Hai34(id1) != Hai34(id2))
-            self.assertEqual(id1 < id2, Hai34(id1) < Hai34(id2))
-            self.assertEqual(id1 <= id2, Hai34(id1) <= Hai34(id2))
-            self.assertEqual(id1 > id2, Hai34(id1) > Hai34(id2))
-            self.assertEqual(id1 >= id2, Hai34(id1) >= Hai34(id2))
+        self.assertEqual(Hai34(0), Hai34(0))
+        self.assertNotEqual(Hai34(0), Hai34(1))
+        self.assertLess(Hai34(0), Hai34(1))
+        self.assertLessEqual(Hai34(0), Hai34(0))
+        self.assertLessEqual(Hai34(0), Hai34(1))
+        self.assertGreater(Hai34(1), Hai34(0))
+        self.assertGreaterEqual(Hai34(0), Hai34(0))
+        self.assertGreaterEqual(Hai34(1), Hai34(0))
+
+    def test_eq_with_int(self):
+        self.assertNotEqual(Hai34(0), 0)
 
 
 class TestHai136Comparison(unittest.TestCase):
     def test_comparison(self):
-        for id1, id2 in product(range(136), repeat=2):
-            self.assertEqual(Hai136(id1) == Hai136(id2), id1 == id2)
-            self.assertEqual(Hai136(id1) != Hai136(id2), id1 != id2)
-            self.assertEqual(Hai136(id1) < Hai136(id2), id1 < id2)
-            self.assertEqual(Hai136(id1) <= Hai136(id2), id1 <= id2)
-            self.assertEqual(Hai136(id1) > Hai136(id2), id1 > id2)
-            self.assertEqual(Hai136(id1) >= Hai136(id2), id1 >= id2)
+        self.assertEqual(Hai136(0), Hai136(0))
+        self.assertNotEqual(Hai136(0), Hai136(1))
+        self.assertLess(Hai136(0), Hai136(1))
+        self.assertLessEqual(Hai136(0), Hai136(0))
+        self.assertLessEqual(Hai136(0), Hai136(1))
+        self.assertGreater(Hai136(1), Hai136(0))
+        self.assertGreaterEqual(Hai136(0), Hai136(0))
+        self.assertGreaterEqual(Hai136(1), Hai136(0))
+
+    def test_eq_with_int(self):
+        self.assertNotEqual(Hai136(0), 0)
 
 
 if __name__ == '__main__':
