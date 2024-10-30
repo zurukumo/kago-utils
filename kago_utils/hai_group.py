@@ -117,13 +117,7 @@ class Hai34Group:
         if isinstance(other, Hai34Group):
             return self.hais == other.hais
 
-        raise TypeError(f"Unsupported operand type(s) for ==: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Hai34Group):
-            return self.hais != other.hais
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
     def __add__(self, other: object) -> Self:
         match other:
@@ -262,13 +256,7 @@ class Hai136Group:
         if isinstance(other, Hai136Group):
             return self.hais == other.hais
 
-        raise TypeError(f"Unsupported operand type(s) for ==: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Hai136Group):
-            return self.hais != other.hais
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
     def __add__(self, other: object) -> Self:
         match other:

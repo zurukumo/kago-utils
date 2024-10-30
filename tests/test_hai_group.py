@@ -239,32 +239,36 @@ class TestHai136GroupValidateAsJunTehai(unittest.TestCase):
             hai_group.validate_as_jun_tehai()
 
 
-class TestHai34GroupComparison(unittest.TestCase):
-    def test_comparison_when_equal(self):
+class TestHai34GroupEq(unittest.TestCase):
+    def test_eq(self):
         hai_group1 = Hai34Group([Hai34(1), Hai34(2)])
         hai_group2 = Hai34Group([Hai34(1), Hai34(2)])
         hai_group3 = Hai34Group([Hai34(2), Hai34(1)])
-        self.assertEqual(hai_group1 == hai_group2, True)
-        self.assertEqual(hai_group1 == hai_group3, True)
+        hai_group4 = Hai34Group([Hai34(1), Hai34(3)])
+        self.assertEqual(hai_group1, hai_group1)
+        self.assertEqual(hai_group1, hai_group2)
+        self.assertEqual(hai_group1, hai_group3)
+        self.assertNotEqual(hai_group1, hai_group4)
 
-    def test_comparison_when_not_equal(self):
-        hai_group1 = Hai34Group([Hai34(1), Hai34(2)])
-        hai_group2 = Hai34Group([Hai34(1), Hai34(3)])
-        self.assertEqual(hai_group1 != hai_group2, True)
+    def test_eq_with_int(self):
+        hai_group = Hai34Group([Hai34(1), Hai34(2)])
+        self.assertNotEqual(hai_group, 1)
 
 
-class TestHai136GroupComparison(unittest.TestCase):
-    def test_comparison_when_equal(self):
+class TestHai136GroupEq(unittest.TestCase):
+    def test_eq(self):
         hai_group1 = Hai136Group([Hai136(1), Hai136(2)])
         hai_group2 = Hai136Group([Hai136(1), Hai136(2)])
         hai_group3 = Hai136Group([Hai136(2), Hai136(1)])
-        self.assertEqual(hai_group1 == hai_group2, True)
-        self.assertEqual(hai_group1 == hai_group3, True)
+        hai_group4 = Hai136Group([Hai136(1), Hai136(3)])
+        self.assertEqual(hai_group1, hai_group1)
+        self.assertEqual(hai_group1, hai_group2)
+        self.assertEqual(hai_group1, hai_group3)
+        self.assertNotEqual(hai_group1, hai_group4)
 
-    def test_comparison_when_not_equal(self):
-        hai_group1 = Hai136Group([Hai136(1), Hai136(2)])
-        hai_group2 = Hai136Group([Hai136(1), Hai136(3)])
-        self.assertEqual(hai_group1 != hai_group2, True)
+    def test_eq_with_int(self):
+        hai_group = Hai136Group([Hai136(1), Hai136(2)])
+        self.assertNotEqual(hai_group, 1)
 
 
 class TestHai34GroupAdd(unittest.TestCase):

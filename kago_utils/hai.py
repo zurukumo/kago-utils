@@ -49,13 +49,7 @@ class Hai34:
         if isinstance(other, Hai34):
             return self.id == other.id
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Hai34):
-            return self.id != other.id
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
     def __lt__(self, other: object) -> bool:
         if isinstance(other, Hai34):
@@ -131,13 +125,7 @@ class Hai136:
         if isinstance(other, Hai136):
             return self.id == other.id
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Hai136):
-            return self.id != other.id
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
     def __lt__(self, other: object) -> bool:
         if isinstance(other, Hai136):
