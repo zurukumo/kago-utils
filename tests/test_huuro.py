@@ -133,15 +133,19 @@ class TestChiiComparison(unittest.TestCase):
         chii2 = Chii(hais=Hai136Group.from_list([0, 4, 8]), stolen=Hai136(0))
         self.assertEqual(chii1, chii2)
 
-    def test_ne_with_not_same_hais(self):
+    def test_eq_with_not_same_hais(self):
         chii1 = Chii(hais=Hai136Group.from_list([0, 4, 8]), stolen=Hai136(0))
         chii2 = Chii(hais=Hai136Group.from_list([0, 4, 9]), stolen=Hai136(0))
         self.assertNotEqual(chii1, chii2)
 
-    def test_ne_with_not_same_stolen(self):
+    def test_eq_with_not_same_stolen(self):
         chii1 = Chii(hais=Hai136Group.from_list([0, 4, 8]), stolen=Hai136(0))
         chii2 = Chii(hais=Hai136Group.from_list([0, 4, 8]), stolen=Hai136(4))
         self.assertNotEqual(chii1, chii2)
+
+    def test_eq_with_int(self):
+        chii = Chii(hais=Hai136Group.from_list([0, 4, 8]), stolen=Hai136(0))
+        self.assertNotEqual(chii, 0)
 
 
 class TestPonComparison(unittest.TestCase):
@@ -150,20 +154,24 @@ class TestPonComparison(unittest.TestCase):
         pon2 = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         self.assertEqual(pon1, pon2)
 
-    def test_ne_with_not_same_hais(self):
+    def test_eq_with_not_same_hais(self):
         pon1 = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         pon2 = Pon(hais=Hai136Group.from_list([0, 1, 3]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         self.assertNotEqual(pon1, pon2)
 
-    def test_ne_with_not_same_stolen(self):
+    def test_eq_with_not_same_stolen(self):
         pon1 = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         pon2 = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(1), from_who=Zaichi.KAMICHA)
         self.assertNotEqual(pon1, pon2)
 
-    def test_ne_with_not_same_from_who(self):
+    def test_eq_with_not_same_from_who(self):
         pon1 = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         pon2 = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(0), from_who=Zaichi.SIMOCHA)
         self.assertNotEqual(pon1, pon2)
+
+    def test_eq_with_int(self):
+        pon = Pon(hais=Hai136Group.from_list([0, 1, 2]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
+        self.assertNotEqual(pon, 0)
 
 
 class TestKakanComparison(unittest.TestCase):
@@ -174,26 +182,31 @@ class TestKakanComparison(unittest.TestCase):
                        stolen=Hai136(0), added=Hai136(1), from_who=Zaichi.KAMICHA)
         self.assertEqual(kakan1, kakan2)
 
-    def test_ne_with_not_same_stolen(self):
+    def test_eq_with_not_same_stolen(self):
         kakan1 = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
                        stolen=Hai136(0), added=Hai136(1), from_who=Zaichi.KAMICHA)
         kakan2 = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
                        stolen=Hai136(1), added=Hai136(1), from_who=Zaichi.KAMICHA)
         self.assertNotEqual(kakan1, kakan2)
 
-    def test_ne_with_not_same_added(self):
+    def test_eq_with_not_same_added(self):
         kakan1 = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
                        stolen=Hai136(0), added=Hai136(1), from_who=Zaichi.KAMICHA)
         kakan2 = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
                        stolen=Hai136(0), added=Hai136(2), from_who=Zaichi.KAMICHA)
         self.assertNotEqual(kakan1, kakan2)
 
-    def test_ne_with_not_same_from_who(self):
+    def test_eq_with_not_same_from_who(self):
         kakan1 = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
                        stolen=Hai136(0), added=Hai136(1), from_who=Zaichi.KAMICHA)
         kakan2 = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
                        stolen=Hai136(0), added=Hai136(1), from_who=Zaichi.SIMOCHA)
         self.assertNotEqual(kakan1, kakan2)
+
+    def test_eq_with_int(self):
+        kakan = Kakan(hais=Hai136Group.from_list([0, 1, 2, 3]),
+                      stolen=Hai136(0), added=Hai136(1), from_who=Zaichi.KAMICHA)
+        self.assertNotEqual(kakan, 0)
 
 
 class TestDaiminkanComparison(unittest.TestCase):
@@ -202,15 +215,19 @@ class TestDaiminkanComparison(unittest.TestCase):
         daiminkan2 = Daiminkan(hais=Hai136Group.from_list([0, 1, 2, 3]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         self.assertEqual(daiminkan1, daiminkan2)
 
-    def test_ne_with_not_same_stolen(self):
+    def test_eq_with_not_same_stolen(self):
         daiminkan1 = Daiminkan(hais=Hai136Group.from_list([0, 1, 2, 3]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         daiminkan2 = Daiminkan(hais=Hai136Group.from_list([0, 1, 2, 3]), stolen=Hai136(1), from_who=Zaichi.KAMICHA)
         self.assertNotEqual(daiminkan1, daiminkan2)
 
-    def test_ne_with_not_same_from_who(self):
+    def test_eq_with_not_same_from_who(self):
         daiminkan1 = Daiminkan(hais=Hai136Group.from_list([0, 1, 2, 3]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
         daiminkan2 = Daiminkan(hais=Hai136Group.from_list([0, 1, 2, 3]), stolen=Hai136(0), from_who=Zaichi.SIMOCHA)
         self.assertNotEqual(daiminkan1, daiminkan2)
+
+    def test_eq_with_int(self):
+        daiminkan = Daiminkan(hais=Hai136Group.from_list([0, 1, 2, 3]), stolen=Hai136(0), from_who=Zaichi.KAMICHA)
+        self.assertNotEqual(daiminkan, 0)
 
 
 class TestAnkanComparison(unittest.TestCase):
@@ -218,3 +235,7 @@ class TestAnkanComparison(unittest.TestCase):
         ankan1 = Ankan(hais=Hai136Group.from_list([0, 1, 2, 3]))
         ankan2 = Ankan(hais=Hai136Group.from_list([0, 1, 2, 3]))
         self.assertEqual(ankan1, ankan2)
+
+    def test_eq_with_int(self):
+        ankan = Ankan(hais=Hai136Group.from_list([0, 1, 2, 3]))
+        self.assertNotEqual(ankan, 0)
