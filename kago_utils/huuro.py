@@ -61,13 +61,7 @@ class Chii:
                 self.from_who == other.from_who
             ))
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Chii):
-            return not self == other
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
 
 class Pon:
@@ -128,13 +122,7 @@ class Pon:
                 self.from_who == other.from_who
             ))
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Pon):
-            return not self == other
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
 
 class Kakan:
@@ -191,13 +179,7 @@ class Kakan:
                 self.from_who == other.from_who
             ))
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Kakan):
-            return not self == other
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
 
 class Daiminkan:
@@ -246,13 +228,7 @@ class Daiminkan:
                 self.from_who == other.from_who
             ))
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Daiminkan):
-            return not self == other
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
 
 
 class Ankan:
@@ -293,10 +269,4 @@ class Ankan:
                 self.from_who == other.from_who
             ))
 
-        raise TypeError(f"Unsupported operand type(s) for =: '{type(self).__name__}' and '{type(other).__name__}'")
-
-    def __ne__(self, other: object) -> bool:
-        if isinstance(other, Ankan):
-            return not self == other
-
-        raise TypeError(f"Unsupported operand type(s) for !=: '{type(self).__name__}' and '{type(other).__name__}'")
+        return False
