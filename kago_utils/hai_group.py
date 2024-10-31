@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Self
+from typing import Iterator, Self
 
 from kago_utils.hai import Hai34, Hai136
 
@@ -175,6 +175,9 @@ class Hai34Group:
     def __getitem__(self, key: int) -> Hai34:
         return self.hais[key]
 
+    def __iter__(self) -> Iterator[Hai34]:
+        return iter(self.hais)
+
     def __contains__(self, item: object) -> bool:
         if isinstance(item, Hai34):
             return item in self.hais
@@ -307,6 +310,9 @@ class Hai136Group:
 
     def __getitem__(self, key: int) -> Hai136:
         return self.hais[key]
+
+    def __iter__(self) -> Iterator[Hai136]:
+        return iter(self.hais)
 
     def __contains__(self, item: object) -> bool:
         if isinstance(item, Hai136):
