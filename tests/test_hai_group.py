@@ -449,25 +449,39 @@ class TestHai136GroupGetitem(unittest.TestCase):
         self.assertEqual(hai_group[2], Hai136(2))
 
 
-class TestHai34GroupIn(unittest.TestCase):
-    def test_in(self):
+class TestHai34GroupIter(unittest.TestCase):
+    def test_iter(self):
+        hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
+        for i, hai in enumerate(hai_group):
+            self.assertEqual(hai, Hai34(i))
+
+
+class TestHai136GroupIter(unittest.TestCase):
+    def test_iter(self):
+        hai_group = Hai136Group([Hai136(0), Hai136(1), Hai136(2)])
+        for i, hai in enumerate(hai_group):
+            self.assertEqual(hai, Hai136(i))
+
+
+class TestHai34GroupContains(unittest.TestCase):
+    def test_contains(self):
         hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
         self.assertEqual(Hai34(0) in hai_group, True)
         self.assertEqual(Hai34(3) in hai_group, False)
 
-    def test_in_with_int(self):
+    def test_contais_with_int(self):
         hai_group = Hai34Group([Hai34(0), Hai34(1), Hai34(2)])
         with self.assertRaises(TypeError):
             0 in hai_group
 
 
-class TestHai136GroupIn(unittest.TestCase):
-    def test_in(self):
+class TestHai136GroupContains(unittest.TestCase):
+    def test_contains(self):
         hai_group = Hai136Group([Hai136(0), Hai136(1), Hai136(2)])
         self.assertEqual(Hai136(0) in hai_group, True)
         self.assertEqual(Hai136(3) in hai_group, False)
 
-    def test_in_with_int(self):
+    def test_contains_with_int(self):
         hai_group = Hai136Group([Hai136(0), Hai136(1), Hai136(2)])
         with self.assertRaises(TypeError):
             0 in hai_group
