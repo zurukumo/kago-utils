@@ -111,10 +111,14 @@ class TestHai136Face(unittest.TestCase):
             self.assertEqual(Hai136(id).face, faces[id//4])
 
 
-class TestHai136IsAka(unittest.TestCase):
-    def test_is_aka(self):
-        for id in range(136):
-            self.assertEqual(Hai136(id).is_aka(), id in (16, 52, 88))
+class TestHai136Color(unittest.TestCase):
+    def test_color(self):
+        self.assertEqual(Hai136(15).color, 'kuro')
+        self.assertEqual(Hai136(16).color, 'aka')
+        self.assertEqual(Hai136(51).color, 'kuro')
+        self.assertEqual(Hai136(52).color, 'aka')
+        self.assertEqual(Hai136(87).color, 'kuro')
+        self.assertEqual(Hai136(88).color, 'aka')
 
 
 class TestHai34Comparison(unittest.TestCase):
