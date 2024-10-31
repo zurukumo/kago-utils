@@ -118,8 +118,11 @@ class Hai136:
     def face(self) -> str:
         return f"{self.number + 1}{self.suit}"
 
-    def is_aka(self) -> bool:
-        return self.id in (16, 52, 88)
+    @property
+    def color(self) -> Literal["kuro", "aka"]:
+        if self.id in (16, 52, 88):
+            return "aka"
+        return "kuro"
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai136):
