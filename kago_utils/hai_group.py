@@ -198,7 +198,15 @@ class Hai136Group:
 
     @classmethod
     def from_counter(cls, counter: list[int]) -> Self:
-        cls.__validate_counter(counter)
+        if len(counter) != 136:
+            raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 136.")
+
+        if any(v < 0 for v in counter):
+            raise ValueError(f"Invalid counter: found negative values in counter. Data: {counter}")
+
+        if any(not isinstance(v, int) for v in counter):
+            raise ValueError(f"Invalid counter: found non-integer values in counter. Data: {counter}")
+
         hais = []
         for hai, count in enumerate(counter):
             for _ in range(count):
@@ -211,32 +219,18 @@ class Hai136Group:
             counter[hai.id] += 1
         return counter
 
-    @staticmethod
-    def __validate_counter(counter: list[int]) -> None:
-        if len(counter) != 136:
-            raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 136.")
-
-        if any(v < 0 for v in counter):
-            raise ValueError(f"Invalid counter: found negative values in counter. Data: {counter}")
-
-        if any(not isinstance(v, int) for v in counter):
-            raise ValueError(f"Invalid counter: found non-integer values in counter. Data: {counter}")
-
     @classmethod
     def from_list(cls, _list: list[int]) -> Self:
-        cls.__validate_list(_list)
-        return cls([Hai136(hai) for hai in sorted(_list)])
-
-    def to_list(self) -> list[int]:
-        return [hai.id for hai in self.hais]
-
-    @staticmethod
-    def __validate_list(_list: list[int]) -> None:
         if any(not isinstance(v, int) for v in _list):
             raise ValueError(f"Invalid list: found non-integer values in list. Data: {_list}")
 
         if any(not 0 <= v <= 135 for v in _list):
             raise ValueError(f"Invalid list: values should be between 0 and 135. Data: {_list}")
+
+        return cls([Hai136(hai) for hai in sorted(_list)])
+
+    def to_list(self) -> list[int]:
+        return [hai.id for hai in self.hais]
 
     @classmethod
     def from_string(cls, string: str) -> Self:
