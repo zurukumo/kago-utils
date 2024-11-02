@@ -131,6 +131,49 @@ class TestHai34GroupFromString(unittest.TestCase):
             Hai34Group.from_string(string)
 
 
+class TestHai136GroupFromString(unittest.TestCase):
+    def test_from_string(self):
+        testcases = [
+            ('1m1p1s1z', [0, 36, 72, 108]),
+            ('1234m', [0, 4, 8, 12]),
+            ('1m', [0]),
+            ('11m', [0, 1]),
+            ('111m', [0, 1, 2]),
+            ('1111m', [0, 1, 2, 3]),
+            ('05m', [16, 17]),
+            ('55m', [17, 18]),
+            ('0m0p0s', [16, 52, 88]),
+        ]
+
+        for string, _list in testcases:
+            self.assertEqual(Hai136Group.from_string(string), Hai136Group.from_list(_list))
+
+    def test_from_string_with_5_same_face_hai(self):
+        string = '11111m'
+        with self.assertRaises(ValueError):
+            Hai136Group.from_string(string)
+
+    def test_from_string_with_invalid_zihai(self):
+        with self.assertRaises(ValueError):
+            Hai136Group.from_string("0z")
+
+        with self.assertRaises(ValueError):
+            Hai136Group.from_string("8z")
+
+        with self.assertRaises(ValueError):
+            Hai136Group.from_string("9z")
+
+    def test_from_string_with_invalid_format(self):
+        string = '123'
+        with self.assertRaises(ValueError):
+            Hai136Group.from_string(string)
+
+    def test_from_string_with_invalid_character(self):
+        string = '1x'
+        with self.assertRaises(ValueError):
+            Hai136Group.from_string(string)
+
+
 class TestHai34GroupToCounter(unittest.TestCase):
     def test_to_counter(self):
         hais = [Hai34(0), Hai34(33)]
@@ -170,9 +213,15 @@ class TestHai34GroupToString(unittest.TestCase):
 
 class TestHai136GroupToString(unittest.TestCase):
     def test_to_string(self):
-        hais = [Hai136(0), Hai136(135)]
-        string = '1m7z'
-        self.assertEqual(Hai136Group(hais).to_string(), string)
+        testcases = [
+            ([Hai136(0), Hai136(135)], '1m7z'),
+            ([Hai136(16), Hai136(52), Hai136(88)], '0m0p0s'),
+            ([Hai136(0), Hai136(8), Hai136(16), Hai136(24), Hai136(32)], '13079m'),
+            ([Hai136(0), Hai136(8), Hai136(17), Hai136(24), Hai136(32)], '13579m'),
+        ]
+
+        for hais, string in testcases:
+            self.assertEqual(Hai136Group(hais).to_string(), string)
 
 
 class TestHai34GroupValidate(unittest.TestCase):

@@ -78,13 +78,13 @@ class TestHai136Suit(unittest.TestCase):
 class TestHai34Number(unittest.TestCase):
     def test_number(self):
         for id in range(34):
-            self.assertEqual(Hai34(id).number, id % 9)
+            self.assertEqual(Hai34(id).number, id % 9 + 1)
 
 
 class TestHai136Number(unittest.TestCase):
     def test_number(self):
         for id in range(136):
-            self.assertEqual(Hai136(id).number, (id // 4) % 9)
+            self.assertEqual(Hai136(id).number, (id // 4) % 9 + 1)
 
 
 class TestHai34Face(unittest.TestCase):
