@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from typing import Iterator, Self
 
 from kago_utils.hai import Hai34, Hai136
@@ -238,8 +239,57 @@ class Hai136Group:
         if any(not 0 <= v <= 135 for v in _list):
             raise ValueError(f"Invalid list: values should be between 0 and 135. Data: {_list}")
 
+    @classmethod
+    def from_string(cls, string: str) -> Self:
+        warnings.simplefilter('once', UserWarning)
+        warnings.warn(
+            "HaiGroup136.from_string forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            UserWarning
+        )
+
+        hais = []
+        rest = cls.from_list(list(range(136)))
+        suit = ''
+        for c in reversed(string):
+            if c in '0123456789':
+                if suit == '':
+                    raise ValueError(f"Invalid string: found values without suit. Data: {string}")
+                if suit == 'z' and c in '089':
+                    raise ValueError(f"Invalid string: found invalid value '{c}' in suit 'z'. Data: {string}")
+
+                for hai in rest:
+                    if c != "0" and hai.suit == suit and hai.number == int(c) and hai.color == "kuro":
+                        hais.append(hai)
+                        rest -= hai
+                        break
+                    if c == "0" and hai.suit == suit and hai.number == 5 and hai.color == "aka":
+                        hais.append(hai)
+                        rest -= hai
+                        break
+                else:
+                    raise ValueError(f"Invalid string: found too many hais in the same suit. Data: {string}")
+            elif c in 'mpsz':
+                suit = c
+            else:
+                raise ValueError(
+                    f"Invalid string: found invalid character '{c}'. "
+                    f"Expected 'm', 'p', 's', 'z', or '0'-'9'. Data: {string}"
+                )
+        return cls(hais)
+
     def to_string(self) -> str:
-        return self.to_hai34_group().to_string()
+        parts = {'m': "", 'p': "", 's': "", 'z': ""}
+        for hai in self.hais:
+            if hai.color == "aka":
+                parts[hai.suit] += "0"
+            else:
+                parts[hai.suit] += str(hai.number)
+
+        string = ''
+        for suit, v in parts.items():
+            if v != "":
+                string += v + suit
+        return string
 
     def validate(self) -> None:
         counter = self.to_counter()
