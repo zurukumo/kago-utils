@@ -74,15 +74,14 @@ class Hai34Group:
         return cls(hais)
 
     def to_string(self) -> str:
-        items = {'m': [0] * 9, 'p': [0] * 9, 's': [0] * 9, 'z': [0] * 7}
+        parts = {'m': "", 'p': "", 's': "", 'z': ""}
         for hai in self.hais:
-            items[{'m': 'm', 'p': 'p', 's': 's', 'z': 'z'}[hai.suit]][hai.number] += 1
+            parts[hai.suit] += str(hai.number)
+
         string = ''
-        for suit in items:
-            for k, v in enumerate(items[suit]):
-                string += f"{k + 1}" * v
-            if sum(items[suit]) > 0:
-                string += suit
+        for suit, v in parts.items():
+            if v != "":
+                string += v + suit
         return string
 
     @staticmethod
