@@ -39,11 +39,11 @@ class Hai34:
 
     @property
     def number(self) -> int:
-        return self.id % 9
+        return self.id % 9 + 1
 
     @property
     def face(self) -> str:
-        return f"{self.number + 1}{self.suit}"
+        return f"{self.number}{self.suit}"
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai34):
@@ -112,11 +112,11 @@ class Hai136:
 
     @property
     def number(self) -> int:
-        return (self.id // 4) % 9
+        return (self.id // 4) % 9 + 1
 
     @property
     def face(self) -> str:
-        return f"{self.number + 1}{self.suit}"
+        return f"{self.number}{self.suit}"
 
     @property
     def color(self) -> Literal["kuro", "aka"]:
