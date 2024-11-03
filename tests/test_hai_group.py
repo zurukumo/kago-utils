@@ -123,15 +123,15 @@ class TestHaiGroupFromList136(unittest.TestCase):
 class TestHaiGroupFromString(unittest.TestCase):
     def test_from_string(self):
         testcases = [
-            ('1m1p1s1z', [0, 36, 72, 108]),
-            ('1234m', [0, 4, 8, 12]),
-            ('1m', [0]),
-            ('11m', [0, 1]),
-            ('111m', [0, 1, 2]),
-            ('1111m', [0, 1, 2, 3]),
-            ('05m', [16, 17]),
-            ('55m', [17, 18]),
-            ('0m0p0s', [16, 52, 88]),
+            ("1m1p1s1z", [0, 36, 72, 108]),
+            ("1234m", [0, 4, 8, 12]),
+            ("1m", [0]),
+            ("11m", [0, 1]),
+            ("111m", [0, 1, 2]),
+            ("1111m", [0, 1, 2, 3]),
+            ("05m", [16, 17]),
+            ("55m", [17, 18]),
+            ("0m0p0s", [16, 52, 88]),
         ]
 
         for string, _list in testcases:
@@ -139,10 +139,10 @@ class TestHaiGroupFromString(unittest.TestCase):
 
     def test_from_string_assert_warning(self):
         with self.assertWarns(UserWarning):
-            HaiGroup.from_string('1m1p1s1z')
+            HaiGroup.from_string("1m1p1s1z")
 
     def test_from_string_with_5_same_face_hai(self):
-        string = '11111m'
+        string = "11111m"
         with self.assertRaises(ValueError):
             HaiGroup.from_string(string)
 
@@ -157,12 +157,12 @@ class TestHaiGroupFromString(unittest.TestCase):
             HaiGroup.from_string("9z")
 
     def test_from_string_with_invalid_format(self):
-        string = '123'
+        string = "123"
         with self.assertRaises(ValueError):
             HaiGroup.from_string(string)
 
     def test_from_string_with_invalid_character(self):
-        string = '1x'
+        string = "1x"
         with self.assertRaises(ValueError):
             HaiGroup.from_string(string)
 
@@ -200,10 +200,10 @@ class TestHaiGroupToList136(unittest.TestCase):
 class TestHaiGroupToString(unittest.TestCase):
     def test_to_string(self):
         testcases = [
-            ([Hai(0), Hai(135)], '1m7z'),
-            ([Hai(16), Hai(52), Hai(88)], '0m0p0s'),
-            ([Hai(0), Hai(8), Hai(16), Hai(24), Hai(32)], '13079m'),
-            ([Hai(0), Hai(8), Hai(17), Hai(24), Hai(32)], '13579m'),
+            ([Hai(0), Hai(135)], "1m7z"),
+            ([Hai(16), Hai(52), Hai(88)], "0m0p0s"),
+            ([Hai(0), Hai(8), Hai(16), Hai(24), Hai(32)], "13079m"),
+            ([Hai(0), Hai(8), Hai(17), Hai(24), Hai(32)], "13579m"),
         ]
 
         for hais, string in testcases:
@@ -351,5 +351,5 @@ class TestHaiGroupContains(unittest.TestCase):
             0 in hai_group
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

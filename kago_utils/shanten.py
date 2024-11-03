@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import gzip
 import os
@@ -11,9 +11,14 @@ class Shanten:
     suuhai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
     zihai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
 
-    __slots__ = ('__jun_tehai',
-                 '__shanten', '__regular_shanten', '__chiitoitsu_shanten', '__kokushimusou_shanten',
-                 '__yuukouhai')
+    __slots__ = (
+        "__jun_tehai",
+        "__shanten",
+        "__regular_shanten",
+        "__chiitoitsu_shanten",
+        "__kokushimusou_shanten",
+        "__yuukouhai",
+    )
 
     __jun_tehai: HaiGroup
     __shanten: int | None
@@ -66,12 +71,12 @@ class Shanten:
     def __load_patterns(cls) -> None:
         if cls.suuhai_distance_table is None or cls.zihai_distance_table is None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            suuhai_distance_table_path = os.path.join(current_dir, 'data/suuhai_distance_table.pickle.gz')
-            zihai_distance_table_path = os.path.join(current_dir, 'data/zihai_distance_table.pickle.gz')
+            suuhai_distance_table_path = os.path.join(current_dir, "data/suuhai_distance_table.pickle.gz")
+            zihai_distance_table_path = os.path.join(current_dir, "data/zihai_distance_table.pickle.gz")
 
-            with gzip.open(suuhai_distance_table_path, 'rb') as f:
+            with gzip.open(suuhai_distance_table_path, "rb") as f:
                 cls.suuhai_distance_table = pickle.load(f)
-            with gzip.open(zihai_distance_table_path, 'rb') as f:
+            with gzip.open(zihai_distance_table_path, "rb") as f:
                 cls.zihai_distance_table = pickle.load(f)
 
     @staticmethod
@@ -95,7 +100,7 @@ class Shanten:
     def __calculate__regular_shanten(self) -> int:
         Shanten.__load_patterns()
         if Shanten.suuhai_distance_table is None or Shanten.zihai_distance_table is None:
-            raise RuntimeError('Patterns are not loaded')
+            raise RuntimeError("Patterns are not loaded")
 
         jun_tehai_counter = self.__jun_tehai.to_counter34()
 
@@ -106,8 +111,8 @@ class Shanten:
 
         min_shanten = 8
         n_menstu = sum(jun_tehai_counter) // 3
-        for (n_manzu_mentsu, n_pinzu_mentsu, n_souzu_mentsu, n_zihai_mentsu) in self.__divide_into_four(n_menstu):
-            for (n_manzu_jantou, n_pinzu_jantou, n_souzu_jantou, n_zihai_jantou) in self.__divide_into_four(1):
+        for n_manzu_mentsu, n_pinzu_mentsu, n_souzu_mentsu, n_zihai_mentsu in self.__divide_into_four(n_menstu):
+            for n_manzu_jantou, n_pinzu_jantou, n_souzu_jantou, n_zihai_jantou in self.__divide_into_four(1):
                 n_manzu = n_manzu_mentsu * 3 + n_manzu_jantou * 2
                 n_pinzu = n_pinzu_mentsu * 3 + n_pinzu_jantou * 2
                 n_souzu = n_souzu_mentsu * 3 + n_souzu_jantou * 2
@@ -147,7 +152,7 @@ class Shanten:
 
         n_yaochu_hai = 0
         has_toitsu = False
-        yaochu_hai_list = HaiGroup.from_string('19m19p19s1234567z').to_list34()
+        yaochu_hai_list = HaiGroup.from_string("19m19p19s1234567z").to_list34()
 
         for i in yaochu_hai_list:
             if jun_tehai_counter[i] >= 1:
@@ -163,7 +168,8 @@ class Shanten:
 
         if len(self.__jun_tehai) % 3 != 1:
             raise ValueError(
-                f"Invalid data: HaiGroup's total count of hais should be 3n+1. Data: {self.__jun_tehai.__repr__()}")
+                f"Invalid data: HaiGroup's total count of hais should be 3n+1. Data: {self.__jun_tehai.__repr__()}"
+            )
 
         current_shanten = self.shanten
 

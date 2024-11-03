@@ -13,41 +13,37 @@ class DistanceTableGenerator:
         self.heap_queue: list[tuple[int, list[int], int]] = []
 
         match type:
-            case 'suuhai':
+            case "suuhai":
                 self.n_hai_kind = 9
                 self.max_n_shuntsu = 4
                 self.max_n_koutsu = 4
                 self.max_n_jantou = 1
-                self.filename = 'suuhai_distance_table.pickle.gz'
-            case 'zihai':
+                self.filename = "suuhai_distance_table.pickle.gz"
+            case "zihai":
                 self.n_hai_kind = 7
                 self.max_n_shuntsu = 0
                 self.max_n_koutsu = 4
                 self.max_n_jantou = 1
-                self.filename = 'zihai_distance_table.pickle.gz'
+                self.filename = "zihai_distance_table.pickle.gz"
 
     def list_agari_patterns(self) -> list[list[int]]:
         patterns = []
-        counts = (
-            range(self.max_n_shuntsu + 1),
-            range(self.max_n_koutsu + 1),
-            range(self.max_n_jantou + 1)
-        )
-        for (n_shuntsu, n_koutsu, n_jantou) in product(*counts):
+        counts = (range(self.max_n_shuntsu + 1), range(self.max_n_koutsu + 1), range(self.max_n_jantou + 1))
+        for n_shuntsu, n_koutsu, n_jantou in product(*counts):
             if n_shuntsu + n_koutsu > 4:
                 continue
 
             positions = (
                 combinations_with_replacement(range(self.n_hai_kind - 2), n_shuntsu),
                 combinations_with_replacement(range(self.n_hai_kind), n_koutsu),
-                combinations_with_replacement(range(self.n_hai_kind), n_jantou)
+                combinations_with_replacement(range(self.n_hai_kind), n_jantou),
             )
-            for (shuntsu_positions, kootsu_positions, jantou_positions) in product(*positions):
+            for shuntsu_positions, kootsu_positions, jantou_positions in product(*positions):
                 pattern = [0] * self.n_hai_kind
                 for i in shuntsu_positions:
                     pattern[i] += 1
-                    pattern[i+1] += 1
-                    pattern[i+2] += 1
+                    pattern[i + 1] += 1
+                    pattern[i + 2] += 1
                 for i in kootsu_positions:
                     pattern[i] += 3
                 for i in jantou_positions:
@@ -97,16 +93,16 @@ class DistanceTableGenerator:
 
     def save_table(self) -> None:
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_dir, f'../kago_utils/data/{self.filename}')
-        with gzip.open(file_path, 'wb') as f:
+        file_path = os.path.join(current_dir, f"../kago_utils/data/{self.filename}")
+        with gzip.open(file_path, "wb") as f:
             pickle.dump(dict(self.distance_table), f)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     suuhai_start_time = time.time()
-    DistanceTableGenerator('suuhai').generate()
-    print(f'Suuhai Distance Table Generation Time: {time.time() - suuhai_start_time} seconds')
+    DistanceTableGenerator("suuhai").generate()
+    print(f"Suuhai Distance Table Generation Time: {time.time() - suuhai_start_time} seconds")
 
     zihai_start_time = time.time()
-    DistanceTableGenerator('zihai').generate()
-    print(f'Zihai Distance Table Generation Time: {time.time() - zihai_start_time} seconds')
+    DistanceTableGenerator("zihai").generate()
+    print(f"Zihai Distance Table Generation Time: {time.time() - zihai_start_time} seconds")

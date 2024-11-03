@@ -9,7 +9,7 @@ from kago_utils.hai import Hai
 class HaiGroup:
     hais: list[Hai]
 
-    __slots__ = ('hais',)
+    __slots__ = ("hais",)
 
     def __init__(self, hais: list[Hai]) -> None:
         self.hais = sorted(hais)
@@ -18,7 +18,7 @@ class HaiGroup:
     def from_counter34(cls, counter: list[int]) -> Self:
         warnings.warn(
             "Hai.from_counter34 forcibly converts args into Hai instances, which may lead to inconsistencies.",
-            UserWarning
+            UserWarning,
         )
 
         if len(counter) != 34:
@@ -69,7 +69,7 @@ class HaiGroup:
     def from_list34(cls, _list: list[int]) -> Self:
         warnings.warn(
             "Hai.from_list34 forcibly converts args into Hai instances, which may lead to inconsistencies.",
-            UserWarning
+            UserWarning,
         )
 
         if any(not isinstance(v, int) for v in _list):
@@ -105,17 +105,17 @@ class HaiGroup:
     def from_string(cls, string: str) -> Self:
         warnings.warn(
             "Hai.from_string forcibly converts args into Hai instances, which may lead to inconsistencies.",
-            UserWarning
+            UserWarning,
         )
 
         hais = []
         rest = cls.from_list136(list(range(136)))
-        suit = ''
+        suit = ""
         for c in reversed(string):
-            if c in '0123456789':
-                if suit == '':
+            if c in "0123456789":
+                if suit == "":
                     raise ValueError(f"Invalid string: found values without suit. Data: {string}")
-                if suit == 'z' and c in '089':
+                if suit == "z" and c in "089":
                     raise ValueError(f"Invalid string: found invalid value '{c}' in suit 'z'. Data: {string}")
 
                 for hai in rest:
@@ -129,7 +129,7 @@ class HaiGroup:
                         break
                 else:
                     raise ValueError(f"Invalid string: found too many same hais. Data: {string}")
-            elif c in 'mpsz':
+            elif c in "mpsz":
                 suit = c
             else:
                 raise ValueError(
@@ -139,14 +139,14 @@ class HaiGroup:
         return cls(hais)
 
     def to_string(self) -> str:
-        parts = {'m': "", 'p': "", 's': "", 'z': ""}
+        parts = {"m": "", "p": "", "s": "", "z": ""}
         for hai in self.hais:
             if hai.color == "aka":
                 parts[hai.suit] += "0"
             else:
                 parts[hai.suit] += str(hai.number)
 
-        string = ''
+        string = ""
         for suit, v in parts.items():
             if v != "":
                 string += v + suit
@@ -196,7 +196,8 @@ class HaiGroup:
                 for hai in other.hais:
                     if hai not in new_hais:
                         raise ValueError(
-                            f"Invalid data: {hai} is not in left-hand side data, so cannot be subtracted.")
+                            f"Invalid data: {hai} is not in left-hand side data, so cannot be subtracted."
+                        )
                     new_hais.remove(hai)
                 return self.__class__(new_hais)
 
