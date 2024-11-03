@@ -42,6 +42,34 @@ class TestHai34GroupFromCounter(unittest.TestCase):
             Hai34Group.from_counter(counter)
 
 
+class TestHai136GroupFromCounter34(unittest.TestCase):
+    def test_from_counter34(self):
+        counter = [0] * 34
+        counter[0] = counter[33] = 1
+        hais = [Hai136(0), Hai136(132)]
+        self.assertEqual(Hai136Group.from_counter34(counter), Hai136Group(hais))
+
+    def test_from_counter34_with_too_short_length(self):
+        counter = [0] * 33
+        with self.assertRaises(ValueError):
+            Hai136Group.from_counter34(counter)
+
+    def test_from_counter34_with_too_long_length(self):
+        counter = [0] * 35
+        with self.assertRaises(ValueError):
+            Hai136Group.from_counter34(counter)
+
+    def test_from_counter34_with_negative_value(self):
+        counter = [-1] * 34
+        with self.assertRaises(ValueError):
+            Hai136Group.from_counter34(counter)
+
+    def test_from_counter34_with_float_value(self):
+        counter = [0.5] * 34
+        with self.assertRaises(ValueError):
+            Hai136Group.from_counter34(counter)
+
+
 class TestHai136GroupFromCounter136(unittest.TestCase):
     def test_from_counter136(self):
         counter = [0] * 136
@@ -90,6 +118,28 @@ class TestHai34GroupFromList(unittest.TestCase):
         _list = [0.5]
         with self.assertRaises(ValueError):
             Hai34Group.from_list(_list)
+
+
+class TestHai136GroupFromList34(unittest.TestCase):
+    def test_from_list34(self):
+        _list = [0, 33]
+        hais = [Hai136(0), Hai136(132)]
+        self.assertEqual(Hai136Group.from_list34(_list), Hai136Group(hais))
+
+    def test_from_list34_with_negative_value(self):
+        _list = [-1]
+        with self.assertRaises(ValueError):
+            Hai136Group.from_list34(_list)
+
+    def test_from_list34_with_too_large_value(self):
+        _list = [34]
+        with self.assertRaises(ValueError):
+            Hai136Group.from_list34(_list)
+
+    def test_from_list34_with_float_value(self):
+        _list = [0.5]
+        with self.assertRaises(ValueError):
+            Hai136Group.from_list34(_list)
 
 
 class TestHai136GroupFromList136(unittest.TestCase):
@@ -182,6 +232,14 @@ class TestHai34GroupToCounter(unittest.TestCase):
         self.assertEqual(Hai34Group(hais).to_counter(), counter)
 
 
+class TestHai136GroupToCounter34(unittest.TestCase):
+    def test_to_counter34(self):
+        hais = [Hai136(0), Hai136(135)]
+        counter = [0] * 34
+        counter[0] = counter[33] = 1
+        self.assertEqual(Hai136Group(hais).to_counter34(), counter)
+
+
 class TestHai136GroupToCounter136(unittest.TestCase):
     def test_to_counter136(self):
         hais = [Hai136(0), Hai136(135)]
@@ -195,6 +253,13 @@ class TestHai34GroupToList136(unittest.TestCase):
         hais = [Hai34(0), Hai34(33)]
         _list = [0, 33]
         self.assertEqual(Hai34Group(hais).to_list(), _list)
+
+
+class TestHai136GroupToList34(unittest.TestCase):
+    def test_to_list34(self):
+        hais = [Hai136(0), Hai136(135)]
+        _list = [0, 33]
+        self.assertEqual(Hai136Group(hais).to_list34(), _list)
 
 
 class TestHai136GroupToList136(unittest.TestCase):

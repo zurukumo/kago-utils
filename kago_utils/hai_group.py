@@ -197,6 +197,33 @@ class Hai136Group:
         return Hai34Group([hai.to_hai34() for hai in self.hais])
 
     @classmethod
+    def from_counter34(cls, counter: list[int]) -> Self:
+        warnings.warn(
+            "Hai.from_counter34 forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            UserWarning
+        )
+
+        if len(counter) != 34:
+            raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 34.")
+
+        if any(v < 0 for v in counter):
+            raise ValueError(f"Invalid counter: found negative values in counter. Data: {counter}")
+
+        if any(not isinstance(v, int) for v in counter):
+            raise ValueError(f"Invalid counter: found non-integer values in counter. Data: {counter}")
+
+        hais = []
+        for id, count in enumerate(counter):
+            for offset in range(count):
+                hais.append(Hai136(id * 4 + offset))
+        return cls(hais)
+
+    def to_counter34(self) -> list[int]:
+        counter = [0] * 34
+        for hai in self.hais:
+            counter[hai.id // 4] += 1
+        return counter
+
     @classmethod
     def from_counter136(cls, counter: list[int]) -> Self:
         if len(counter) != 136:
@@ -221,6 +248,28 @@ class Hai136Group:
         return counter
 
     @classmethod
+    def from_list34(cls, _list: list[int]) -> Self:
+        warnings.warn(
+            "Hai.from_list34 forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            UserWarning
+        )
+
+        if any(not isinstance(v, int) for v in _list):
+            raise ValueError(f"Invalid list: found non-integer values in list. Data: {_list}")
+
+        if any(not 0 <= v <= 33 for v in _list):
+            raise ValueError(f"Invalid list: values should be between 0 and 33. Data: {_list}")
+
+        hais = []
+        offsets = [0] * 34
+        for id in sorted(_list):
+            hais.append(Hai136(id * 4 + offsets[id]))
+            offsets[id] += 1
+        return cls(hais)
+
+    def to_list34(self) -> list[int]:
+        return [hai.id // 4 for hai in self.hais]
+
     @classmethod
     def from_list136(cls, _list: list[int]) -> Self:
         if any(not isinstance(v, int) for v in _list):
@@ -236,9 +285,8 @@ class Hai136Group:
 
     @classmethod
     def from_string(cls, string: str) -> Self:
-        warnings.simplefilter('once', UserWarning)
         warnings.warn(
-            "HaiGroup136.from_string forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            "Hai.from_string forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
             UserWarning
         )
 
