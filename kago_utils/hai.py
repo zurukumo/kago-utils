@@ -6,7 +6,7 @@ from typing import Literal
 class Hai:
     id: int
 
-    __slots__ = ('id',)
+    __slots__ = ("id",)
 
     def __init__(self, id: int) -> None:
         self.validate(id)
@@ -19,15 +19,15 @@ class Hai:
             raise ValueError(f"Invalid Hai: id should be between 0 and 135, but got {id}")
 
     @property
-    def suit(self) -> Literal['m', 'p', 's', 'z']:
+    def suit(self) -> Literal["m", "p", "s", "z"]:
         if 0 <= self.id < 36:
-            return 'm'
+            return "m"
         elif 36 <= self.id < 72:
-            return 'p'
+            return "p"
         elif 72 <= self.id < 108:
-            return 's'
+            return "s"
         elif 108 <= self.id < 136:
-            return 'z'
+            return "z"
 
         raise ValueError(f"Invalid Hai: id should be between 0 and 135, but got {self.id}")
 

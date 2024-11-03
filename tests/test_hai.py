@@ -24,13 +24,13 @@ class TestHaiInit(unittest.TestCase):
 class TestHaiSuit(unittest.TestCase):
     def test_suit(self):
         for id in range(36):
-            self.assertEqual(Hai(id).suit, 'm')
+            self.assertEqual(Hai(id).suit, "m")
         for id in range(36, 72):
-            self.assertEqual(Hai(id).suit, 'p')
+            self.assertEqual(Hai(id).suit, "p")
         for id in range(72, 108):
-            self.assertEqual(Hai(id).suit, 's')
+            self.assertEqual(Hai(id).suit, "s")
         for id in range(108, 136):
-            self.assertEqual(Hai(id).suit, 'z')
+            self.assertEqual(Hai(id).suit, "z")
 
 
 class TestHaiNumber(unittest.TestCase):
@@ -42,23 +42,53 @@ class TestHaiNumber(unittest.TestCase):
 class TestHaiFace(unittest.TestCase):
     def test_face(self):
         faces = [
-            '1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m',
-            '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p',
-            '1s', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s',
-            '1z', '2z', '3z', '4z', '5z', '6z', '7z'
+            "1m",
+            "2m",
+            "3m",
+            "4m",
+            "5m",
+            "6m",
+            "7m",
+            "8m",
+            "9m",
+            "1p",
+            "2p",
+            "3p",
+            "4p",
+            "5p",
+            "6p",
+            "7p",
+            "8p",
+            "9p",
+            "1s",
+            "2s",
+            "3s",
+            "4s",
+            "5s",
+            "6s",
+            "7s",
+            "8s",
+            "9s",
+            "1z",
+            "2z",
+            "3z",
+            "4z",
+            "5z",
+            "6z",
+            "7z",
         ]
         for id in range(136):
-            self.assertEqual(Hai(id).face, faces[id//4])
+            self.assertEqual(Hai(id).face, faces[id // 4])
 
 
 class TestHaiColor(unittest.TestCase):
     def test_color(self):
-        self.assertEqual(Hai(15).color, 'kuro')
-        self.assertEqual(Hai(16).color, 'aka')
-        self.assertEqual(Hai(51).color, 'kuro')
-        self.assertEqual(Hai(52).color, 'aka')
-        self.assertEqual(Hai(87).color, 'kuro')
-        self.assertEqual(Hai(88).color, 'aka')
+        self.assertEqual(Hai(15).color, "kuro")
+        self.assertEqual(Hai(16).color, "aka")
+        self.assertEqual(Hai(51).color, "kuro")
+        self.assertEqual(Hai(52).color, "aka")
+        self.assertEqual(Hai(87).color, "kuro")
+        self.assertEqual(Hai(88).color, "aka")
 
 
 class TestHaiComparison(unittest.TestCase):
@@ -76,5 +106,5 @@ class TestHaiComparison(unittest.TestCase):
         self.assertNotEqual(Hai(0), 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
