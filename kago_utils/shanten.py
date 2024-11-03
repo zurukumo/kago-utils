@@ -3,12 +3,11 @@
 import gzip
 import os
 import pickle
-from typing import cast
 
-from kago_utils.hai_group import Hai34Group, Hai136Group
+from kago_utils.hai_group import Hai136Group
 
 
-class Shanten[T: Hai34Group | Hai136Group]:
+class Shanten:
     suuhai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
     zihai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
 
@@ -16,14 +15,14 @@ class Shanten[T: Hai34Group | Hai136Group]:
                  '__shanten', '__regular_shanten', '__chiitoitsu_shanten', '__kokushimusou_shanten',
                  '__yuukouhai')
 
-    __jun_tehai: T
+    __jun_tehai: Hai136Group
     __shanten: int | None
     __regular_shanten: int | None
     __chiitoitsu_shanten: int | None
     __kokushimusou_shanten: int | None
-    __yuukouhai: T | None
+    __yuukouhai: Hai136Group | None
 
-    def __init__(self, jun_tehai: T) -> None:
+    def __init__(self, jun_tehai: Hai136Group) -> None:
         jun_tehai.validate_as_jun_tehai()
 
         self.__jun_tehai = jun_tehai
@@ -58,7 +57,7 @@ class Shanten[T: Hai34Group | Hai136Group]:
         return self.__kokushimusou_shanten
 
     @property
-    def yuukouhai(self) -> T:
+    def yuukouhai(self) -> Hai136Group:
         if self.__yuukouhai is None:
             self.__yuukouhai = self.__calculate_yuukouhai()
         return self.__yuukouhai
@@ -98,7 +97,7 @@ class Shanten[T: Hai34Group | Hai136Group]:
         if Shanten.suuhai_distance_table is None or Shanten.zihai_distance_table is None:
             raise RuntimeError('Patterns are not loaded')
 
-        jun_tehai_counter = self.__jun_tehai.to_hai34_group().to_counter()
+        jun_tehai_counter = self.__jun_tehai.to_counter34()
 
         manzu = tuple(jun_tehai_counter[0:9])
         pinzu = tuple(jun_tehai_counter[9:18])
@@ -124,7 +123,7 @@ class Shanten[T: Hai34Group | Hai136Group]:
         return min_shanten
 
     def __calculate__chiitoitsu_shanten(self) -> int | None:
-        jun_tehai_counter = self.__jun_tehai.to_hai34_group().to_counter()
+        jun_tehai_counter = self.__jun_tehai.to_counter34()
 
         if not 13 <= sum(jun_tehai_counter) <= 14:
             return None
@@ -141,14 +140,14 @@ class Shanten[T: Hai34Group | Hai136Group]:
         return 6 - n_toitsu + (7 - n_unique_hai if n_unique_hai < 7 else 0)
 
     def __calculate__kokushimusou_shanten(self) -> int | None:
-        jun_tehai_counter = self.__jun_tehai.to_hai34_group().to_counter()
+        jun_tehai_counter = self.__jun_tehai.to_counter34()
 
         if not 13 <= sum(jun_tehai_counter) <= 14:
             return None
 
         n_yaochu_hai = 0
         has_toitsu = False
-        yaochu_hai_list = Hai34Group.from_string('19m19p19s1234567z').to_list()
+        yaochu_hai_list = Hai136Group.from_string('19m19p19s1234567z').to_list34()
 
         for i in yaochu_hai_list:
             if jun_tehai_counter[i] >= 1:
@@ -158,45 +157,19 @@ class Shanten[T: Hai34Group | Hai136Group]:
 
         return 13 - n_yaochu_hai - (1 if has_toitsu else 0)
 
-    def __calculate_yuukouhai(self) -> T:
-        if sum(self.__jun_tehai.to_counter()) % 3 != 1:
-            raise ValueError(
-                f"Invalid data: the total count of hais should be 3n+1. Data: {self.__jun_tehai.__repr__()}")
-
-        if isinstance(self.__jun_tehai, Hai34Group):
-            return self.__calculate_yuukouhai_for_hai34_group()
-        elif isinstance(self.__jun_tehai, Hai136Group):
-            return self.__calculate_yuukouhai_for_hai136_group()
-
-        raise TypeError(f"jun_tehai should be Hai34 or Hai136, but {self.__jun_tehai.__class__.__name__}")
-
-    def __calculate_yuukouhai_for_hai34_group(self) -> T:
-        if not isinstance(self.__jun_tehai, Hai34Group):
-            raise ValueError(f"Invalid data: {self.__jun_tehai.__repr__()}")
-
-        current_shanten = self.shanten
-
-        yuukouhai = []
-        for i in range(34):
-            new_jun_tehai = self.__jun_tehai + Hai34Group.from_list([i])
-            try:
-                new_shanten = Shanten(new_jun_tehai).shanten
-                if new_shanten < current_shanten:
-                    yuukouhai.append(i)
-            except ValueError:
-                pass
-
-        return cast(T, self.__jun_tehai.__class__.from_list(yuukouhai))
-
-    def __calculate_yuukouhai_for_hai136_group(self) -> T:
+    def __calculate_yuukouhai(self) -> Hai136Group:
         if not isinstance(self.__jun_tehai, Hai136Group):
-            raise ValueError(f"Invalid data: {self.__jun_tehai.__repr__()}")
+            raise TypeError(f"jun_tehai should be Hai136Group, but {self.__jun_tehai.__class__.__name__}")
+
+        if len(self.__jun_tehai) % 3 != 1:
+            raise ValueError(
+                f"Invalid data: Hai136Group's total count of hais should be 3n+1. Data: {self.__jun_tehai.__repr__()}")
 
         current_shanten = self.shanten
 
         yuukouhai = []
         for i in range(136):
-            new_jun_tehai = self.__jun_tehai + Hai136Group.from_list([i])
+            new_jun_tehai = self.__jun_tehai + Hai136Group.from_list136([i])
             try:
                 new_shanten = Shanten(new_jun_tehai).shanten
                 if new_shanten < current_shanten:
@@ -204,4 +177,4 @@ class Shanten[T: Hai34Group | Hai136Group]:
             except ValueError:
                 pass
 
-        return cast(T, self.__jun_tehai.__class__.from_list(yuukouhai))
+        return self.__jun_tehai.__class__.from_list136(yuukouhai)
