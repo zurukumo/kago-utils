@@ -34,3 +34,9 @@ jobs:
 
       - name: Run typecheck
         run: python -m pipenv run typecheck
+
+      - name: Run lint
+        run: python -m pipenv run lint
+
+      - name: Run format
+        run: python -m pipenv run format
