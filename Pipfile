@@ -14,6 +14,6 @@ shanten-tools = "*"
 python_version = "3.12"
 
 [scripts]
-test = "python -m unittest discover -v tests"
+test = "python -W ignore -m unittest discover -v tests"
 typecheck = "python -m mypy ."
 generate-distance-table = "python -m scripts.generate_distance_table"
