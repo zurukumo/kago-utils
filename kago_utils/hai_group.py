@@ -17,7 +17,7 @@ class HaiGroup:
     @classmethod
     def from_counter34(cls, counter: list[int]) -> Self:
         warnings.warn(
-            "Hai.from_counter34 forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            "Hai.from_counter34 forcibly converts args into Hai instances, which may lead to inconsistencies.",
             UserWarning
         )
 
@@ -68,7 +68,7 @@ class HaiGroup:
     @classmethod
     def from_list34(cls, _list: list[int]) -> Self:
         warnings.warn(
-            "Hai.from_list34 forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            "Hai.from_list34 forcibly converts args into Hai instances, which may lead to inconsistencies.",
             UserWarning
         )
 
@@ -104,7 +104,7 @@ class HaiGroup:
     @classmethod
     def from_string(cls, string: str) -> Self:
         warnings.warn(
-            "Hai.from_string forcibly converts a string into a Hai ID, which may lead to inconsistencies.",
+            "Hai.from_string forcibly converts args into Hai instances, which may lead to inconsistencies.",
             UserWarning
         )
 
@@ -128,7 +128,7 @@ class HaiGroup:
                         rest -= hai
                         break
                 else:
-                    raise ValueError(f"Invalid string: found too many hais in the same suit. Data: {string}")
+                    raise ValueError(f"Invalid string: found too many same hais. Data: {string}")
             elif c in 'mpsz':
                 suit = c
             else:
