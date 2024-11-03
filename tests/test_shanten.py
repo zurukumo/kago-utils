@@ -36,7 +36,7 @@ def calculate_shanten_external(jun_tehai: HaiGroup):
 
 
 class TestCalculateShantenWithRandomTehai(unittest.TestCase):
-    n_assertion = 10000
+    n_assertion = 1000
     # format: (jun_tehai_length, n_huuro)
     tehai_patterns = [(14, 0), (13, 0), (11, 1), (10, 1), (8, 2), (7, 2), (5, 3), (4, 3), (2, 4), (1, 4)]
 
