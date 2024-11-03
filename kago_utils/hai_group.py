@@ -3,15 +3,15 @@ from __future__ import annotations
 import warnings
 from typing import Iterator, Self
 
-from kago_utils.hai import Hai136
+from kago_utils.hai import Hai
 
 
-class Hai136Group:
-    hais: list[Hai136]
+class HaiGroup:
+    hais: list[Hai]
 
     __slots__ = ('hais',)
 
-    def __init__(self, hais: list[Hai136]) -> None:
+    def __init__(self, hais: list[Hai]) -> None:
         self.hais = sorted(hais)
 
     @classmethod
@@ -33,7 +33,7 @@ class Hai136Group:
         hais = []
         for id, count in enumerate(counter):
             for offset in range(count):
-                hais.append(Hai136(id * 4 + offset))
+                hais.append(Hai(id * 4 + offset))
         return cls(hais)
 
     def to_counter34(self) -> list[int]:
@@ -56,7 +56,7 @@ class Hai136Group:
         hais = []
         for id, count in enumerate(counter):
             for _ in range(count):
-                hais.append(Hai136(id))
+                hais.append(Hai(id))
         return cls(hais)
 
     def to_counter136(self) -> list[int]:
@@ -81,7 +81,7 @@ class Hai136Group:
         hais = []
         offsets = [0] * 34
         for id in sorted(_list):
-            hais.append(Hai136(id * 4 + offsets[id]))
+            hais.append(Hai(id * 4 + offsets[id]))
             offsets[id] += 1
         return cls(hais)
 
@@ -96,7 +96,7 @@ class Hai136Group:
         if any(not 0 <= v <= 135 for v in _list):
             raise ValueError(f"Invalid list: values should be between 0 and 135. Data: {_list}")
 
-        return cls([Hai136(hai) for hai in sorted(_list)])
+        return cls([Hai(hai) for hai in sorted(_list)])
 
     def to_list136(self) -> list[int]:
         return [hai.id for hai in self.hais]
@@ -167,17 +167,17 @@ class Hai136Group:
             raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, Hai136Group):
+        if isinstance(other, HaiGroup):
             return self.hais == other.hais
 
         return False
 
     def __add__(self, other: object) -> Self:
         match other:
-            case Hai136():
+            case Hai():
                 new_hais = self.hais + [other]
                 return self.__class__(new_hais)
-            case Hai136Group():
+            case HaiGroup():
                 new_hais = self.hais + other.hais
                 return self.__class__(new_hais)
 
@@ -185,13 +185,13 @@ class Hai136Group:
 
     def __sub__(self, other: object) -> Self:
         match other:
-            case Hai136():
+            case Hai():
                 new_hais = self.hais.copy()
                 if other not in new_hais:
                     raise ValueError(f"Invalid data: {other} is not in left-hand side data, so cannot be subtracted.")
                 new_hais.remove(other)
                 return self.__class__(new_hais)
-            case Hai136Group():
+            case HaiGroup():
                 new_hais = self.hais.copy()
                 for hai in other.hais:
                     if hai not in new_hais:
@@ -203,14 +203,14 @@ class Hai136Group:
         raise TypeError(f"Unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __or__(self, other: object) -> Self:
-        if isinstance(other, Hai136Group):
+        if isinstance(other, HaiGroup):
             new_hais = [max(a, b) for a, b in zip(self.to_counter136(), other.to_counter136())]
             return self.__class__.from_counter136(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for |: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __and__(self, other: object) -> Self:
-        if isinstance(other, Hai136Group):
+        if isinstance(other, HaiGroup):
             new_hais = [min(a, b) for a, b in zip(self.to_counter136(), other.to_counter136())]
             return self.__class__.from_counter136(new_hais)
 
@@ -219,14 +219,14 @@ class Hai136Group:
     def __len__(self) -> int:
         return len(self.hais)
 
-    def __getitem__(self, key: int) -> Hai136:
+    def __getitem__(self, key: int) -> Hai:
         return self.hais[key]
 
-    def __iter__(self) -> Iterator[Hai136]:
+    def __iter__(self) -> Iterator[Hai]:
         return iter(self.hais)
 
     def __contains__(self, item: object) -> bool:
-        if isinstance(item, Hai136):
+        if isinstance(item, Hai):
             return item in self.hais
 
         raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")

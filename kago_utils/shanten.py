@@ -4,7 +4,7 @@ import gzip
 import os
 import pickle
 
-from kago_utils.hai_group import Hai136Group
+from kago_utils.hai_group import HaiGroup
 
 
 class Shanten:
@@ -15,14 +15,14 @@ class Shanten:
                  '__shanten', '__regular_shanten', '__chiitoitsu_shanten', '__kokushimusou_shanten',
                  '__yuukouhai')
 
-    __jun_tehai: Hai136Group
+    __jun_tehai: HaiGroup
     __shanten: int | None
     __regular_shanten: int | None
     __chiitoitsu_shanten: int | None
     __kokushimusou_shanten: int | None
-    __yuukouhai: Hai136Group | None
+    __yuukouhai: HaiGroup | None
 
-    def __init__(self, jun_tehai: Hai136Group) -> None:
+    def __init__(self, jun_tehai: HaiGroup) -> None:
         jun_tehai.validate_as_jun_tehai()
 
         self.__jun_tehai = jun_tehai
@@ -57,7 +57,7 @@ class Shanten:
         return self.__kokushimusou_shanten
 
     @property
-    def yuukouhai(self) -> Hai136Group:
+    def yuukouhai(self) -> HaiGroup:
         if self.__yuukouhai is None:
             self.__yuukouhai = self.__calculate_yuukouhai()
         return self.__yuukouhai
@@ -147,7 +147,7 @@ class Shanten:
 
         n_yaochu_hai = 0
         has_toitsu = False
-        yaochu_hai_list = Hai136Group.from_string('19m19p19s1234567z').to_list34()
+        yaochu_hai_list = HaiGroup.from_string('19m19p19s1234567z').to_list34()
 
         for i in yaochu_hai_list:
             if jun_tehai_counter[i] >= 1:
@@ -157,19 +157,19 @@ class Shanten:
 
         return 13 - n_yaochu_hai - (1 if has_toitsu else 0)
 
-    def __calculate_yuukouhai(self) -> Hai136Group:
-        if not isinstance(self.__jun_tehai, Hai136Group):
-            raise TypeError(f"jun_tehai should be Hai136Group, but {self.__jun_tehai.__class__.__name__}")
+    def __calculate_yuukouhai(self) -> HaiGroup:
+        if not isinstance(self.__jun_tehai, HaiGroup):
+            raise TypeError(f"jun_tehai should be HaiGroup, but {self.__jun_tehai.__class__.__name__}")
 
         if len(self.__jun_tehai) % 3 != 1:
             raise ValueError(
-                f"Invalid data: Hai136Group's total count of hais should be 3n+1. Data: {self.__jun_tehai.__repr__()}")
+                f"Invalid data: HaiGroup's total count of hais should be 3n+1. Data: {self.__jun_tehai.__repr__()}")
 
         current_shanten = self.shanten
 
         yuukouhai = []
         for i in range(136):
-            new_jun_tehai = self.__jun_tehai + Hai136Group.from_list136([i])
+            new_jun_tehai = self.__jun_tehai + HaiGroup.from_list136([i])
             try:
                 new_shanten = Shanten(new_jun_tehai).shanten
                 if new_shanten < current_shanten:

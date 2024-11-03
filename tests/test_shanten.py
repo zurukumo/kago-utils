@@ -5,32 +5,32 @@ import unittest
 import numpy as np
 from shanten_tools import shanten as external_shanten
 
-from kago_utils.hai_group import Hai136Group
+from kago_utils.hai_group import HaiGroup
 from kago_utils.shanten import Shanten
 
 
 def generate_random_jun_tehai(jun_tehai_length: int):
     # manzu, pinzu, souzu and zihai
     yama = random.sample(range(34 * 4), jun_tehai_length)
-    jun_tehai = Hai136Group.from_list136(yama)
+    jun_tehai = HaiGroup.from_list136(yama)
     return jun_tehai
 
 
 def generate_random_jun_tehai_for_honitsu(jun_tehai_length: int):
     # manzu and zihai
     yama = random.sample(list(range(9 * 4)) + list(range(27 * 4, 34 * 4)), jun_tehai_length)
-    jun_tehai = Hai136Group.from_list136(yama)
+    jun_tehai = HaiGroup.from_list136(yama)
     return jun_tehai
 
 
 def generate_random_jun_tehai_for_chinitsu(jun_tehai_length: int):
     # manzu
     yama = random.sample(range(9 * 4), jun_tehai_length)
-    jun_tehai = Hai136Group.from_list136(yama)
+    jun_tehai = HaiGroup.from_list136(yama)
     return jun_tehai
 
 
-def calculate_shanten_external(jun_tehai: Hai136Group):
+def calculate_shanten_external(jun_tehai: HaiGroup):
     jun_tehai = jun_tehai.to_counter34()
     return external_shanten(np.array(jun_tehai, dtype=np.uint8)) - 1
 
@@ -91,7 +91,7 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
         with open(self.p_normal_10000_txt, 'rb') as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
-                jun_tehai = Hai136Group.from_list34(problem[:14])
+                jun_tehai = HaiGroup.from_list34(problem[:14])
                 shanten = Shanten(jun_tehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
@@ -102,7 +102,7 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
         with open(self.p_hon_10000_txt, 'rb') as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
-                jun_tehai = Hai136Group.from_list34(problem[:14])
+                jun_tehai = HaiGroup.from_list34(problem[:14])
                 shanten = Shanten(jun_tehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
@@ -113,7 +113,7 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
         with open(self.p_tin_10000_txt, 'rb') as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
-                jun_tehai = Hai136Group.from_list34(problem[:14])
+                jun_tehai = HaiGroup.from_list34(problem[:14])
                 shanten = Shanten(jun_tehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
@@ -124,7 +124,7 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
         with open(self.p_koku_10000_txt, 'rb') as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
-                jun_tehai = Hai136Group.from_list34(problem[:14])
+                jun_tehai = HaiGroup.from_list34(problem[:14])
                 shanten = Shanten(jun_tehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
@@ -135,8 +135,8 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
 class TestCalculateShantenWithHandmadeTehai(unittest.TestCase):
     # format: (jun_tehai, expected)
     test_cases = [
-        (Hai136Group.from_string('23466669999m111z'), 1),
-        (Hai136Group.from_string('1111345567m111z'), 1)
+        (HaiGroup.from_string('23466669999m111z'), 1),
+        (HaiGroup.from_string('1111345567m111z'), 1)
     ]
 
     def test_shanten_when_jun_tehai_length_is_invalid(self):
@@ -148,11 +148,11 @@ class TestCalculateShantenWithHandmadeTehai(unittest.TestCase):
 
 class TestCalculateShantenWithInvalidTehai(unittest.TestCase):
     test_cases = [
-        Hai136Group.from_string(''),
-        Hai136Group.from_string('111m'),
-        Hai136Group.from_string('111m111s'),
-        Hai136Group.from_string('111m111s111p'),
-        Hai136Group.from_string('111m111s111p111z'),
+        HaiGroup.from_string(''),
+        HaiGroup.from_string('111m'),
+        HaiGroup.from_string('111m111s'),
+        HaiGroup.from_string('111m111s111p'),
+        HaiGroup.from_string('111m111s111p111z'),
     ]
 
     def test_shanten(self):
@@ -240,35 +240,27 @@ class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
 
     def test_yuukouhai(self):
         for jun_tehai, expected in self.string_test_cases:
-            result = Shanten(Hai136Group.from_string(jun_tehai)).yuukouhai.to_string()
-            msg = (
-                f"jun_tehai: {jun_tehai}, "
-                f"expected: {expected}, "
-                f"result: {result}"
-            )
+            result = Shanten(HaiGroup.from_string(jun_tehai)).yuukouhai.to_string()
+            msg = f"jun_tehai: {jun_tehai}, expected: {expected}, result: {result}"
             self.assertEqual(result, expected, msg)
 
         for jun_tehai, expected in self.list_test_cases:
-            result = Shanten(Hai136Group.from_list136(jun_tehai)).yuukouhai.to_list136()
-            msg = (
-                f"jun_tehai: {jun_tehai}, "
-                f"expected: {expected}, "
-                f"result: {result}"
-            )
+            result = Shanten(HaiGroup.from_list136(jun_tehai)).yuukouhai.to_list136()
+            msg = f"jun_tehai: {jun_tehai}, expected: {expected}, result: {result}"
             self.assertEqual(result, expected, msg)
 
 
 class TestCalculateYuukouhaiWithInvalidTehai(unittest.TestCase):
     test_cases = [
-        Hai136Group.from_string(''),
-        Hai136Group.from_string('11m'),
-        Hai136Group.from_string('111m'),
-        Hai136Group.from_string('111m11s'),
-        Hai136Group.from_string('111m111s'),
-        Hai136Group.from_string('111m111s11p'),
-        Hai136Group.from_string('111m111s111p'),
-        Hai136Group.from_string('111m111s111p11z'),
-        Hai136Group.from_string('111m111s111p111z'),
+        HaiGroup.from_string(''),
+        HaiGroup.from_string('11m'),
+        HaiGroup.from_string('111m'),
+        HaiGroup.from_string('111m11s'),
+        HaiGroup.from_string('111m111s'),
+        HaiGroup.from_string('111m111s11p'),
+        HaiGroup.from_string('111m111s111p'),
+        HaiGroup.from_string('111m111s111p11z'),
+        HaiGroup.from_string('111m111s111p111z'),
     ]
 
     def test_yuukouhai_when_jun_tehai_length_is_invalid(self):

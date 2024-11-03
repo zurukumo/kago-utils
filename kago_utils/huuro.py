@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-from kago_utils.hai import Hai136
-from kago_utils.hai_group import Hai136Group
+from kago_utils.hai import Hai
+from kago_utils.hai_group import HaiGroup
 from kago_utils.zaichi import Zaichi
 
 
 class Chii:
-    hais: Hai136Group
-    stolen: Hai136
+    hais: HaiGroup
+    stolen: Hai
     from_who: Zaichi
 
     __slots__ = ('hais', 'stolen', 'from_who')
 
-    def __init__(self, hais: Hai136Group, stolen: Hai136) -> None:
+    def __init__(self, hais: HaiGroup, stolen: Hai) -> None:
         self.hais = hais
         self.stolen = stolen
         self.from_who = Zaichi.KAMICHA
@@ -65,13 +65,13 @@ class Chii:
 
 
 class Pon:
-    hais: Hai136Group
-    stolen: Hai136
+    hais: HaiGroup
+    stolen: Hai
     from_who: Zaichi
 
     __slots__ = ('hais', 'stolen', 'from_who')
 
-    def __init__(self, hais: Hai136Group, stolen: Hai136, from_who: Zaichi) -> None:
+    def __init__(self, hais: HaiGroup, stolen: Hai, from_who: Zaichi) -> None:
         self.hais = hais
         self.stolen = stolen
         self.from_who = from_who
@@ -104,7 +104,7 @@ class Pon:
 
     def to_kakan(self) -> Kakan:
         base_id = self.hais[0].id - (self.hais[0].id % 4)
-        new_hais = Hai136Group.from_list136([base_id, base_id + 1, base_id + 2, base_id + 3])
+        new_hais = HaiGroup.from_list136([base_id, base_id + 1, base_id + 2, base_id + 3])
         added = (new_hais - self.hais)[0]
 
         return Kakan(
@@ -126,14 +126,14 @@ class Pon:
 
 
 class Kakan:
-    hais: Hai136Group
-    stolen: Hai136
-    added: Hai136
+    hais: HaiGroup
+    stolen: Hai
+    added: Hai
     from_who: Zaichi
 
     __slots__ = ('hais', 'stolen', 'added', 'from_who')
 
-    def __init__(self, hais: Hai136Group, stolen: Hai136, added: Hai136, from_who: Zaichi) -> None:
+    def __init__(self, hais: HaiGroup, stolen: Hai, added: Hai, from_who: Zaichi) -> None:
         self.hais = hais
         self.stolen = stolen
         self.added = added
@@ -183,13 +183,13 @@ class Kakan:
 
 
 class Daiminkan:
-    hais: Hai136Group
-    stolen: Hai136
+    hais: HaiGroup
+    stolen: Hai
     from_who: Zaichi
 
     __slots__ = ('hais', 'stolen', 'from_who')
 
-    def __init__(self, hais: Hai136Group, stolen: Hai136, from_who: Zaichi) -> None:
+    def __init__(self, hais: HaiGroup, stolen: Hai, from_who: Zaichi) -> None:
         self.hais = hais
         self.stolen = stolen
         self.from_who = from_who
@@ -232,12 +232,12 @@ class Daiminkan:
 
 
 class Ankan:
-    hais: Hai136Group
+    hais: HaiGroup
     from_who: Zaichi
 
     __slots__ = ('hais', 'from_who')
 
-    def __init__(self, hais: Hai136Group) -> None:
+    def __init__(self, hais: HaiGroup) -> None:
         self.hais = hais
         self.from_who = Zaichi.JICHA
 

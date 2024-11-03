@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Literal
 
 
-class Hai136:
+class Hai:
     id: int
 
     __slots__ = ('id',)
@@ -14,9 +14,9 @@ class Hai136:
 
     def validate(self, id: int) -> None:
         if not isinstance(id, int):
-            raise TypeError(f"Invalid Hai136: id should be an integer, but got {type(id).__name__}")
+            raise TypeError(f"Invalid Hai: id should be an integer, but got {type(id).__name__}")
         if not 0 <= id <= 135:
-            raise ValueError(f"Invalid Hai136: id should be between 0 and 135, but got {id}")
+            raise ValueError(f"Invalid Hai: id should be between 0 and 135, but got {id}")
 
     @property
     def suit(self) -> Literal['m', 'p', 's', 'z']:
@@ -29,7 +29,7 @@ class Hai136:
         elif 108 <= self.id < 136:
             return 'z'
 
-        raise ValueError(f"Invalid Hai136: id should be between 0 and 135, but got {self.id}")
+        raise ValueError(f"Invalid Hai: id should be between 0 and 135, but got {self.id}")
 
     @property
     def number(self) -> int:
@@ -46,31 +46,31 @@ class Hai136:
         return "kuro"
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, Hai136):
+        if isinstance(other, Hai):
             return self.id == other.id
 
         return False
 
     def __lt__(self, other: object) -> bool:
-        if isinstance(other, Hai136):
+        if isinstance(other, Hai):
             return self.id < other.id
 
         raise TypeError(f"Unsupported operand type(s) for <: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __le__(self, other: object) -> bool:
-        if isinstance(other, Hai136):
+        if isinstance(other, Hai):
             return self.id <= other.id
 
         raise TypeError(f"Unsupported operand type(s) for <=: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __gt__(self, other: object) -> bool:
-        if isinstance(other, Hai136):
+        if isinstance(other, Hai):
             return self.id > other.id
 
         raise TypeError(f"Unsupported operand type(s) for >: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __ge__(self, other: object) -> bool:
-        if isinstance(other, Hai136):
+        if isinstance(other, Hai):
             return self.id >= other.id
 
         raise TypeError(f"Unsupported operand type(s) for >=: '{type(self).__name__}' and '{type(other).__name__}'")
