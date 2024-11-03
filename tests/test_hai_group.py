@@ -42,32 +42,32 @@ class TestHai34GroupFromCounter(unittest.TestCase):
             Hai34Group.from_counter(counter)
 
 
-class TestHai136GroupFromCounter(unittest.TestCase):
-    def test_from_counter(self):
+class TestHai136GroupFromCounter136(unittest.TestCase):
+    def test_from_counter136(self):
         counter = [0] * 136
         counter[0] = counter[135] = 1
         hais = [Hai136(0), Hai136(135)]
-        self.assertEqual(Hai136Group.from_counter(counter), Hai136Group(hais))
+        self.assertEqual(Hai136Group.from_counter136(counter), Hai136Group(hais))
 
-    def test_from_counter_with_too_short_length(self):
+    def test_from_counter136_with_too_short_length(self):
         counter = [0] * 135
         with self.assertRaises(ValueError):
-            Hai136Group.from_counter(counter)
+            Hai136Group.from_counter136(counter)
 
-    def test_from_counter_with_too_long_length(self):
+    def test_from_counter136_with_too_long_length(self):
         counter = [0] * 137
         with self.assertRaises(ValueError):
-            Hai136Group.from_counter(counter)
+            Hai136Group.from_counter136(counter)
 
-    def test_from_counter_with_negative_value(self):
+    def test_from_counter136_with_negative_value(self):
         counter = [-1] * 136
         with self.assertRaises(ValueError):
-            Hai136Group.from_counter(counter)
+            Hai136Group.from_counter136(counter)
 
-    def test_from_counter_with_float_value(self):
+    def test_from_counter136_with_float_value(self):
         counter = [0.5] * 136
         with self.assertRaises(ValueError):
-            Hai136Group.from_counter(counter)
+            Hai136Group.from_counter136(counter)
 
 
 class TestHai34GroupFromList(unittest.TestCase):
@@ -92,26 +92,26 @@ class TestHai34GroupFromList(unittest.TestCase):
             Hai34Group.from_list(_list)
 
 
-class TestHai136GroupFromList(unittest.TestCase):
-    def test_from_list(self):
+class TestHai136GroupFromList136(unittest.TestCase):
+    def test_from_list136(self):
         _list = [0, 135]
         hais = [Hai136(0), Hai136(135)]
-        self.assertEqual(Hai136Group.from_list(_list), Hai136Group(hais))
+        self.assertEqual(Hai136Group.from_list136(_list), Hai136Group(hais))
 
-    def test_from_list_with_negative_value(self):
+    def test_from_list136_with_negative_value(self):
         _list = [-1]
         with self.assertRaises(ValueError):
-            Hai136Group.from_list(_list)
+            Hai136Group.from_list136(_list)
 
-    def test_from_list_with_too_large_value(self):
+    def test_from_list136_with_too_large_value(self):
         _list = [136]
         with self.assertRaises(ValueError):
-            Hai136Group.from_list(_list)
+            Hai136Group.from_list136(_list)
 
-    def test_from_list_with_float_value(self):
+    def test_from_list136_with_float_value(self):
         _list = [0.5]
         with self.assertRaises(ValueError):
-            Hai136Group.from_list(_list)
+            Hai136Group.from_list136(_list)
 
 
 class TestHai34GroupFromString(unittest.TestCase):
@@ -146,7 +146,7 @@ class TestHai136GroupFromString(unittest.TestCase):
         ]
 
         for string, _list in testcases:
-            self.assertEqual(Hai136Group.from_string(string), Hai136Group.from_list(_list))
+            self.assertEqual(Hai136Group.from_string(string), Hai136Group.from_list136(_list))
 
     def test_from_string_with_5_same_face_hai(self):
         string = '11111m'
@@ -182,26 +182,26 @@ class TestHai34GroupToCounter(unittest.TestCase):
         self.assertEqual(Hai34Group(hais).to_counter(), counter)
 
 
-class TestHai136GroupToCounter(unittest.TestCase):
-    def test_to_counter(self):
+class TestHai136GroupToCounter136(unittest.TestCase):
+    def test_to_counter136(self):
         hais = [Hai136(0), Hai136(135)]
         counter = [0] * 136
         counter[0] = counter[135] = 1
-        self.assertEqual(Hai136Group(hais).to_counter(), counter)
+        self.assertEqual(Hai136Group(hais).to_counter136(), counter)
 
 
-class TestHai34GroupToList(unittest.TestCase):
+class TestHai34GroupToList136(unittest.TestCase):
     def test_to_list(self):
         hais = [Hai34(0), Hai34(33)]
         _list = [0, 33]
         self.assertEqual(Hai34Group(hais).to_list(), _list)
 
 
-class TestHai136GroupToList(unittest.TestCase):
-    def test_to_list(self):
+class TestHai136GroupToList136(unittest.TestCase):
+    def test_to_list136(self):
         hais = [Hai136(0), Hai136(135)]
         _list = [0, 135]
-        self.assertEqual(Hai136Group(hais).to_list(), _list)
+        self.assertEqual(Hai136Group(hais).to_list136(), _list)
 
 
 class TestHai34GroupToString(unittest.TestCase):
@@ -237,11 +237,11 @@ class TestHai34GroupValidate(unittest.TestCase):
 
 class TestHai136GroupValidate(unittest.TestCase):
     def test_validate(self):
-        hai_group = Hai136Group.from_list([0, 1, 2])
+        hai_group = Hai136Group.from_list136([0, 1, 2])
         hai_group.validate()
 
     def test_validate_when_2nd_hai_exists(self):
-        hai_group = Hai136Group.from_list([0, 0, 1, 2])
+        hai_group = Hai136Group.from_list136([0, 0, 1, 2])
         with self.assertRaises(ValueError):
             hai_group.validate()
 
@@ -269,21 +269,21 @@ class TestHai34GroupValidateAsJunTehai(unittest.TestCase):
 
 class TestHai136GroupValidateAsJunTehai(unittest.TestCase):
     def test_validate_as_jun_tehai(self):
-        hai_group = Hai136Group.from_list(list(range(14)))
+        hai_group = Hai136Group.from_list136(list(range(14)))
         hai_group.validate_as_jun_tehai()
 
     def test_validate_as_jun_tehai_when_length_is_not_invalid(self):
-        hai_group = Hai136Group.from_list(list(range(3)))
+        hai_group = Hai136Group.from_list136(list(range(3)))
         with self.assertRaises(ValueError):
             hai_group.validate_as_jun_tehai()
 
     def test_validate_as_jun_tehai_when_length_is_too_long(self):
-        hai_group = Hai136Group.from_list(list(range(15)))
+        hai_group = Hai136Group.from_list136(list(range(15)))
         with self.assertRaises(ValueError):
             hai_group.validate_as_jun_tehai()
 
     def test_validate_as_jun_tehai_when_2nd_hai_exists(self):
-        hai_group = Hai136Group.from_list(list(range(12)) + [12] * 2)
+        hai_group = Hai136Group.from_list136(list(range(12)) + [12] * 2)
         with self.assertRaises(ValueError):
             hai_group.validate_as_jun_tehai()
 

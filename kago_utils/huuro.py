@@ -104,7 +104,7 @@ class Pon:
 
     def to_kakan(self) -> Kakan:
         base_id = self.hais[0].id - (self.hais[0].id % 4)
-        new_hais = Hai136Group.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])
+        new_hais = Hai136Group.from_list136([base_id, base_id + 1, base_id + 2, base_id + 3])
         added = (new_hais - self.hais)[0]
 
         return Kakan(
@@ -251,7 +251,7 @@ class Ankan:
         self.__validate_from_who_is_jicha()
 
     def __validate_length_of_hais_is_4(self) -> None:
-        if len(self.hais.to_list()) != 4:
+        if len(self.hais) != 4:
             raise ValueError('Invalid Ankan: length of hais should be 4')
 
     def __validate_hais_are_same_face(self) -> None:
