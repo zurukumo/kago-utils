@@ -175,7 +175,7 @@ class Shanten:
 
         yuukouhai = []
         for i in range(136):
-            new_jun_tehai = self.__jun_tehai + HaiGroup.from_list136([i])
+            new_jun_tehai = self.__jun_tehai + HaiGroup.from_list([i])
             try:
                 new_shanten = Shanten(new_jun_tehai).shanten
                 if new_shanten < current_shanten:
@@ -183,4 +183,4 @@ class Shanten:
             except ValueError:
                 pass
 
-        return self.__jun_tehai.__class__.from_list136(yuukouhai)
+        return self.__jun_tehai.__class__.from_list(yuukouhai)

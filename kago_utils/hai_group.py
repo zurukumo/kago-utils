@@ -43,7 +43,7 @@ class HaiGroup:
         return counter
 
     @classmethod
-    def from_counter136(cls, counter: list[int]) -> Self:
+    def from_counter(cls, counter: list[int]) -> Self:
         if len(counter) != 136:
             raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 136.")
 
@@ -59,7 +59,7 @@ class HaiGroup:
                 hais.append(Hai(id))
         return cls(hais)
 
-    def to_counter136(self) -> list[int]:
+    def to_counter(self) -> list[int]:
         counter = [0] * 136
         for hai in self.hais:
             counter[hai.id] += 1
@@ -89,7 +89,7 @@ class HaiGroup:
         return [hai.id // 4 for hai in self.hais]
 
     @classmethod
-    def from_list136(cls, _list: list[int]) -> Self:
+    def from_list(cls, _list: list[int]) -> Self:
         if any(not isinstance(v, int) for v in _list):
             raise ValueError(f"Invalid list: found non-integer values in list. Data: {_list}")
 
@@ -98,7 +98,7 @@ class HaiGroup:
 
         return cls([Hai(hai) for hai in sorted(_list)])
 
-    def to_list136(self) -> list[int]:
+    def to_list(self) -> list[int]:
         return [hai.id for hai in self.hais]
 
     @classmethod
@@ -109,7 +109,7 @@ class HaiGroup:
         )
 
         hais = []
-        rest = cls.from_list136(list(range(136)))
+        rest = cls.from_list(list(range(136)))
         suit = ""
         for c in reversed(string):
             if c in "0123456789":
@@ -153,14 +153,14 @@ class HaiGroup:
         return string
 
     def validate(self) -> None:
-        counter = self.to_counter136()
+        counter = self.to_counter()
         if any(not 0 <= v <= 1 for v in counter):
             raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
     def validate_as_jun_tehai(self) -> None:
         self.validate()
 
-        counter = self.to_counter136()
+        counter = self.to_counter()
         if sum(counter) > 14:
             raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
         if sum(counter) % 3 == 0:
@@ -205,15 +205,15 @@ class HaiGroup:
 
     def __or__(self, other: object) -> Self:
         if isinstance(other, HaiGroup):
-            new_hais = [max(a, b) for a, b in zip(self.to_counter136(), other.to_counter136())]
-            return self.__class__.from_counter136(new_hais)
+            new_hais = [max(a, b) for a, b in zip(self.to_counter(), other.to_counter())]
+            return self.__class__.from_counter(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for |: '{type(self).__name__}' and '{type(other).__name__}'")
 
     def __and__(self, other: object) -> Self:
         if isinstance(other, HaiGroup):
-            new_hais = [min(a, b) for a, b in zip(self.to_counter136(), other.to_counter136())]
-            return self.__class__.from_counter136(new_hais)
+            new_hais = [min(a, b) for a, b in zip(self.to_counter(), other.to_counter())]
+            return self.__class__.from_counter(new_hais)
 
         raise TypeError(f"Unsupported operand type(s) for &: '{type(self).__name__}' and '{type(other).__name__}'")
 

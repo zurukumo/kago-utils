@@ -12,21 +12,21 @@ from kago_utils.shanten import Shanten
 def generate_random_jun_tehai(jun_tehai_length: int):
     # manzu, pinzu, souzu and zihai
     yama = random.sample(range(34 * 4), jun_tehai_length)
-    jun_tehai = HaiGroup.from_list136(yama)
+    jun_tehai = HaiGroup.from_list(yama)
     return jun_tehai
 
 
 def generate_random_jun_tehai_for_honitsu(jun_tehai_length: int):
     # manzu and zihai
     yama = random.sample(list(range(9 * 4)) + list(range(27 * 4, 34 * 4)), jun_tehai_length)
-    jun_tehai = HaiGroup.from_list136(yama)
+    jun_tehai = HaiGroup.from_list(yama)
     return jun_tehai
 
 
 def generate_random_jun_tehai_for_chinitsu(jun_tehai_length: int):
     # manzu
     yama = random.sample(range(9 * 4), jun_tehai_length)
-    jun_tehai = HaiGroup.from_list136(yama)
+    jun_tehai = HaiGroup.from_list(yama)
     return jun_tehai
 
 
@@ -238,7 +238,7 @@ class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
             self.assertEqual(result, expected, msg)
 
         for jun_tehai, expected in self.list_test_cases:
-            result = Shanten(HaiGroup.from_list136(jun_tehai)).yuukouhai.to_list136()
+            result = Shanten(HaiGroup.from_list(jun_tehai)).yuukouhai.to_list()
             msg = f"jun_tehai: {jun_tehai}, expected: {expected}, result: {result}"
             self.assertEqual(result, expected, msg)
 

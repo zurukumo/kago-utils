@@ -100,7 +100,7 @@ class Pon:
 
     def to_kakan(self) -> Kakan:
         base_id = self.hais[0].id - (self.hais[0].id % 4)
-        new_hais = HaiGroup.from_list136([base_id, base_id + 1, base_id + 2, base_id + 3])
+        new_hais = HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])
         added = (new_hais - self.hais)[0]
 
         return Kakan(
