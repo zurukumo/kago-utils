@@ -233,4 +233,4 @@ class HaiGroup:
         raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.hais})"
+        return f"HaiGroup({self.hais})"
