@@ -74,3 +74,6 @@ class Hai:
             return self.id >= other.id
 
         raise TypeError(f"Unsupported operand type(s) for >=: '{type(self).__name__}' and '{type(other).__name__}'")
+
+    def __repr__(self) -> str:
+        return f"Hai({self.id})"

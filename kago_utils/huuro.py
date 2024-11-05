@@ -59,6 +59,9 @@ class Chii:
 
         return False
 
+    def __repr__(self) -> str:
+        return f"Chii(hais={self.hais}, stolen={self.stolen}, from_who={self.from_who})"
+
 
 class Pon:
     hais: HaiGroup
@@ -115,6 +118,9 @@ class Pon:
             return all((self.hais == other.hais, self.stolen == other.stolen, self.from_who == other.from_who))
 
         return False
+
+    def __repr__(self) -> str:
+        return f"Pon(hais={self.hais}, stolen={self.stolen}, from_who={self.from_who})"
 
 
 class Kakan:
@@ -175,6 +181,9 @@ class Kakan:
 
         return False
 
+    def __repr__(self) -> str:
+        return f"Kakan(hais={self.hais}, stolen={self.stolen}, added={self.added}, from_who={self.from_who})"
+
 
 class Daiminkan:
     hais: HaiGroup
@@ -220,6 +229,9 @@ class Daiminkan:
 
         return False
 
+    def __repr__(self) -> str:
+        return f"Daiminkan(hais={self.hais}, stolen={self.stolen}, from_who={self.from_who})"
+
 
 class Ankan:
     hais: HaiGroup
@@ -257,3 +269,6 @@ class Ankan:
             return all((self.hais == other.hais, self.from_who == other.from_who))
 
         return False
+
+    def __repr__(self) -> str:
+        return f"Ankan(hais={self.hais}, from_who={self.from_who})"

@@ -230,3 +230,47 @@ class TestAnkanComparison(unittest.TestCase):
     def test_eq_with_int(self):
         ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
         self.assertNotEqual(ankan, 0)
+
+
+class TestChiiRepr(unittest.TestCase):
+    def test_repr(self):
+        chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
+        self.assertEqual(
+            repr(chii), "Chii(hais=HaiGroup([Hai(0), Hai(4), Hai(8)]), stolen=Hai(0), from_who=Zaichi.KAMICHA)"
+        )
+
+
+class TestPonRepr(unittest.TestCase):
+    def test_repr(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        self.assertEqual(
+            repr(pon), "Pon(hais=HaiGroup([Hai(0), Hai(1), Hai(2)]), stolen=Hai(0), from_who=Zaichi.KAMICHA)"
+        )
+
+
+class TestKakanRepr(unittest.TestCase):
+    def test_repr(self):
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)
+        self.assertEqual(
+            repr(kakan),
+            "Kakan(hais=HaiGroup([Hai(0), Hai(1), Hai(2), Hai(3)]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)",
+        )
+
+
+class TestDaiminkanRepr(unittest.TestCase):
+    def test_repr(self):
+        daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        self.assertEqual(
+            repr(daiminkan),
+            "Daiminkan(hais=HaiGroup([Hai(0), Hai(1), Hai(2), Hai(3)]), stolen=Hai(0), from_who=Zaichi.KAMICHA)",
+        )
+
+
+class TestAnkanRepr(unittest.TestCase):
+    def test_repr(self):
+        ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
+        self.assertEqual(repr(ankan), "Ankan(hais=HaiGroup([Hai(0), Hai(1), Hai(2), Hai(3)]), from_who=Zaichi.JICHA)")
+
+
+if __name__ == "__main__":
+    unittest.main()
