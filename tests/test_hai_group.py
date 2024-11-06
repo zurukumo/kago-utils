@@ -351,5 +351,11 @@ class TestHaiGroupContains(unittest.TestCase):
             0 in hai_group
 
 
+class TestHaiGroupRepr(unittest.TestCase):
+    def test_repr(self):
+        hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
+        self.assertEqual(repr(hai_group), "HaiGroup([Hai(0), Hai(1), Hai(2)])")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -231,3 +231,6 @@ class HaiGroup:
             return item in self.hais
 
         raise TypeError(f"Unsupported operand type(s) for in: '{type(self).__name__}' and '{type(item).__name__}'")
+
+    def __repr__(self) -> str:
+        return f"HaiGroup({self.hais})"

@@ -106,5 +106,10 @@ class TestHaiComparison(unittest.TestCase):
         self.assertNotEqual(Hai(0), 0)
 
 
+class TestHaiRepr(unittest.TestCase):
+    def test_repr(self):
+        self.assertEqual(repr(Hai(0)), "Hai(0)")
+
+
 if __name__ == "__main__":
     unittest.main()
