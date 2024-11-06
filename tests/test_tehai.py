@@ -1,4 +1,5 @@
 import gzip
+import os
 import pickle
 import unittest
 
@@ -22,7 +23,9 @@ def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
 
 class TestTehaiListChiiCandidates(unittest.TestCase):
     def test_list_chii_candidates(self):
-        with gzip.open("tests/data/tehai/chii.pickle.gz", "rb") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/tehai/chii.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
         for test_case in test_cases:
@@ -39,7 +42,9 @@ class TestTehaiListChiiCandidates(unittest.TestCase):
 
 class TestTehaiListPonCandidates(unittest.TestCase):
     def test_list_pon_candidates(self):
-        with gzip.open("tests/data/tehai/pon.pickle.gz", "rb") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/tehai/pon.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
         for test_case in test_cases:
@@ -57,7 +62,9 @@ class TestTehaiListPonCandidates(unittest.TestCase):
 
 class TestTehaiListDaiminkanCandidates(unittest.TestCase):
     def test_list_daiminkan_candidates(self):
-        with gzip.open("tests/data/tehai/daiminkan.pickle.gz", "rb") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/tehai/daiminkan.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
         for test_case in test_cases:
@@ -75,7 +82,9 @@ class TestTehaiListDaiminkanCandidates(unittest.TestCase):
 
 class TestTehaiListKakanCandidates(unittest.TestCase):
     def test_list_kakan_candidates(self):
-        with gzip.open("tests/data/tehai/kakan.pickle.gz", "rb") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/tehai/kakan.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
         for test_case in test_cases:
@@ -101,7 +110,9 @@ class TestTehaiListKakanCandidates(unittest.TestCase):
 
 class TestTehaiListAnkanCandidates(unittest.TestCase):
     def test_list_ankan_candidates(self):
-        with gzip.open("tests/data/tehai/ankan.pickle.gz", "rb") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/tehai/ankan.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
         for test_case in test_cases:
