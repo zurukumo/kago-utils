@@ -8,19 +8,19 @@ from kago_utils.zaichi import Zaichi
 
 
 class Tehai:
-    jun_tehai: HaiGroup
+    juntehai: HaiGroup
     huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     last_tsumo: Hai | None
     last_dahai: Hai | None
 
-    __slots__ = ("jun_tehai", "huuros", "last_tsumo", "last_dahai")
+    __slots__ = ("juntehai", "huuros", "last_tsumo", "last_dahai")
 
-    def __init__(self, jun_tehai: HaiGroup, huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan] = []):
-        self.jun_tehai = jun_tehai
+    def __init__(self, juntehai: HaiGroup, huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan] = []):
+        self.juntehai = juntehai
         self.huuros = huuros
 
     def tsumo(self, hai: Hai) -> None:
-        self.jun_tehai += hai
+        self.juntehai += hai
         self.last_tsumo = hai
 
     def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
@@ -28,8 +28,8 @@ class Tehai:
         prev1: dict[str, Hai | None] = {"b": None, "r": None}
         next1: dict[str, Hai | None] = {"b": None, "r": None}
         next2: dict[str, Hai | None] = {"b": None, "r": None}
-        # Shuffle jun_tehai to select prev2, prev1, next1, and next2 randomly.
-        for hai in random.sample(self.jun_tehai, len(self.jun_tehai)):
+        # Shuffle juntehai to select prev2, prev1, next1, and next2 randomly.
+        for hai in random.sample(self.juntehai, len(self.juntehai)):
             if hai.suit == "z" or hai.suit != stolen.suit:
                 continue
 
@@ -57,8 +57,8 @@ class Tehai:
         candidates = []
         b = []
         r = []
-        # Shuffle jun_tehai to select b and r randomly.
-        for hai in random.sample(self.jun_tehai, len(self.jun_tehai)):
+        # Shuffle juntehai to select b and r randomly.
+        for hai in random.sample(self.juntehai, len(self.juntehai)):
             if hai.name == stolen.name:
                 if hai.color == "b":
                     b.append(hai)
@@ -82,7 +82,7 @@ class Tehai:
 
     def list_daiminkan_candidates(self, stolen: Hai, from_who: Zaichi) -> list[Daiminkan]:
         candidates = []
-        hais = [hai for hai in self.jun_tehai if hai.name == stolen.name]
+        hais = [hai for hai in self.juntehai if hai.name == stolen.name]
         if len(hais) >= 3:
             candidates.append(Daiminkan(hais=HaiGroup(hais + [stolen]), stolen=stolen, from_who=from_who))
 
@@ -90,7 +90,7 @@ class Tehai:
 
     def list_ankan_candidates(self) -> list[Ankan]:
         candidates = []
-        counter = self.jun_tehai.to_counter34()
+        counter = self.juntehai.to_counter34()
         for i in range(34):
             if counter[i] >= 4:
                 base_id = i * 4

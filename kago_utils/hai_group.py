@@ -158,7 +158,7 @@ class HaiGroup(Sequence[Hai]):
         if any(not 0 <= v <= 1 for v in counter):
             raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
-    def validate_as_jun_tehai(self) -> None:
+    def validate_as_juntehai(self) -> None:
         self.validate()
 
         counter = self.to_counter()
