@@ -141,7 +141,7 @@ class TestHaiGroupFromString(unittest.TestCase):
         with self.assertWarns(UserWarning):
             HaiGroup.from_string("1m1p1s1z")
 
-    def test_from_string_with_5_same_face_hai(self):
+    def test_from_string_with_5_same_name_hai(self):
         string = "11111m"
         with self.assertRaises(ValueError):
             HaiGroup.from_string(string)

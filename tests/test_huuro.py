@@ -43,7 +43,7 @@ class TestPonInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Pon(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
 
-    def test_init_with_not_same_face_hais(self):
+    def test_init_with_not_same_name_hais(self):
         with self.assertRaises(ValueError):
             Pon(hais=HaiGroup.from_list([0, 1, 4]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
 
@@ -68,7 +68,7 @@ class TestKakanInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Kakan(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)
 
-    def test_init_with_not_same_face_hais(self):
+    def test_init_with_not_same_name_hais(self):
         with self.assertRaises(ValueError):
             Kakan(hais=HaiGroup.from_list([0, 1, 2, 4]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)
 
@@ -97,7 +97,7 @@ class TestDaiminkanInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Daiminkan(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
 
-    def test_init_with_not_same_face_hais(self):
+    def test_init_with_not_same_name_hais(self):
         with self.assertRaises(ValueError):
             Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 4]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
 
@@ -122,7 +122,7 @@ class TestAnkanInit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Ankan(hais=HaiGroup.from_list([0, 1, 2]))
 
-    def test_init_with_not_same_face_hais(self):
+    def test_init_with_not_same_name_hais(self):
         with self.assertRaises(ValueError):
             Ankan(hais=HaiGroup.from_list([0, 1, 2, 4]))
 

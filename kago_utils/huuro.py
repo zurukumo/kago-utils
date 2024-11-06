@@ -81,7 +81,7 @@ class Pon:
         self.hais.validate()
 
         self.__validate_length_of_hais_is_3()
-        self.__validate_hais_are_same_face()
+        self.__validate_hais_are_same_name()
         self.__validate_hais_contain_stolen()
         self.__validate_from_who_is_taacha()
 
@@ -89,9 +89,9 @@ class Pon:
         if len(self.hais) != 3:
             raise ValueError("Invalid Pon: length of hais should be 3")
 
-    def __validate_hais_are_same_face(self) -> None:
-        if not (self.hais[0].face == self.hais[1].face == self.hais[2].face):
-            raise ValueError("Invalid Pon: hais should be the same face")
+    def __validate_hais_are_same_name(self) -> None:
+        if not (self.hais[0].name == self.hais[1].name == self.hais[2].name):
+            raise ValueError("Invalid Pon: hais should be the same name")
 
     def __validate_hais_contain_stolen(self) -> None:
         if self.stolen not in self.hais:
@@ -143,7 +143,7 @@ class Kakan:
         self.hais.validate()
 
         self.__validate_length_of_hais_is_4()
-        self.__validate_hais_are_same_face()
+        self.__validate_hais_are_same_name()
         self.__validate_hais_contain_stolen()
         self.__validate_hais_contain_added()
         self.__validate_from_who_is_taacha()
@@ -152,9 +152,9 @@ class Kakan:
         if len(self.hais) != 4:
             raise ValueError("Invalid Kakan: length of hais should be 4")
 
-    def __validate_hais_are_same_face(self) -> None:
-        if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
-            raise ValueError("Invalid Kakan: hais should be the same face")
+    def __validate_hais_are_same_name(self) -> None:
+        if not (self.hais[0].name == self.hais[1].name == self.hais[2].name == self.hais[3].name):
+            raise ValueError("Invalid Kakan: hais should be the same name")
 
     def __validate_hais_contain_stolen(self) -> None:
         if self.stolen not in self.hais:
@@ -203,7 +203,7 @@ class Daiminkan:
         self.hais.validate()
 
         self.__validate_length_of_hais_is_4()
-        self.__validate_hais_are_same_face()
+        self.__validate_hais_are_same_name()
         self.__validate_hais_contain_stolen()
         self.__validate_from_who_is_taacha()
 
@@ -211,9 +211,9 @@ class Daiminkan:
         if len(self.hais) != 4:
             raise ValueError("Invalid Daiminkan: length of hais should be 4")
 
-    def __validate_hais_are_same_face(self) -> None:
-        if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
-            raise ValueError("Invalid Daiminkan: hais should be the same face")
+    def __validate_hais_are_same_name(self) -> None:
+        if not (self.hais[0].name == self.hais[1].name == self.hais[2].name == self.hais[3].name):
+            raise ValueError("Invalid Daiminkan: hais should be the same name")
 
     def __validate_hais_contain_stolen(self) -> None:
         if self.stolen not in self.hais:
@@ -249,16 +249,16 @@ class Ankan:
         self.hais.validate()
 
         self.__validate_length_of_hais_is_4()
-        self.__validate_hais_are_same_face()
+        self.__validate_hais_are_same_name()
         self.__validate_from_who_is_jicha()
 
     def __validate_length_of_hais_is_4(self) -> None:
         if len(self.hais) != 4:
             raise ValueError("Invalid Ankan: length of hais should be 4")
 
-    def __validate_hais_are_same_face(self) -> None:
-        if not (self.hais[0].face == self.hais[1].face == self.hais[2].face == self.hais[3].face):
-            raise ValueError("Invalid Ankan: hais should be the same face")
+    def __validate_hais_are_same_name(self) -> None:
+        if not (self.hais[0].name == self.hais[1].name == self.hais[2].name == self.hais[3].name):
+            raise ValueError("Invalid Ankan: hais should be the same name")
 
     def __validate_from_who_is_jicha(self) -> None:
         if self.from_who != Zaichi.JICHA:
