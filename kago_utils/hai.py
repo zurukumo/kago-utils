@@ -36,14 +36,16 @@ class Hai:
         return (self.id // 4) % 9 + 1
 
     @property
-    def face(self) -> str:
+    def color(self) -> Literal["b", "r"]:
+        return "r" if self.id in (16, 52, 88) else "b"
+
+    @property
+    def name(self) -> str:
         return f"{self.number}{self.suit}"
 
     @property
-    def color(self) -> Literal["kuro", "aka"]:
-        if self.id in (16, 52, 88):
-            return "aka"
-        return "kuro"
+    def long_name(self) -> str:
+        return f"{self.color if self.color == "r" else ""}{self.number}{self.suit}"
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Hai):

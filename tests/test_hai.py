@@ -39,56 +39,101 @@ class TestHaiNumber(unittest.TestCase):
             self.assertEqual(Hai(id).number, (id // 4) % 9 + 1)
 
 
-class TestHaiFace(unittest.TestCase):
-    def test_face(self):
-        faces = [
-            "1m",
-            "2m",
-            "3m",
-            "4m",
-            "5m",
-            "6m",
-            "7m",
-            "8m",
-            "9m",
-            "1p",
-            "2p",
-            "3p",
-            "4p",
-            "5p",
-            "6p",
-            "7p",
-            "8p",
-            "9p",
-            "1s",
-            "2s",
-            "3s",
-            "4s",
-            "5s",
-            "6s",
-            "7s",
-            "8s",
-            "9s",
-            "1z",
-            "2z",
-            "3z",
-            "4z",
-            "5z",
-            "6z",
-            "7z",
-        ]
-        for id in range(136):
-            self.assertEqual(Hai(id).face, faces[id // 4])
-
-
 class TestHaiColor(unittest.TestCase):
     def test_color(self):
-        self.assertEqual(Hai(15).color, "kuro")
-        self.assertEqual(Hai(16).color, "aka")
-        self.assertEqual(Hai(51).color, "kuro")
-        self.assertEqual(Hai(52).color, "aka")
-        self.assertEqual(Hai(87).color, "kuro")
-        self.assertEqual(Hai(88).color, "aka")
+        self.assertEqual(Hai(15).color, "b")
+        self.assertEqual(Hai(16).color, "r")
+        self.assertEqual(Hai(51).color, "b")
+        self.assertEqual(Hai(52).color, "r")
+        self.assertEqual(Hai(87).color, "b")
+        self.assertEqual(Hai(88).color, "r")
+
+
+class TestHaiName(unittest.TestCase):
+    def test_name(self):
+        names = (
+            ["1m"] * 4
+            + ["2m"] * 4
+            + ["3m"] * 4
+            + ["4m"] * 4
+            + ["5m"] * 4
+            + ["6m"] * 4
+            + ["7m"] * 4
+            + ["8m"] * 4
+            + ["9m"] * 4
+            + ["1p"] * 4
+            + ["2p"] * 4
+            + ["3p"] * 4
+            + ["4p"] * 4
+            + ["5p"] * 4
+            + ["6p"] * 4
+            + ["7p"] * 4
+            + ["8p"] * 4
+            + ["9p"] * 4
+            + ["1s"] * 4
+            + ["2s"] * 4
+            + ["3s"] * 4
+            + ["4s"] * 4
+            + ["5s"] * 4
+            + ["6s"] * 4
+            + ["7s"] * 4
+            + ["8s"] * 4
+            + ["9s"] * 4
+            + ["1z"] * 4
+            + ["2z"] * 4
+            + ["3z"] * 4
+            + ["4z"] * 4
+            + ["5z"] * 4
+            + ["6z"] * 4
+            + ["7z"] * 4
+        )
+        for id in range(136):
+            self.assertEqual(Hai(id).name, names[id])
+
+
+class TestHaiLongName(unittest.TestCase):
+    def test_long_name(self):
+        long_names = (
+            ["1m"] * 4
+            + ["2m"] * 4
+            + ["3m"] * 4
+            + ["4m"] * 4
+            + ["r5m"] * 1
+            + ["5m"] * 3
+            + ["6m"] * 4
+            + ["7m"] * 4
+            + ["8m"] * 4
+            + ["9m"] * 4
+            + ["1p"] * 4
+            + ["2p"] * 4
+            + ["3p"] * 4
+            + ["4p"] * 4
+            + ["r5p"] * 1
+            + ["5p"] * 3
+            + ["6p"] * 4
+            + ["7p"] * 4
+            + ["8p"] * 4
+            + ["9p"] * 4
+            + ["1s"] * 4
+            + ["2s"] * 4
+            + ["3s"] * 4
+            + ["4s"] * 4
+            + ["r5s"] * 1
+            + ["5s"] * 3
+            + ["6s"] * 4
+            + ["7s"] * 4
+            + ["8s"] * 4
+            + ["9s"] * 4
+            + ["1z"] * 4
+            + ["2z"] * 4
+            + ["3z"] * 4
+            + ["4z"] * 4
+            + ["5z"] * 4
+            + ["6z"] * 4
+            + ["7z"] * 4
+        )
+        for id in range(136):
+            self.assertEqual(Hai(id).long_name, long_names[id])
 
 
 class TestHaiComparison(unittest.TestCase):
