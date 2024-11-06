@@ -71,10 +71,10 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
 # ref: https://mahjong.ara.black/etc/shanten/shanten9.htm
 class TestCalculateShantenWithAraTehai(unittest.TestCase):
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_normal_10000_txt = os.path.join(current_dir, "data/p_normal_10000.txt")
-    p_hon_10000_txt = os.path.join(current_dir, "data/p_hon_10000.txt")
-    p_tin_10000_txt = os.path.join(current_dir, "data/p_tin_10000.txt")
-    p_koku_10000_txt = os.path.join(current_dir, "data/p_koku_10000.txt")
+    p_normal_10000_txt = os.path.join(current_dir, "data/shanten/p_normal_10000.txt")
+    p_hon_10000_txt = os.path.join(current_dir, "data/shanten/p_hon_10000.txt")
+    p_tin_10000_txt = os.path.join(current_dir, "data/shanten/p_tin_10000.txt")
+    p_koku_10000_txt = os.path.join(current_dir, "data/shanten/p_koku_10000.txt")
 
     def test_shanten_normal_10000(self):
         with open(self.p_normal_10000_txt, "rb") as f:
