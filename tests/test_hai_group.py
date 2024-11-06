@@ -325,11 +325,21 @@ class TestHaiGroupLen(unittest.TestCase):
 
 
 class TestHaiGroupGetitem(unittest.TestCase):
-    def test_getitem(self):
+    def test_getitem_with_int(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         self.assertEqual(hai_group[0], Hai(0))
         self.assertEqual(hai_group[1], Hai(1))
         self.assertEqual(hai_group[2], Hai(2))
+
+    def test_getitem_with_slice(self):
+        hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
+        self.assertEqual(hai_group[:2], HaiGroup([Hai(0), Hai(1)]))
+        self.assertEqual(hai_group[1:], HaiGroup([Hai(1), Hai(2)]))
+
+    def test_getitem_with_float(self):
+        hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
+        with self.assertRaises(TypeError):
+            hai_group[1.0]
 
 
 class TestHaiGroupIter(unittest.TestCase):
