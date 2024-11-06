@@ -83,12 +83,12 @@ class TestHaiFace(unittest.TestCase):
 
 class TestHaiColor(unittest.TestCase):
     def test_color(self):
-        self.assertEqual(Hai(15).color, "kuro")
-        self.assertEqual(Hai(16).color, "aka")
-        self.assertEqual(Hai(51).color, "kuro")
-        self.assertEqual(Hai(52).color, "aka")
-        self.assertEqual(Hai(87).color, "kuro")
-        self.assertEqual(Hai(88).color, "aka")
+        self.assertEqual(Hai(15).color, "b")
+        self.assertEqual(Hai(16).color, "r")
+        self.assertEqual(Hai(51).color, "b")
+        self.assertEqual(Hai(52).color, "r")
+        self.assertEqual(Hai(87).color, "b")
+        self.assertEqual(Hai(88).color, "r")
 
 
 class TestHaiComparison(unittest.TestCase):
