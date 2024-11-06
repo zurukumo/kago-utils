@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import warnings
-from typing import Iterator, Self
+from collections.abc import Sequence
+from typing import Iterator, Self, overload
 
 from kago_utils.hai import Hai
 
 
-class HaiGroup:
+class HaiGroup(Sequence[Hai]):
     hais: list[Hai]
 
     __slots__ = ("hais",)
@@ -220,8 +221,19 @@ class HaiGroup:
     def __len__(self) -> int:
         return len(self.hais)
 
-    def __getitem__(self, key: int) -> Hai:
-        return self.hais[key]
+    @overload
+    def __getitem__(self, key: int) -> Hai: ...
+
+    @overload
+    def __getitem__(self, key: slice) -> Self: ...
+
+    def __getitem__(self, key: int | slice) -> Hai | Self:
+        if isinstance(key, int):
+            return self.hais[key]
+        elif isinstance(key, slice):
+            return self.__class__(self.hais[key])
+
+        raise TypeError(f"Invalid type for key: {type(key).__name__}")
 
     def __iter__(self) -> Iterator[Hai]:
         return iter(self.hais)
