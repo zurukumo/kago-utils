@@ -22,24 +22,26 @@ def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
 
 
 class TestTehaiInit(unittest.TestCase):
-    def test_init_as_juntehai(self):
+    def test_init(self):
         hai_group = HaiGroup.from_list(list(range(14)))
         Tehai(juntehai=hai_group)
 
-    def test_init_with_juntehai_whose_length_is_not_invalid(self):
+
+class TestTehaiValidateJuntehai(unittest.TestCase):
+    def test_validate_juntehai_with_juntehai_whose_length_is_not_invalid(self):
         hai_group = HaiGroup.from_list(list(range(3)))
         with self.assertRaises(ValueError):
-            Tehai(juntehai=hai_group)
+            Tehai.validate_juntehai(juntehai=hai_group)
 
-    def test_init_with_juntehai_whose_length_is_too_long(self):
+    def test_validate_juntehai_with_juntehai_whose_length_is_too_long(self):
         hai_group = HaiGroup.from_list(list(range(15)))
         with self.assertRaises(ValueError):
-            Tehai(juntehai=hai_group)
+            Tehai.validate_juntehai(juntehai=hai_group)
 
-    def test_init_with_juntehai_which_has_same_hai(self):
+    def test_validate_juntehai_with_juntehai_which_has_same_hai(self):
         hai_group = HaiGroup.from_list(list(range(12)) + [12] * 2)
         with self.assertRaises(ValueError):
-            Tehai(juntehai=hai_group)
+            Tehai.validate_juntehai(juntehai=hai_group)
 
 
 class TestTehaiListChiiCandidates(unittest.TestCase):
