@@ -19,6 +19,17 @@ class Tehai:
         self.juntehai = juntehai
         self.huuros = huuros
 
+        Tehai.validate_juntehai(juntehai)
+
+    @classmethod
+    def validate_juntehai(cls, juntehai: HaiGroup) -> None:
+        if any(not 0 <= v <= 1 for v in juntehai.to_counter()):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {juntehai}")
+        if len(juntehai) > 14:
+            raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {juntehai}")
+        if len(juntehai) % 3 == 0:
+            raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {juntehai}")
+
     def tsumo(self, hai: Hai) -> None:
         self.juntehai += hai
         self.last_tsumo = hai

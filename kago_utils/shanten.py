@@ -5,6 +5,7 @@ import os
 import pickle
 
 from kago_utils.hai_group import HaiGroup
+from kago_utils.tehai import Tehai
 
 
 class Shanten:
@@ -28,7 +29,7 @@ class Shanten:
     __yuukouhai: HaiGroup | None
 
     def __init__(self, juntehai: HaiGroup) -> None:
-        juntehai.validate_as_juntehai()
+        Tehai.validate_juntehai(juntehai)
 
         self.__juntehai = juntehai
         self.__shanten = None

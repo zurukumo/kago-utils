@@ -21,6 +21,27 @@ def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
     return "|".join([hai.long_name for hai in huuro.hais])
 
 
+class TestTehaiInit(unittest.TestCase):
+    def test_init_as_juntehai(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        Tehai(juntehai=hai_group)
+
+    def test_init_with_juntehai_whose_length_is_not_invalid(self):
+        hai_group = HaiGroup.from_list(list(range(3)))
+        with self.assertRaises(ValueError):
+            Tehai(juntehai=hai_group)
+
+    def test_init_with_juntehai_whose_length_is_too_long(self):
+        hai_group = HaiGroup.from_list(list(range(15)))
+        with self.assertRaises(ValueError):
+            Tehai(juntehai=hai_group)
+
+    def test_init_with_juntehai_which_has_same_hai(self):
+        hai_group = HaiGroup.from_list(list(range(12)) + [12] * 2)
+        with self.assertRaises(ValueError):
+            Tehai(juntehai=hai_group)
+
+
 class TestTehaiListChiiCandidates(unittest.TestCase):
     def test_list_chii_candidates(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
