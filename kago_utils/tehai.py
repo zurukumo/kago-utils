@@ -19,8 +19,6 @@ class Tehai:
         self.juntehai = juntehai
         self.huuros = huuros
 
-        Tehai.validate_juntehai(juntehai)
-
     @classmethod
     def validate_juntehai(cls, juntehai: HaiGroup) -> None:
         if any(not 0 <= v <= 1 for v in juntehai.to_counter()):
@@ -33,6 +31,10 @@ class Tehai:
     def tsumo(self, hai: Hai) -> None:
         self.juntehai += hai
         self.last_tsumo = hai
+
+    def dahai(self, hai: Hai) -> None:
+        self.juntehai -= hai
+        self.last_dahai = hai
 
     def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
