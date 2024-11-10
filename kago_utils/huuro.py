@@ -101,6 +101,15 @@ class Pon:
         if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
             raise ValueError("Invalid Pon: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA")
 
+    def can_become_kakan(self, kakan: Kakan) -> bool:
+        return all(
+            (
+                self.hais == kakan.hais - kakan.added,
+                self.stolen == kakan.stolen,
+                self.from_who == kakan.from_who,
+            )
+        )
+
     def to_kakan(self) -> Kakan:
         base_id = self.hais[0].id - (self.hais[0].id % 4)
         new_hais = HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])
