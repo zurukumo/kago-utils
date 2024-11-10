@@ -158,15 +158,6 @@ class HaiGroup(Sequence[Hai]):
         if any(not 0 <= v <= 1 for v in counter):
             raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {self.__repr__()}")
 
-    def validate_as_jun_tehai(self) -> None:
-        self.validate()
-
-        counter = self.to_counter()
-        if sum(counter) > 14:
-            raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {self.__repr__()}")
-        if sum(counter) % 3 == 0:
-            raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {self.__repr__()}")
-
     def __eq__(self, other: object) -> bool:
         if isinstance(other, HaiGroup):
             return self.hais == other.hais

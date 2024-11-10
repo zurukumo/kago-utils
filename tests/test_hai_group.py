@@ -221,27 +221,6 @@ class TestHaiGroupValidate(unittest.TestCase):
             hai_group.validate()
 
 
-class TestHaiGroupValidateAsJunTehai(unittest.TestCase):
-    def test_validate_as_jun_tehai(self):
-        hai_group = HaiGroup.from_list(list(range(14)))
-        hai_group.validate_as_jun_tehai()
-
-    def test_validate_as_jun_tehai_when_length_is_not_invalid(self):
-        hai_group = HaiGroup.from_list(list(range(3)))
-        with self.assertRaises(ValueError):
-            hai_group.validate_as_jun_tehai()
-
-    def test_validate_as_jun_tehai_when_length_is_too_long(self):
-        hai_group = HaiGroup.from_list(list(range(15)))
-        with self.assertRaises(ValueError):
-            hai_group.validate_as_jun_tehai()
-
-    def test_validate_as_jun_tehai_when_2nd_hai_exists(self):
-        hai_group = HaiGroup.from_list(list(range(12)) + [12] * 2)
-        with self.assertRaises(ValueError):
-            hai_group.validate_as_jun_tehai()
-
-
 class TestHaiGroupEq(unittest.TestCase):
     def test_eq(self):
         hai_group1 = HaiGroup([Hai(1), Hai(2)])
