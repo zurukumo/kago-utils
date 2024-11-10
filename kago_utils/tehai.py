@@ -36,6 +36,31 @@ class Tehai:
         self.juntehai -= hai
         self.last_dahai = hai
 
+    def chii(self, chii: Chii) -> None:
+        self.huuros.append(chii)
+        self.juntehai -= chii.hais - chii.stolen
+
+    def pon(self, pon: Pon) -> None:
+        self.huuros.append(pon)
+        self.juntehai -= pon.hais - pon.stolen
+
+    def kakan(self, kakan: Kakan) -> None:
+        for i, huuro in enumerate(self.huuros):
+            if isinstance(huuro, Pon) and huuro.can_become_kakan(kakan):
+                self.huuros[i] = kakan
+                self.juntehai -= kakan.added
+                return
+
+        raise ValueError(f"Invalid data: there is no pon that can become given kakan. Data: {kakan}")
+
+    def daiminkan(self, daiminkan: Daiminkan) -> None:
+        self.huuros.append(daiminkan)
+        self.juntehai -= daiminkan.hais - daiminkan.stolen
+
+    def ankan(self, ankan: Ankan) -> None:
+        self.huuros.append(ankan)
+        self.juntehai -= ankan.hais
+
     @property
     def is_menzen(self) -> bool:
         return not any(isinstance(huuro, (Chii, Pon, Kakan, Daiminkan)) for huuro in self.huuros)
