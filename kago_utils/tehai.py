@@ -15,9 +15,9 @@ class Tehai:
 
     __slots__ = ("juntehai", "huuros", "last_tsumo", "last_dahai")
 
-    def __init__(self, juntehai: HaiGroup, huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan] = []):
+    def __init__(self, juntehai: HaiGroup, huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan] | None = None):
         self.juntehai = juntehai
-        self.huuros = huuros
+        self.huuros = huuros if huuros is not None else []
 
     @classmethod
     def validate_juntehai(cls, juntehai: HaiGroup) -> None:
