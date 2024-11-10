@@ -36,6 +36,10 @@ class Tehai:
         self.juntehai -= hai
         self.last_dahai = hai
 
+    @property
+    def is_menzen(self) -> bool:
+        return not any(isinstance(huuro, (Chii, Pon, Kakan, Daiminkan)) for huuro in self.huuros)
+
     def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
         prev1: dict[str, Hai | None] = {"b": None, "r": None}
