@@ -44,6 +44,107 @@ class TestTehaiValidateJuntehai(unittest.TestCase):
             Tehai.validate_juntehai(juntehai=hai_group)
 
 
+class TestTehaiChii(unittest.TestCase):
+    def test_chii(self):
+        hai_group = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
+        chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
+        tehai = Tehai(juntehai=hai_group)
+        tehai.chii(chii)
+
+        self.assertIn(chii, tehai.huuros)
+        self.assertEqual(tehai.juntehai, HaiGroup.from_list([12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52]))
+
+
+class TestTehaiPon(unittest.TestCase):
+    def test_pon(self):
+        hai_group = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
+        tehai = Tehai(juntehai=hai_group)
+        tehai.pon(pon)
+
+        self.assertIn(pon, tehai.huuros)
+        self.assertEqual(tehai.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24]))
+
+
+class TestTehaiKakan(unittest.TestCase):
+    def test_kakan(self):
+        hai_group = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)
+        tehai = Tehai(juntehai=hai_group, huuros=[pon])
+        tehai.kakan(kakan)
+
+        self.assertIn(kakan, tehai.huuros)
+        self.assertNotIn(pon, tehai.huuros)
+        self.assertEqual(tehai.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24]))
+
+
+class TestTehaiDaiminkan(unittest.TestCase):
+    def test_daiminkan(self):
+        hai_group = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
+        daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)
+        tehai = Tehai(juntehai=hai_group)
+        tehai.daiminkan(daiminkan)
+
+        self.assertIn(daiminkan, tehai.huuros)
+        self.assertEqual(tehai.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
+
+
+class TestTehaiAnkan(unittest.TestCase):
+    def test_ankan(self):
+        hai_group = HaiGroup.from_list([0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
+        ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
+        tehai = Tehai(juntehai=hai_group)
+        tehai.ankan(ankan)
+
+        self.assertIn(ankan, tehai.huuros)
+        self.assertEqual(tehai.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
+
+
+class TestTehaiIsMenzen(unittest.TestCase):
+    def test_is_menzen_without_huuros(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        tehai = Tehai(juntehai=hai_group)
+        self.assertTrue(tehai.is_menzen)
+
+    def test_is_menzen_with_chii(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
+        tehai = Tehai(juntehai=hai_group, huuros=[chii])
+        self.assertFalse(tehai.is_menzen)
+
+    def test_is_menzen_with_pon(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        tehai = Tehai(juntehai=hai_group, huuros=[pon])
+        self.assertFalse(tehai.is_menzen)
+
+    def test_is_menzen_with_kakan(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)
+        tehai = Tehai(juntehai=hai_group, huuros=[kakan])
+        self.assertFalse(tehai.is_menzen)
+
+    def test_is_menzen_with_daiminkan(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        tehai = Tehai(juntehai=hai_group, huuros=[daiminkan])
+        self.assertFalse(tehai.is_menzen)
+
+    def test_is_menzen_with_ankan(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
+        tehai = Tehai(juntehai=hai_group, huuros=[ankan])
+        self.assertTrue(tehai.is_menzen)
+
+    def test_is_menzen_with_ankan_and_chii(self):
+        hai_group = HaiGroup.from_list(list(range(14)))
+        ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
+        chii = Chii(hais=HaiGroup.from_list([4, 8, 12]), stolen=Hai(4))
+        tehai = Tehai(juntehai=hai_group, huuros=[ankan, chii])
+        self.assertFalse(tehai.is_menzen)
+
+
 class TestTehaiListChiiCandidates(unittest.TestCase):
     def test_list_chii_candidates(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))

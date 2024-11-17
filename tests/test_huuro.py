@@ -127,6 +127,42 @@ class TestAnkanInit(unittest.TestCase):
             Ankan(hais=HaiGroup.from_list([0, 1, 2, 4]))
 
 
+class TestPonCanBecomeKakan(unittest.TestCase):
+    def test_can_become_kakan_with_valid_kakan(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(3), from_who=Zaichi.KAMICHA)
+        self.assertTrue(pon.can_become_kakan(kakan))
+
+    def test_can_become_kakan_with_not_same_hais(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        kakan = Kakan(hais=HaiGroup.from_list([4, 5, 6, 7]), stolen=Hai(4), added=Hai(7), from_who=Zaichi.KAMICHA)
+        self.assertFalse(pon.can_become_kakan(kakan))
+
+    def test_can_become_kakan_with_not_same_stolen(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(1), added=Hai(3), from_who=Zaichi.KAMICHA)
+        self.assertFalse(pon.can_become_kakan(kakan))
+
+    def test_can_become_kakan_with_not_same_added(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(2), from_who=Zaichi.KAMICHA)
+        self.assertFalse(pon.can_become_kakan(kakan))
+
+    def test_can_become_kakan_with_not_same_from_who(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(3), from_who=Zaichi.SIMOCHA)
+        self.assertFalse(pon.can_become_kakan(kakan))
+
+
+class TestPonToKakan(unittest.TestCase):
+    def test_to_kakan(self):
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
+        kakan = pon.to_kakan()
+        self.assertEqual(
+            kakan, Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(3), from_who=Zaichi.KAMICHA)
+        )
+
+
 class TestChiiComparison(unittest.TestCase):
     def test_eq(self):
         chii1 = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))

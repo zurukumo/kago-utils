@@ -15,9 +15,9 @@ class Tehai:
 
     __slots__ = ("juntehai", "huuros", "last_tsumo", "last_dahai")
 
-    def __init__(self, juntehai: HaiGroup, huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan] = []):
+    def __init__(self, juntehai: HaiGroup, huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan] | None = None):
         self.juntehai = juntehai
-        self.huuros = huuros
+        self.huuros = huuros if huuros is not None else []
 
     @classmethod
     def validate_juntehai(cls, juntehai: HaiGroup) -> None:
@@ -35,6 +35,35 @@ class Tehai:
     def dahai(self, hai: Hai) -> None:
         self.juntehai -= hai
         self.last_dahai = hai
+
+    def chii(self, chii: Chii) -> None:
+        self.huuros.append(chii)
+        self.juntehai -= chii.hais - chii.stolen
+
+    def pon(self, pon: Pon) -> None:
+        self.huuros.append(pon)
+        self.juntehai -= pon.hais - pon.stolen
+
+    def kakan(self, kakan: Kakan) -> None:
+        for i, huuro in enumerate(self.huuros):
+            if isinstance(huuro, Pon) and huuro.can_become_kakan(kakan):
+                self.huuros[i] = kakan
+                self.juntehai -= kakan.added
+                return
+
+        raise ValueError(f"Invalid data: there is no pon that can become given kakan. Data: {kakan}")
+
+    def daiminkan(self, daiminkan: Daiminkan) -> None:
+        self.huuros.append(daiminkan)
+        self.juntehai -= daiminkan.hais - daiminkan.stolen
+
+    def ankan(self, ankan: Ankan) -> None:
+        self.huuros.append(ankan)
+        self.juntehai -= ankan.hais
+
+    @property
+    def is_menzen(self) -> bool:
+        return not any(isinstance(huuro, (Chii, Pon, Kakan, Daiminkan)) for huuro in self.huuros)
 
     def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
