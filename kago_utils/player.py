@@ -37,15 +37,15 @@ class Player:
 
     @property
     def pao_sekinin_player(self) -> Player | None:
-        daisuushii_huuro = 0
-        daisangen_huuro = 0
+        n_daisuushii_huuro = 0
+        n_daisangen_huuro = 0
         for huuro in self.tehai.huuros:
             if huuro.hais[0].name in ("5z", "6z", "7z"):
-                daisangen_huuro += 1
+                n_daisangen_huuro += 1
             if huuro.hais[0].name in ("1z", "2z", "3z", "4z"):
-                daisuushii_huuro += 1
+                n_daisuushii_huuro += 1
 
-            if daisangen_huuro >= 3 or daisuushii_huuro >= 4:
+            if n_daisangen_huuro >= 3 or n_daisuushii_huuro >= 4:
                 return self.find_player_by_zaichi(huuro.from_who)
 
         return None
