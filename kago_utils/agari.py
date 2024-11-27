@@ -111,15 +111,13 @@ class Agari:
 
         if game.last_teban == player.zaseki:
             if game.last_tsumo is None:
-                raise Exception("game.last_tsumo is None")
+                raise Exception()
 
             self.agarihai = game.last_tsumo
             self.from_who = player.zaseki
         else:
-            if game.last_dahai is None:
-                raise Exception("game.last_dahai is None")
-            if game.last_teban is None:
-                raise Exception("game.last_teban is None")
+            if game.last_dahai is None or game.last_teban is None:
+                raise Exception()
 
             self.tehai.juntehai += game.last_dahai
             self.agarihai = game.last_dahai
