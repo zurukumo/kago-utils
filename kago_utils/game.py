@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from kago_utils.hai import Hai
 
@@ -44,5 +44,15 @@ class Game:
         return self.players[zaseki]
 
     @property
-    def bakaze(self) -> str:
-        return "東南西北"[self.kyoku // 4]
+    def bakaze(self) -> Literal["東", "南", "西", "北"]:
+        match self.kyoku % 4:
+            case 0:
+                return "東"
+            case 1:
+                return "南"
+            case 2:
+                return "西"
+            case 3:
+                return "北"
+
+        raise Exception()

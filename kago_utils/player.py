@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from kago_utils.game import Game
 from kago_utils.tehai import Tehai
 from kago_utils.zaichi import Zaichi
@@ -20,8 +22,18 @@ class Player:
         return self.zaseki == self.game.kyoku % 4
 
     @property
-    def jikaze(self) -> str:
-        return "東南西北"[(self.zaseki - self.game.kyoku) % 4]
+    def jikaze(self) -> Literal["東", "南", "西", "北"]:
+        match (self.zaseki - self.game.kyoku) % 4:
+            case 0:
+                return "東"
+            case 1:
+                return "南"
+            case 2:
+                return "西"
+            case 3:
+                return "北"
+
+        raise Exception()
 
     @property
     def pao_sekinin_player(self) -> Player | None:
