@@ -3,15 +3,14 @@ import unittest
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Chii
-from kago_utils.tehai import Tehai
 from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 
 class TestTehaiDecomposer(unittest.TestCase):
     def test_decompose(self):
         juntehai = HaiGroup.from_string("111222333m66677z")
-        tehai = Tehai(juntehai)
-        decomposed_tehais = list(TehaiDecomposer(tehai, juntehai[0], is_tsumo_agari=True).decompose())
+        huuros = []
+        decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[0], is_tsumo_agari=True).decompose())
 
         self.assertEqual(len(decomposed_tehais), 2)
         self.assertEqual(
@@ -37,8 +36,8 @@ class TestTehaiDecomposer(unittest.TestCase):
 
     def test_decompose_with_penchan_kanchan_tehai(self):
         juntehai = HaiGroup.from_string("122334m55566677z")
-        tehai = Tehai(juntehai)
-        decomposed_tehais = list(TehaiDecomposer(tehai, juntehai[3], is_tsumo_agari=True).decompose())
+        huuros = []
+        decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[3], is_tsumo_agari=True).decompose())
 
         self.assertEqual(len(decomposed_tehais), 2)
         self.assertEqual(
@@ -65,8 +64,7 @@ class TestTehaiDecomposer(unittest.TestCase):
     def test_decompose_with_huuros(self):
         juntehai = HaiGroup.from_string("112233m66677z")
         huuros = [Chii(hais=HaiGroup.from_list([2, 6, 10]), stolen=Hai(2))]
-        tehai = Tehai(juntehai, huuros)
-        decomposed_tehais = list(TehaiDecomposer(tehai, juntehai[0], is_tsumo_agari=True).decompose())
+        decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[0], is_tsumo_agari=True).decompose())
 
         self.assertEqual(len(decomposed_tehais), 1)
         self.assertEqual(
@@ -81,9 +79,9 @@ class TestTehaiDecomposer(unittest.TestCase):
         )
 
     def test_decompose_when_ron_agari(self):
-        junehai = HaiGroup.from_string("111m44455566677z")
-        tehai = Tehai(junehai)
-        decomposed_tehais = list(TehaiDecomposer(tehai, junehai[0], is_tsumo_agari=False).decompose())
+        juntehai = HaiGroup.from_string("111m44455566677z")
+        huuros = []
+        decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[0], is_tsumo_agari=False).decompose())
 
         self.assertEqual(len(decomposed_tehais), 1)
         self.assertEqual(

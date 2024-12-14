@@ -5,8 +5,8 @@ import copy
 from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
+from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
 from kago_utils.player import Player
-from kago_utils.tehai import Tehai
 from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 
@@ -73,7 +73,8 @@ class Agari:
     game: Game
     is_daburon: bool
 
-    tehai: Tehai
+    juntehai: HaiGroup
+    huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     zentehai: HaiGroup
 
     is_tsumo_agari: bool
@@ -90,7 +91,8 @@ class Agari:
         "player",
         "game",
         "is_daburon",
-        "tehai",
+        "juntehai",
+        "huuros",
         "agarihai",
         "from_who",
         "zentehai",
@@ -107,24 +109,25 @@ class Agari:
         self.player = player
         self.is_daburon = is_daburon
 
-        self.tehai = copy.deepcopy(player.tehai)
+        self.juntehai = copy.deepcopy(player.juntehai)
+        self.huuros = copy.deepcopy(player.huuros)
 
         if game.last_teban == player.zaseki:
-            if game.last_tsumo is None:
+            if player.last_tsumo is None:
                 raise Exception()
 
-            self.agarihai = game.last_tsumo
+            self.agarihai = player.last_tsumo
             self.from_who = player.zaseki
         else:
             if game.last_dahai is None or game.last_teban is None:
                 raise Exception()
 
-            self.tehai.juntehai += game.last_dahai
+            self.juntehai += game.last_dahai
             self.agarihai = game.last_dahai
             self.from_who = game.last_teban
 
-        self.zentehai = copy.deepcopy(self.tehai.juntehai)
-        for huuro in self.tehai.huuros:
+        self.zentehai = copy.deepcopy(self.juntehai)
+        for huuro in self.huuros:
             self.zentehai += huuro.hais
 
         self.is_tsumo_agari = self.player.zaseki == self.from_who
@@ -159,7 +162,9 @@ class Agari:
                 max_yaku = yaku
 
         # Calculate ten for regular
-        for decomposed_tehai in TehaiDecomposer(self.tehai, self.agarihai, self.is_tsumo_agari).decompose():
+        for decomposed_tehai in TehaiDecomposer(
+            self.juntehai, self.huuros, self.agarihai, self.is_tsumo_agari
+        ).decompose():
             hu, is_pinhu = self.calculate_hu(decomposed_tehai)
             bubun_yaku = self.get_bubun_yaku_for_regular(decomposed_tehai, is_pinhu)
 
@@ -222,18 +227,18 @@ class Agari:
             if block.type == "shuntsu" and block.hais[1] == block.agarihai:
                 hu += 2
 
-        is_pinhu = hu == 20 and self.tehai.is_menzen
+        is_pinhu = hu == 20 and self.player.is_menzen
 
         # Hu by agari type
         # Tsumo(exception for pinhu)
         if self.is_tsumo_agari and not is_pinhu:
             hu += 2
         # Menzen ron
-        if not self.is_tsumo_agari and self.tehai.is_menzen:
+        if not self.is_tsumo_agari and self.player.is_menzen:
             hu += 10
 
         # Adjust hu when it is kui pinhu
-        if hu == 20 and not self.tehai.is_menzen:
+        if hu == 20 and not self.player.is_menzen:
             hu = 30
 
         hu = (hu + 9) // 10 * 10
@@ -334,10 +339,10 @@ class Agari:
             or sum(counter[9:18]) + sum(counter[27:34]) == total
             or sum(counter[18:27]) + sum(counter[27:34]) == total
         ):
-            zenbu_yaku["混一色"] = 2 + self.tehai.is_menzen
+            zenbu_yaku["混一色"] = 2 + self.player.is_menzen
 
         if sum(counter[0:9]) == total or sum(counter[9:18]) == total or sum(counter[18:27]) == total:
-            zenbu_yaku["清一色"] = 5 + self.tehai.is_menzen
+            zenbu_yaku["清一色"] = 5 + self.player.is_menzen
 
         if sum(counter[27:34]) == total:
             zenbu_yaku["字一色"] = 13
@@ -348,12 +353,12 @@ class Agari:
         if sum([counter[i] for i in (0, 8, 9, 17, 18, 26)]) == total:
             zenbu_yaku["清老頭"] = 13
 
-        if len(self.tehai.huuros) == 0:
+        if len(self.huuros) == 0:
             for i in [0, 9, 18]:
                 if counter[i] >= 3 and counter[i + 8] >= 3 and all(counter[i : i + 9]):
                     zenbu_yaku["九蓮宝燈"] = 13
 
-        if len(self.tehai.huuros) == 0:
+        if len(self.huuros) == 0:
             for i in [0, 9, 18]:
                 if (
                     counter[i] >= 3
@@ -384,7 +389,7 @@ class Agari:
         if is_pinhu:
             bubun_yaku["平和"] = 1
 
-        if self.tehai.is_menzen and sum(c >= 2 for c in sp) == 1:
+        if self.player.is_menzen and sum(c >= 2 for c in sp) == 1:
             bubun_yaku["一盃口"] = 1
 
         if self.player.jikaze == "東" and kp[27]:
@@ -413,14 +418,14 @@ class Agari:
             bubun_yaku["役牌 中"] = 1
 
         if sum(tp[i] + kp[i] for i in Agari.YAOCHUHAI) + sum(sp[i] for i in (0, 6, 7, 13, 14, 20)) == 5:
-            bubun_yaku["混全帯幺九"] = 1 + self.tehai.is_menzen
+            bubun_yaku["混全帯幺九"] = 1 + self.player.is_menzen
 
         if (sp[0] and sp[3] and sp[6]) or (sp[7] and sp[10] and sp[13]) or (sp[14] and sp[17] and sp[20]):
-            bubun_yaku["一気通貫"] = 1 + self.tehai.is_menzen
+            bubun_yaku["一気通貫"] = 1 + self.player.is_menzen
 
         for i in range(7):
             if sp[i] and sp[i + 7] and sp[i + 14]:
-                bubun_yaku["三色同順"] = 1 + self.tehai.is_menzen
+                bubun_yaku["三色同順"] = 1 + self.player.is_menzen
                 break
 
         for i in range(9):
@@ -440,11 +445,11 @@ class Agari:
         if kp[31] + kp[32] + kp[33] == 2 and tp[31] + tp[32] + tp[33] == 1:
             bubun_yaku["小三元"] = 2
 
-        if self.tehai.is_menzen and sum(c >= 2 for c in sp) == 2:
+        if self.player.is_menzen and sum(c >= 2 for c in sp) == 2:
             bubun_yaku["二盃口"] = 3
 
         if sum(tp[i] + kp[i] for i in (0, 8, 9, 17, 18, 26)) + sum(sp[i] for i in (0, 6, 7, 13, 14, 20)) == 5:
-            bubun_yaku["純全帯幺九"] = 2 + self.tehai.is_menzen
+            bubun_yaku["純全帯幺九"] = 2 + self.player.is_menzen
 
         if kp[31] and kp[32] and kp[33]:
             bubun_yaku["大三元"] = 13
@@ -471,7 +476,7 @@ class Agari:
 
     def get_bubun_yaku_for_kokushimusou(self) -> dict[str, int]:
         bubun_yaku = Agari.initialize_yaku()
-        counter = self.tehai.juntehai.to_counter34()
+        counter = self.juntehai.to_counter34()
 
         if all(counter[i] in [1, 2] for i in Agari.YAOCHUHAI):
             bubun_yaku["国士無双"] = 13
@@ -483,7 +488,7 @@ class Agari:
 
     def get_bubun_yaku_for_chiitoitsu(self) -> dict[str, int]:
         bubun_yaku = Agari.initialize_yaku()
-        counter = self.tehai.juntehai.to_counter34()
+        counter = self.juntehai.to_counter34()
 
         if sum(counter[i] == 2 for i in range(34)) == 7:
             bubun_yaku["七対子"] = 2

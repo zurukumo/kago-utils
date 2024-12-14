@@ -2,8 +2,8 @@ import copy
 from typing import Generator, Literal
 
 from kago_utils.hai import Hai
+from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
-from kago_utils.tehai import Tehai
 
 
 class TehaiBlock:
@@ -45,20 +45,28 @@ class TehaiBlock:
 
 
 class TehaiDecomposer:
-    tehai: Tehai
+    juntehai: HaiGroup
+    huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     agarihai: Hai
     is_tsumo_agari: bool
 
-    __slots__ = ("tehai", "agarihai", "is_tsumo_agari")
+    __slots__ = ("juntehai", "huuros", "agarihai", "is_tsumo_agari")
 
-    def __init__(self, tehai: Tehai, agarihai: Hai, is_tsumo_agari: bool):
-        self.tehai = tehai
+    def __init__(
+        self,
+        juntehai: HaiGroup,
+        huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan],
+        agarihai: Hai,
+        is_tsumo_agari: bool,
+    ):
+        self.juntehai = juntehai
+        self.huuros = huuros
         self.agarihai = agarihai
         self.is_tsumo_agari = is_tsumo_agari
 
     def decompose(self) -> Generator[list[TehaiBlock], None, None]:
         huuro_blocks = []
-        for huuro in self.tehai.huuros:
+        for huuro in self.huuros:
             hais = huuro.hais.to_list34()
             match huuro:
                 case Chii():
@@ -70,17 +78,17 @@ class TehaiDecomposer:
                 case Ankan():
                     huuro_blocks.append(TehaiBlock(type="kantsu", hais=hais, minan="an"))
 
-        for juntehai_blocks in self.__decompose_juntehai_blocks():
-            yield (juntehai_blocks + huuro_blocks)[::]
+        for junt_ehai_blocks in self.__decompose_junt_ehai_blocks():
+            yield (junt_ehai_blocks + huuro_blocks)[::]
 
-    def __decompose_juntehai_blocks(self) -> Generator[list[TehaiBlock], None, None]:
-        counter = self.tehai.juntehai.to_counter34()
-        for jantou in self.__decompose_juntehai_jantou(counter):
-            for mentsus in self.__decompose_juntehai_mentsu(counter):
+    def __decompose_junt_ehai_blocks(self) -> Generator[list[TehaiBlock], None, None]:
+        counter = self.juntehai.to_counter34()
+        for jantou in self.__decompose_junt_ehai_jantou(counter):
+            for mentsus in self.__decompose_junt_ehai_mentsu(counter):
                 for blocks in self.__select_block_including_agarihai(jantou + mentsus):
                     yield blocks
 
-    def __decompose_juntehai_jantou(self, counter: list[int]) -> Generator[list[TehaiBlock], None, None]:
+    def __decompose_junt_ehai_jantou(self, counter: list[int]) -> Generator[list[TehaiBlock], None, None]:
         for i in range(34):
             if counter[i] >= 2:
                 jantou = TehaiBlock(type="jantou", hais=[i, i], minan="an")
@@ -88,7 +96,7 @@ class TehaiDecomposer:
                 yield [jantou]
                 counter[i] += 2
 
-    def __decompose_juntehai_mentsu(
+    def __decompose_junt_ehai_mentsu(
         self, counter: list[int], start: int = 0
     ) -> Generator[list[TehaiBlock], None, None]:
         if sum(counter) == 0:
@@ -101,7 +109,7 @@ class TehaiDecomposer:
                 counter[i] -= 1
                 counter[i + 1] -= 1
                 counter[i + 2] -= 1
-                for mentsus in self.__decompose_juntehai_mentsu(counter, i):
+                for mentsus in self.__decompose_junt_ehai_mentsu(counter, i):
                     yield [shuntsu] + mentsus
                 counter[i] += 1
                 counter[i + 1] += 1
@@ -110,7 +118,7 @@ class TehaiDecomposer:
             if counter[i] >= 3:
                 koutsu = TehaiBlock(type="koutsu", hais=[i, i, i], minan="an")
                 counter[i] -= 3
-                for mentsus in self.__decompose_juntehai_mentsu(counter, i + 1):
+                for mentsus in self.__decompose_junt_ehai_mentsu(counter, i + 1):
                     yield [koutsu] + mentsus
                 counter[i] += 3
 
