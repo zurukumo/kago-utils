@@ -8,7 +8,6 @@ from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
-from kago_utils.shanten import Shanten
 from kago_utils.zaichi import Zaichi
 
 
