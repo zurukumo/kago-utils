@@ -35,6 +35,28 @@ def calculate_shanten_external(juntehai: HaiGroup):
     return external_shanten(np.array(juntehai, dtype=np.uint8)) - 1
 
 
+class TestShantenInit(unittest.TestCase):
+    def test_init(self):
+        for juntehai_length in [1, 2, 4, 5, 7, 8, 10, 11, 13, 14]:
+            juntehai = HaiGroup.from_list(list(range(juntehai_length)))
+            Shanten(juntehai)
+
+    def test_init_with_juntehai_whose_length_is_invalid(self):
+        juntehai = HaiGroup.from_list(list(range(3)))
+        with self.assertRaises(ValueError):
+            Shanten(juntehai)
+
+    def test_init_with_juntehai_whose_length_is_too_long(self):
+        juntehai = HaiGroup.from_list(list(range(15)))
+        with self.assertRaises(ValueError):
+            Shanten(juntehai)
+
+    def test_init_with_juntehai_having_same_hai(self):
+        juntehai = HaiGroup.from_list(list(range(12)) + [12] * 2)
+        with self.assertRaises(ValueError):
+            Shanten(juntehai)
+
+
 class TestCalculateShantenWithRandomTehai(unittest.TestCase):
     n_assertion = 1000
     # format: (juntehai_length, n_huuro)
