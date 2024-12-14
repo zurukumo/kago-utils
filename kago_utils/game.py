@@ -45,7 +45,7 @@ class Game:
 
     @property
     def bakaze(self) -> Literal["東", "南", "西", "北"]:
-        match self.kyoku % 4:
+        match self.kyoku // 4:
             case 0:
                 return "東"
             case 1:
