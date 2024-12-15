@@ -5,7 +5,6 @@ import os
 import pickle
 
 from kago_utils.hai_group import HaiGroup
-from kago_utils.tehai import Tehai
 
 
 class Shanten:
@@ -29,7 +28,7 @@ class Shanten:
     __yuukouhai: HaiGroup | None
 
     def __init__(self, juntehai: HaiGroup) -> None:
-        Tehai.validate_juntehai(juntehai)
+        Shanten.validate_juntehai(juntehai)
 
         self.__juntehai = juntehai
         self.__shanten = None
@@ -37,6 +36,15 @@ class Shanten:
         self.__chiitoitsu_shanten = None
         self.__kokushimusou_shanten = None
         self.__yuukouhai = None
+
+    @classmethod
+    def validate_juntehai(cls, juntehai: HaiGroup) -> None:
+        if any(not 0 <= v <= 1 for v in juntehai.to_counter()):
+            raise ValueError(f"Invalid data: the count of each hai should be between 0 and 1. Data: {juntehai}")
+        if len(juntehai) > 14:
+            raise ValueError(f"Invalid data: the total count of hais should be 14 or less. Data: {juntehai}")
+        if len(juntehai) % 3 == 0:
+            raise ValueError(f"Invalid data: the total count of hais should be 3n+1 or 3n+2. Data: {juntehai}")
 
     @property
     def shanten(self) -> int:
