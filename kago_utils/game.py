@@ -15,22 +15,13 @@ class Game:
     honba: int
     kyoutaku: int
 
+    teban: int
     last_teban: int | None
-    last_tsumo: Hai | None
     last_dahai: Hai | None
 
-    pc: int
+    yama: list[Hai]
 
-    __slots__ = (
-        "players",
-        "kyoku",
-        "honba",
-        "kyoutaku",
-        "last_teban",
-        "last_tsumo",
-        "last_dahai",
-        "pc",
-    )
+    __slots__ = ("players", "kyoku", "honba", "kyoutaku", "teban", "last_teban", "last_dahai", "yama")
 
     def __init__(self) -> None:
         self.players = []
