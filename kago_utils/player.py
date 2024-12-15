@@ -113,10 +113,15 @@ class Player:
         return candidates
 
     def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
+        # Not enoguh yama
+        if len(self.game.yama) == 0:
+            return []
+
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
         prev1: dict[str, Hai | None] = {"b": None, "r": None}
         next1: dict[str, Hai | None] = {"b": None, "r": None}
         next2: dict[str, Hai | None] = {"b": None, "r": None}
+
         # Shuffle juntehai to select prev2, prev1, next1, and next2 randomly.
         for hai in random.sample(self.juntehai, len(self.juntehai)):
             if hai.suit == "z" or hai.suit != stolen.suit:
@@ -143,6 +148,10 @@ class Player:
         return candidates
 
     def list_pon_candidates(self, stolen: Hai, from_who: Zaichi) -> list[Pon]:
+        # Not enough yama
+        if len(self.game.yama) == 0:
+            return []
+
         candidates = []
         b = []
         r = []
@@ -162,6 +171,19 @@ class Player:
         return candidates
 
     def list_kakan_candidates(self, added: Hai) -> list[Kakan]:
+        # Not enough yama
+        if len(self.game.yama) == 0:
+            return []
+
+        # Four kans exist
+        n_kan = 0
+        for player in self.game.players:
+            for huuro in player.huuros:
+                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
+                    n_kan += 1
+        if n_kan >= 4:
+            return []
+
         candidates = []
         for huuro in self.huuros:
             if isinstance(huuro, Pon) and huuro.hais[0].name == added.name:
@@ -170,6 +192,19 @@ class Player:
         return candidates
 
     def list_daiminkan_candidates(self, stolen: Hai, from_who: Zaichi) -> list[Daiminkan]:
+        # Not enough yama
+        if len(self.game.yama) == 0:
+            return []
+
+        # Four kans exist
+        n_kan = 0
+        for player in self.game.players:
+            for huuro in player.huuros:
+                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
+                    n_kan += 1
+        if n_kan >= 4:
+            return []
+
         candidates = []
         hais = [hai for hai in self.juntehai if hai.name == stolen.name]
         if len(hais) >= 3:
@@ -178,6 +213,19 @@ class Player:
         return candidates
 
     def list_ankan_candidates(self) -> list[Ankan]:
+        # Not enough yama
+        if len(self.game.yama) == 0:
+            return []
+
+        # Four kans exist
+        n_kan = 0
+        for player in self.game.players:
+            for huuro in player.huuros:
+                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
+                    n_kan += 1
+        if n_kan >= 4:
+            return []
+
         candidates = []
         counter = self.juntehai.to_counter34()
         for i in range(34):
