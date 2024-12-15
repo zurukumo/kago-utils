@@ -8,6 +8,7 @@ from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
+from kago_utils.shanten import Shanten
 from kago_utils.zaichi import Zaichi
 
 
@@ -15,20 +16,26 @@ class Player:
     id: str
     game: Game
     zaseki: int
+    ten: int
 
     juntehai: HaiGroup
     huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     last_tsumo: Hai | None
     last_dahai: Hai | None
+    is_riichi_called: bool
+    is_riichi_completed: bool
 
     __slots__ = (
         "id",
         "game",
         "zaseki",
+        "ten",
         "juntehai",
         "huuros",
         "last_tsumo",
         "last_dahai",
+        "is_riichi_called",
+        "is_riichi_completed",
     )
 
     def __init__(self, id: str) -> None:
@@ -38,6 +45,10 @@ class Player:
     def reset(self) -> None:
         self.juntehai = HaiGroup([])
         self.huuros = []
+        self.last_tsumo = None
+        self.last_dahai = None
+        self.is_riichi_called = False
+        self.is_riichi_completed = False
 
     def tsumo(self, hai: Hai) -> None:
         self.juntehai += hai
@@ -71,6 +82,35 @@ class Player:
     def ankan(self, ankan: Ankan) -> None:
         self.huuros.append(ankan)
         self.juntehai -= ankan.hais
+
+    def list_riichi_candidates(self) -> HaiGroup:
+        # Not menzen
+        if not self.is_menzen:
+            return HaiGroup([])
+
+        # Already riichi called
+        if self.is_riichi_called:
+            return HaiGroup([])
+
+        # Not enough ten
+        if self.ten < 1000:
+            return HaiGroup([])
+
+        # Not enough yama
+        if len(self.game.yama) < 4:
+            return HaiGroup([])
+
+        # Not tenpai
+        if Shanten(self.juntehai).shanten > 0:
+            return HaiGroup([])
+
+        candidates = HaiGroup([])
+        for hai in self.juntehai:
+            new_juntehai = self.juntehai - hai
+            if Shanten(new_juntehai).shanten == 0:
+                candidates += hai
+
+        return candidates
 
     def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
