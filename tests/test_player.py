@@ -231,10 +231,10 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_string("123456789m11p112s")
 
-        player.game.yama = [Hai(i) for i in range(4)]
+        game.yama = [Hai(i) for i in range(4)]
         self.assertEqual(player.list_riichi_candidates(), HaiGroup.from_string("112s"))
 
-        player.game.yama = [Hai(i) for i in range(3)]
+        game.yama = [Hai(i) for i in range(3)]
         self.assertEqual(player.list_riichi_candidates(), HaiGroup([]))
 
     def test_list_riichi_candidates_when_not_tenpai(self):
