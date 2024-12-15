@@ -321,65 +321,6 @@ class TestPlayerListPonCandidates(unittest.TestCase):
         self.assertEqual(player.list_pon_candidates(stolen=Hai(1), from_who=Zaichi.KAMICHA), [])
 
 
-class TestPlayerListDaiminkanCandidates(unittest.TestCase):
-    def test_list_daiminkan_candidates(self):
-        game = game_factory()
-        player = game.players[0]
-
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/player/daiminkan.pickle.gz")
-        with gzip.open(filepath, "rb") as f:
-            test_cases = pickle.load(f)
-
-        for test_case in test_cases:
-            juntehai = HaiGroup.from_list(test_case["juntehai"])
-            hais = HaiGroup.from_list(test_case["hais"])
-            stolen = Hai(test_case["stolen"])
-            from_who = Zaichi(test_case["from_who"])
-
-            player.juntehai = juntehai
-            candidates = map(simplify_huuro, player.list_daiminkan_candidates(stolen=stolen, from_who=from_who))
-            expected = simplify_huuro(Daiminkan(hais=hais, stolen=stolen, from_who=from_who))
-
-            self.assertIn(expected, candidates)
-
-    def test_list_daiminkan_candidates_when_yama_is_not_enough(self):
-        game = game_factory()
-        player = game.players[0]
-
-        player.juntehai = HaiGroup.from_list([0, 1, 2, 135])
-
-        game.yama = [Hai(i) for i in range(1)]
-        self.assertEqual(
-            player.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA),
-            [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)],
-        )
-
-        game.yama = []
-        self.assertEqual(player.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA), [])
-
-    def test_list_daiminkan_candidates_when_four_kans_exist(self):
-        game = game_factory()
-        player1 = game.players[0]
-        player2 = game.players[1]
-
-        player1.juntehai = HaiGroup.from_list([0, 1, 2, 135])
-
-        player2.huuros = []
-        self.assertEqual(
-            player1.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA),
-            [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)],
-        )
-
-        player2.huuros = [
-            Ankan(hais=HaiGroup.from_string("1111z")),
-            Ankan(hais=HaiGroup.from_string("2222z")),
-            Ankan(hais=HaiGroup.from_string("3333z")),
-            Ankan(hais=HaiGroup.from_string("4444z")),
-        ]
-        self.assertEqual(player1.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA), [])
-
-
 class TestPlayerListKakanCandidates(unittest.TestCase):
     def test_list_kakan_candidates(self):
         game = game_factory()
@@ -448,6 +389,65 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
             Ankan(hais=HaiGroup.from_string("4444z")),
         ]
         self.assertEqual(player1.list_kakan_candidates(added=Hai(3)), [])
+
+
+class TestPlayerListDaiminkanCandidates(unittest.TestCase):
+    def test_list_daiminkan_candidates(self):
+        game = game_factory()
+        player = game.players[0]
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/player/daiminkan.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
+            test_cases = pickle.load(f)
+
+        for test_case in test_cases:
+            juntehai = HaiGroup.from_list(test_case["juntehai"])
+            hais = HaiGroup.from_list(test_case["hais"])
+            stolen = Hai(test_case["stolen"])
+            from_who = Zaichi(test_case["from_who"])
+
+            player.juntehai = juntehai
+            candidates = map(simplify_huuro, player.list_daiminkan_candidates(stolen=stolen, from_who=from_who))
+            expected = simplify_huuro(Daiminkan(hais=hais, stolen=stolen, from_who=from_who))
+
+            self.assertIn(expected, candidates)
+
+    def test_list_daiminkan_candidates_when_yama_is_not_enough(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 2, 135])
+
+        game.yama = [Hai(i) for i in range(1)]
+        self.assertEqual(
+            player.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA),
+            [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)],
+        )
+
+        game.yama = []
+        self.assertEqual(player.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA), [])
+
+    def test_list_daiminkan_candidates_when_four_kans_exist(self):
+        game = game_factory()
+        player1 = game.players[0]
+        player2 = game.players[1]
+
+        player1.juntehai = HaiGroup.from_list([0, 1, 2, 135])
+
+        player2.huuros = []
+        self.assertEqual(
+            player1.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA),
+            [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)],
+        )
+
+        player2.huuros = [
+            Ankan(hais=HaiGroup.from_string("1111z")),
+            Ankan(hais=HaiGroup.from_string("2222z")),
+            Ankan(hais=HaiGroup.from_string("3333z")),
+            Ankan(hais=HaiGroup.from_string("4444z")),
+        ]
+        self.assertEqual(player1.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA), [])
 
 
 class TestPlayerListAnkanCandidates(unittest.TestCase):
