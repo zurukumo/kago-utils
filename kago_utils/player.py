@@ -143,7 +143,15 @@ class Player:
         for hai1, hai2, hai3 in pattern1 + pattern2 + pattern3:
             if hai1 is None or hai2 is None or hai3 is None:
                 continue
-            candidates.append(Chii(hais=HaiGroup([hai1, hai2, hai3]), stolen=stolen))
+
+            chii = Chii(hais=HaiGroup([hai1, hai2, hai3]), stolen=stolen)
+
+            # Pass if cannot dahai after chii
+            kuikae_hais = self.juntehai & chii.kuikae_hais
+            if len(self.juntehai) - 2 == len(kuikae_hais):
+                continue
+
+            candidates.append(chii)
 
         return candidates
 

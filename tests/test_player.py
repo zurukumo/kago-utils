@@ -282,6 +282,18 @@ class TestPlayerListChiiCandidates(unittest.TestCase):
         game.yama = []
         self.assertEqual(player.list_chii_candidates(stolen=Hai(8)), [])
 
+    def test_list_chii_candidates_when_cannot_dahai_after_chii(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 4, 8, 9, 133, 134, 135])
+        self.assertEqual(
+            player.list_chii_candidates(stolen=Hai(10)), [Chii(hais=HaiGroup.from_list([0, 4, 10]), stolen=Hai(10))]
+        )
+
+        player.juntehai = HaiGroup.from_list([0, 4, 8, 9])
+        self.assertEqual(player.list_chii_candidates(stolen=Hai(10)), [])
+
 
 class TestPlayerListPonCandidates(unittest.TestCase):
     def test_list_pon_candidates(self):
