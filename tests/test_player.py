@@ -22,7 +22,7 @@ def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
     return "|".join([hai.long_name for hai in huuro.hais])
 
 
-def player_factory():
+def game_factory():
     game = Game()
     game.yama = [Hai(i) for i in range(136)]
 
@@ -30,18 +30,23 @@ def player_factory():
         player = Player(id=str(i))
         player.ten = 25000
         game.add_player(player)
-    return game.players[0]
+
+    return game
 
 
 class TestPlayerInit(unittest.TestCase):
     def test_init(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
 
 
 class TestPlayerChii(unittest.TestCase):
     def test_chii(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
         chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         player.chii(chii)
@@ -52,7 +57,9 @@ class TestPlayerChii(unittest.TestCase):
 
 class TestPlayerPon(unittest.TestCase):
     def test_pon(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
         player.pon(pon)
@@ -63,7 +70,9 @@ class TestPlayerPon(unittest.TestCase):
 
 class TestPlayerKakan(unittest.TestCase):
     def test_kakan(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
         kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)
@@ -77,7 +86,9 @@ class TestPlayerKakan(unittest.TestCase):
 
 class TestPlayerDaiminkan(unittest.TestCase):
     def test_daiminkan(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
         daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)
         player.daiminkan(daiminkan)
@@ -88,7 +99,9 @@ class TestPlayerDaiminkan(unittest.TestCase):
 
 class TestPlayerAnkan(unittest.TestCase):
     def test_ankan(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list([0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
         ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
         player.ankan(ankan)
@@ -99,24 +112,32 @@ class TestPlayerAnkan(unittest.TestCase):
 
 class TestPlayerIsMenzen(unittest.TestCase):
     def test_is_menzen_without_huuros(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         self.assertTrue(player.is_menzen)
 
     def test_is_menzen_with_chii(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         player.huuros = [Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))]
         self.assertFalse(player.is_menzen)
 
     def test_is_menzen_with_pon(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         player.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)]
         self.assertFalse(player.is_menzen)
 
     def test_is_menzen_with_kakan(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         player.huuros = [
             Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)
@@ -124,19 +145,25 @@ class TestPlayerIsMenzen(unittest.TestCase):
         self.assertFalse(player.is_menzen)
 
     def test_is_menzen_with_daiminkan(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         player.huuros = [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.KAMICHA)]
         self.assertFalse(player.is_menzen)
 
     def test_is_menzen_with_ankan(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         player.huuros = [Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))]
         self.assertTrue(player.is_menzen)
 
     def test_is_menzen_with_ankan_and_chii(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_list(list(range(14)))
         player.huuros = [
             Ankan(hais=HaiGroup.from_list([0, 1, 2, 3])),
@@ -156,12 +183,16 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         ]
 
         for juntehai, expected in testcases:
-            player = player_factory()
+            game = game_factory()
+            player = game.players[0]
+
             player.juntehai = juntehai
             self.assertEqual(player.list_riichi_candidates(), expected)
 
     def test_list_riichi_candidates_when_not_menzen(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_string("123456m11p112s")
 
         player.huuros = []
@@ -171,7 +202,9 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         self.assertEqual(player.list_riichi_candidates(), HaiGroup([]))
 
     def test_list_riichi_candidates_when_riichi_called(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_string("123456789m11p112s")
 
         player.is_riichi_called = False
@@ -181,7 +214,9 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         self.assertEqual(player.list_riichi_candidates(), HaiGroup([]))
 
     def test_list_riichi_candidates_when_ten_is_not_enough(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_string("123456789m11p112s")
 
         player.ten = 1000
@@ -191,17 +226,21 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         self.assertEqual(player.list_riichi_candidates(), HaiGroup([]))
 
     def test_list_riichi_candidates_when_yama_is_not_enough(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_string("123456789m11p112s")
 
-        player.game.yama = [Hai(i) for i in range(4)]
+        game.yama = [Hai(i) for i in range(4)]
         self.assertEqual(player.list_riichi_candidates(), HaiGroup.from_string("112s"))
 
-        player.game.yama = [Hai(i) for i in range(3)]
+        game.yama = [Hai(i) for i in range(3)]
         self.assertEqual(player.list_riichi_candidates(), HaiGroup([]))
 
     def test_list_riichi_candidates_when_not_tenpai(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         player.juntehai = HaiGroup.from_string("123456789m11p159s")
 
         self.assertEqual(player.list_riichi_candidates(), HaiGroup([]))
@@ -209,7 +248,9 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
 
 class TestPlayerListChiiCandidates(unittest.TestCase):
     def test_list_chii_candidates(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         current_dir = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(current_dir, "data/player/chii.pickle.gz")
         with gzip.open(filepath, "rb") as f:
@@ -226,10 +267,39 @@ class TestPlayerListChiiCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
+    def test_list_chii_candidates_when_yama_is_not_enough(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 4, 134, 135])
+
+        game.yama = [Hai(i) for i in range(1)]
+        self.assertEqual(
+            player.list_chii_candidates(stolen=Hai(8)),
+            [Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(8))],
+        )
+
+        game.yama = []
+        self.assertEqual(player.list_chii_candidates(stolen=Hai(8)), [])
+
+    def test_list_chii_candidates_when_cannot_dahai_after_chii(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 4, 8, 9, 133, 134, 135])
+        self.assertEqual(
+            player.list_chii_candidates(stolen=Hai(10)), [Chii(hais=HaiGroup.from_list([0, 4, 10]), stolen=Hai(10))]
+        )
+
+        player.juntehai = HaiGroup.from_list([0, 4, 8, 9])
+        self.assertEqual(player.list_chii_candidates(stolen=Hai(10)), [])
+
 
 class TestPlayerListPonCandidates(unittest.TestCase):
     def test_list_pon_candidates(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         current_dir = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(current_dir, "data/player/pon.pickle.gz")
         with gzip.open(filepath, "rb") as f:
@@ -247,31 +317,27 @@ class TestPlayerListPonCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
+    def test_list_pon_candidates_when_yama_is_not_enough(self):
+        game = game_factory()
+        player = game.players[0]
 
-class TestPlayerListDaiminkanCandidates(unittest.TestCase):
-    def test_list_daiminkan_candidates(self):
-        player = player_factory()
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/player/daiminkan.pickle.gz")
-        with gzip.open(filepath, "rb") as f:
-            test_cases = pickle.load(f)
+        player.juntehai = HaiGroup.from_list([0, 1, 134, 135])
 
-        for test_case in test_cases:
-            juntehai = HaiGroup.from_list(test_case["juntehai"])
-            hais = HaiGroup.from_list(test_case["hais"])
-            stolen = Hai(test_case["stolen"])
-            from_who = Zaichi(test_case["from_who"])
+        game.yama = [Hai(i) for i in range(1)]
+        self.assertEqual(
+            player.list_pon_candidates(stolen=Hai(2), from_who=Zaichi.KAMICHA),
+            [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)],
+        )
 
-            player.juntehai = juntehai
-            candidates = map(simplify_huuro, player.list_daiminkan_candidates(stolen=stolen, from_who=from_who))
-            expected = simplify_huuro(Daiminkan(hais=hais, stolen=stolen, from_who=from_who))
-
-            self.assertIn(expected, candidates)
+        game.yama = []
+        self.assertEqual(player.list_pon_candidates(stolen=Hai(1), from_who=Zaichi.KAMICHA), [])
 
 
 class TestPlayerListKakanCandidates(unittest.TestCase):
     def test_list_kakan_candidates(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         current_dir = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(current_dir, "data/player/kakan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
@@ -298,10 +364,109 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
+    def test_list_kakan_candidates_when_yama_is_not_enough(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([3, 135])
+        player.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)]
+
+        game.yama = [Hai(i) for i in range(1)]
+        self.assertEqual(
+            player.list_kakan_candidates(added=Hai(3)),
+            [Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)],
+        )
+
+        game.yama = []
+        self.assertEqual(player.list_kakan_candidates(added=Hai(3)), [])
+
+    def test_list_kakan_candidates_when_four_kans_exist(self):
+        game = game_factory()
+        player1 = game.players[0]
+        player2 = game.players[1]
+
+        player1.juntehai = HaiGroup.from_list([3, 135])
+        player1.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)]
+
+        player2.huuros = []
+        self.assertEqual(
+            player1.list_kakan_candidates(added=Hai(3)),
+            [Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)],
+        )
+
+        player2.huuros = [
+            Ankan(hais=HaiGroup.from_string("1111z")),
+            Ankan(hais=HaiGroup.from_string("2222z")),
+            Ankan(hais=HaiGroup.from_string("3333z")),
+            Ankan(hais=HaiGroup.from_string("4444z")),
+        ]
+        self.assertEqual(player1.list_kakan_candidates(added=Hai(3)), [])
+
+
+class TestPlayerListDaiminkanCandidates(unittest.TestCase):
+    def test_list_daiminkan_candidates(self):
+        game = game_factory()
+        player = game.players[0]
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(current_dir, "data/player/daiminkan.pickle.gz")
+        with gzip.open(filepath, "rb") as f:
+            test_cases = pickle.load(f)
+
+        for test_case in test_cases:
+            juntehai = HaiGroup.from_list(test_case["juntehai"])
+            hais = HaiGroup.from_list(test_case["hais"])
+            stolen = Hai(test_case["stolen"])
+            from_who = Zaichi(test_case["from_who"])
+
+            player.juntehai = juntehai
+            candidates = map(simplify_huuro, player.list_daiminkan_candidates(stolen=stolen, from_who=from_who))
+            expected = simplify_huuro(Daiminkan(hais=hais, stolen=stolen, from_who=from_who))
+
+            self.assertIn(expected, candidates)
+
+    def test_list_daiminkan_candidates_when_yama_is_not_enough(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 2, 135])
+
+        game.yama = [Hai(i) for i in range(1)]
+        self.assertEqual(
+            player.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA),
+            [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)],
+        )
+
+        game.yama = []
+        self.assertEqual(player.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA), [])
+
+    def test_list_daiminkan_candidates_when_four_kans_exist(self):
+        game = game_factory()
+        player1 = game.players[0]
+        player2 = game.players[1]
+
+        player1.juntehai = HaiGroup.from_list([0, 1, 2, 135])
+
+        player2.huuros = []
+        self.assertEqual(
+            player1.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA),
+            [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)],
+        )
+
+        player2.huuros = [
+            Ankan(hais=HaiGroup.from_string("1111z")),
+            Ankan(hais=HaiGroup.from_string("2222z")),
+            Ankan(hais=HaiGroup.from_string("3333z")),
+            Ankan(hais=HaiGroup.from_string("4444z")),
+        ]
+        self.assertEqual(player1.list_daiminkan_candidates(stolen=Hai(3), from_who=Zaichi.KAMICHA), [])
+
 
 class TestPlayerListAnkanCandidates(unittest.TestCase):
     def test_list_ankan_candidates(self):
-        player = player_factory()
+        game = game_factory()
+        player = game.players[0]
+
         current_dir = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(current_dir, "data/player/ankan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
@@ -316,3 +481,33 @@ class TestPlayerListAnkanCandidates(unittest.TestCase):
             expected = simplify_huuro(Ankan(hais=hais))
 
             self.assertIn(expected, candidates)
+
+    def test_list_ankan_candidates_when_yama_is_not_enough(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 2, 3, 135])
+
+        game.yama = [Hai(i) for i in range(1)]
+        self.assertEqual(player.list_ankan_candidates(), [Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))])
+
+        game.yama = []
+        self.assertEqual(player.list_ankan_candidates(), [])
+
+    def test_list_ankan_candidates_when_four_kans_exist(self):
+        game = game_factory()
+        player1 = game.players[0]
+        player2 = game.players[1]
+
+        player1.juntehai = HaiGroup.from_list([0, 1, 2, 3, 135])
+
+        player2.huuros = []
+        self.assertEqual(player1.list_ankan_candidates(), [Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))])
+
+        player2.huuros = [
+            Ankan(hais=HaiGroup.from_string("1111z")),
+            Ankan(hais=HaiGroup.from_string("2222z")),
+            Ankan(hais=HaiGroup.from_string("3333z")),
+            Ankan(hais=HaiGroup.from_string("4444z")),
+        ]
+        self.assertEqual(player1.list_ankan_candidates(), [])
