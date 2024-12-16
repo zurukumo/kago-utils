@@ -62,6 +62,27 @@ class Chii:
     def __repr__(self) -> str:
         return f"Chii(hais={self.hais}, stolen={self.stolen}, from_who={self.from_who})"
 
+    @property
+    def kuikae_hais(self) -> HaiGroup:
+        hais = HaiGroup([])
+        if self.hais[0] == self.stolen:
+            id1 = self.hais[0].id - self.hais[0].id % 4
+            hais += HaiGroup.from_list([id1, id1 + 1, id1 + 2, id1 + 3])
+            if self.hais[0].number != 7:
+                id2 = id1 + 12
+                hais += HaiGroup.from_list([id2, id2 + 1, id2 + 2, id2 + 3])
+        elif self.hais[1] == self.stolen:
+            id = self.hais[1].id - self.hais[1].id % 4
+            hais += HaiGroup.from_list([id, id + 1, id + 2, id + 3])
+        elif self.hais[2] == self.stolen:
+            id1 = self.hais[2].id - self.hais[2].id % 4
+            hais += HaiGroup.from_list([id1, id1 + 1, id1 + 2, id1 + 3])
+            if self.hais[2].number != 3:
+                id2 = id1 - 12
+                hais += HaiGroup.from_list([id2, id2 + 1, id2 + 2, id2 + 3])
+
+        return hais
+
 
 class Pon:
     hais: HaiGroup
@@ -130,6 +151,11 @@ class Pon:
 
     def __repr__(self) -> str:
         return f"Pon(hais={self.hais}, stolen={self.stolen}, from_who={self.from_who})"
+
+    @property
+    def kuikae_hais(self) -> HaiGroup:
+        id = self.hais[0].id - self.hais[0].id % 4
+        return HaiGroup.from_list([id, id + 1, id + 2, id + 3])
 
 
 class Kakan:

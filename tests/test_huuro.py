@@ -308,5 +308,99 @@ class TestAnkanRepr(unittest.TestCase):
         self.assertEqual(repr(ankan), "Ankan(hais=HaiGroup([Hai(0), Hai(1), Hai(2), Hai(3)]), from_who=Zaichi.JICHA)")
 
 
+class TestChiiKuikaeHais(unittest.TestCase):
+    def test_kuikae_hais(self):
+        # (hais, expected_when_left_hai_is_stolen, expected_when_middle_hai_is_stolen, expected_when_right_hai_is_stolen)
+        test_cases = [
+            (
+                HaiGroup.from_string("123m"),
+                HaiGroup.from_string("11114444m"),
+                HaiGroup.from_string("2222m"),
+                HaiGroup.from_string("3333m"),
+            ),
+            (
+                HaiGroup.from_string("234m"),
+                HaiGroup.from_string("22220555m"),
+                HaiGroup.from_string("3333m"),
+                HaiGroup.from_string("11114444m"),
+            ),
+            (
+                HaiGroup.from_string("345m"),
+                HaiGroup.from_string("33336666m"),
+                HaiGroup.from_string("4444m"),
+                HaiGroup.from_string("22220555m"),
+            ),
+            (
+                HaiGroup.from_string("456m"),
+                HaiGroup.from_string("44447777m"),
+                HaiGroup.from_string("0555m"),
+                HaiGroup.from_string("33336666m"),
+            ),
+            (
+                HaiGroup.from_string("567m"),
+                HaiGroup.from_string("05558888m"),
+                HaiGroup.from_string("6666m"),
+                HaiGroup.from_string("44447777m"),
+            ),
+            (
+                HaiGroup.from_string("678m"),
+                HaiGroup.from_string("66669999m"),
+                HaiGroup.from_string("7777m"),
+                HaiGroup.from_string("05558888m"),
+            ),
+            (
+                HaiGroup.from_string("789m"),
+                HaiGroup.from_string("7777m"),
+                HaiGroup.from_string("8888m"),
+                HaiGroup.from_string("66669999m"),
+            ),
+            (
+                HaiGroup.from_string("123p"),
+                HaiGroup.from_string("11114444p"),
+                HaiGroup.from_string("2222p"),
+                HaiGroup.from_string("3333p"),
+            ),
+            (
+                HaiGroup.from_string("789s"),
+                HaiGroup.from_string("7777s"),
+                HaiGroup.from_string("8888s"),
+                HaiGroup.from_string("66669999s"),
+            ),
+        ]
+
+        for hais, expected1, expected2, expected3 in test_cases:
+            chii = Chii(hais=hais, stolen=hais[0])
+            self.assertEqual(chii.kuikae_hais, expected1)
+
+            chii = Chii(hais=hais, stolen=hais[1])
+            self.assertEqual(chii.kuikae_hais, expected2)
+
+            chii = Chii(hais=hais, stolen=hais[2])
+            self.assertEqual(chii.kuikae_hais, expected3)
+
+
+class TestPonKuikaeHais(unittest.TestCase):
+    def test_kuikae_hais(self):
+        # (hais, expected)
+        test_cases = [
+            (HaiGroup.from_string("111m"), HaiGroup.from_string("1111m")),
+            (HaiGroup.from_string("222m"), HaiGroup.from_string("2222m")),
+            (HaiGroup.from_string("333m"), HaiGroup.from_string("3333m")),
+            (HaiGroup.from_string("444m"), HaiGroup.from_string("4444m")),
+            (HaiGroup.from_string("555m"), HaiGroup.from_string("0555m")),
+            (HaiGroup.from_string("666m"), HaiGroup.from_string("6666m")),
+            (HaiGroup.from_string("777m"), HaiGroup.from_string("7777m")),
+            (HaiGroup.from_string("888m"), HaiGroup.from_string("8888m")),
+            (HaiGroup.from_string("999m"), HaiGroup.from_string("9999m")),
+            (HaiGroup.from_string("111p"), HaiGroup.from_string("1111p")),
+            (HaiGroup.from_string("999p"), HaiGroup.from_string("9999p")),
+            (HaiGroup.from_string("555z"), HaiGroup.from_string("5555z")),
+        ]
+
+        for hais, expected in test_cases:
+            pon = Pon(hais=hais, stolen=hais[0], from_who=Zaichi.KAMICHA)
+            self.assertEqual(pon.kuikae_hais, expected)
+
+
 if __name__ == "__main__":
     unittest.main()
