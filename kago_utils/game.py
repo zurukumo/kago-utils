@@ -26,6 +26,10 @@ class Game:
     def __init__(self) -> None:
         self.players = []
 
+    #######################
+    ### Utility methods ###
+    #######################
+
     def add_player(self, player: Player) -> None:
         player.game = self
         player.zaseki = len(self.players)

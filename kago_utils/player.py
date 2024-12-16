@@ -280,7 +280,10 @@ class Player:
     def is_menzen(self) -> bool:
         return not any(isinstance(huuro, (Chii, Pon, Kakan, Daiminkan)) for huuro in self.huuros)
 
-    # Utils
+    #######################
+    ### Utility methods ###
+    #######################
+
     def find_player_by_zaichi(self, zaichi: Zaichi) -> Player:
         zaseki = (self.zaseki + zaichi.value) % 4
         return self.game.find_player_by_zaseki(zaseki)
