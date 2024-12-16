@@ -359,7 +359,7 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
 
             player.juntehai = juntehai
             player.huuros = huuros
-            candidates = map(simplify_huuro, player.list_kakan_candidates(added=added))
+            candidates = map(simplify_huuro, player.list_kakan_candidates())
             expected = simplify_huuro(Kakan(hais=hais, stolen=stolen, added=added, from_who=from_who))
 
             self.assertIn(expected, candidates)
@@ -373,12 +373,12 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
 
         game.yama = [Hai(i) for i in range(1)]
         self.assertEqual(
-            player.list_kakan_candidates(added=Hai(3)),
+            player.list_kakan_candidates(),
             [Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)],
         )
 
         game.yama = []
-        self.assertEqual(player.list_kakan_candidates(added=Hai(3)), [])
+        self.assertEqual(player.list_kakan_candidates(), [])
 
     def test_list_kakan_candidates_when_four_kans_exist(self):
         game = game_factory()
@@ -390,7 +390,7 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
 
         player2.huuros = []
         self.assertEqual(
-            player1.list_kakan_candidates(added=Hai(3)),
+            player1.list_kakan_candidates(),
             [Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)],
         )
 
@@ -400,7 +400,7 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
             Ankan(hais=HaiGroup.from_string("3333z")),
             Ankan(hais=HaiGroup.from_string("4444z")),
         ]
-        self.assertEqual(player1.list_kakan_candidates(added=Hai(3)), [])
+        self.assertEqual(player1.list_kakan_candidates(), [])
 
 
 class TestPlayerListDaiminkanCandidates(unittest.TestCase):

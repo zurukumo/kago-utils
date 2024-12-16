@@ -178,7 +178,7 @@ class Player:
 
         return candidates
 
-    def list_kakan_candidates(self, added: Hai) -> list[Kakan]:
+    def list_kakan_candidates(self) -> list[Kakan]:
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
@@ -194,7 +194,7 @@ class Player:
 
         candidates = []
         for huuro in self.huuros:
-            if isinstance(huuro, Pon) and huuro.hais[0].name == added.name:
+            if isinstance(huuro, Pon) and huuro.to_kakan().added in self.juntehai:
                 candidates.append(huuro.to_kakan())
 
         return candidates
