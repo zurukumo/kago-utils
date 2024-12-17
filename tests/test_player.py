@@ -248,6 +248,50 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         self.assertEqual(player.list_riichi_candidates(), False)
 
 
+class TestPlayerListDahaiCandidates(unittest.TestCase):
+    def test_list_dahai_candidates(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_string("123456789m11p112s")
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("123456789m11p112s"))
+
+    def test_list_dahai_candidates_when_riichi_is_completed(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_string("123456789m11p112s")
+        player.last_tsumo = HaiGroup.from_string("1m")[0]
+        player.is_riichi_completed = True
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("1m"))
+
+    def test_list_dahai_candidates_right_after_calling_riichi(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_string("12346666778899m")
+        player.riichi()
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("14666699m"))
+
+    def test_list_dahai_candidates_right_after_calling_chii(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_string("123m1112223334z")
+        game.last_dahai = HaiGroup.from_string("4m")[0]
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        player.chii(player.list_chii_candidates()[0])
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("1112223334z"))
+
+    def test_list_dahai_candidates_right_after_calling_pon(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_string("555m1112223334z")
+        game.last_dahai = HaiGroup.from_string("0m")[0]
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        player.pon(player.list_pon_candidates()[0])
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("1112223334z"))
 
 
 class TestPlayerListChiiCandidates(unittest.TestCase):

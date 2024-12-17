@@ -24,6 +24,8 @@ class Player:
     last_dahai: Hai | None
     is_riichi_completed: bool
     is_right_after_riichi_called: bool
+    is_right_after_chii_called: bool
+    is_right_after_pon_called: bool
 
     __slots__ = (
         "id",
@@ -36,6 +38,8 @@ class Player:
         "last_dahai",
         "is_riichi_completed",
         "is_right_after_riichi_called",
+        "is_right_after_chii_called",
+        "is_right_after_pon_called",
     )
 
     def __init__(self, id: str) -> None:
@@ -49,6 +53,8 @@ class Player:
         self.last_dahai = None
         self.is_riichi_completed = False
         self.is_right_after_riichi_called = False
+        self.is_right_after_chii_called = False
+        self.is_right_after_pon_called = False
 
     def tsumo(self, hai: Hai) -> None:
         self.juntehai += hai
@@ -64,10 +70,12 @@ class Player:
     def chii(self, chii: Chii) -> None:
         self.huuros.append(chii)
         self.juntehai -= chii.hais - chii.stolen
+        self.is_right_after_chii_called = True
 
     def pon(self, pon: Pon) -> None:
         self.huuros.append(pon)
         self.juntehai -= pon.hais - pon.stolen
+        self.is_right_after_pon_called = True
 
     def kakan(self, kakan: Kakan) -> None:
         for i, huuro in enumerate(self.huuros):
@@ -113,6 +121,37 @@ class Player:
 
         return True
 
+    def list_dahai_candidates(self) -> HaiGroup:
+        # Riichi completed
+        if self.is_riichi_completed:
+            if self.last_tsumo is None:
+                raise Exception()
+
+            return HaiGroup([self.last_tsumo])
+
+        # Right after calling riichi
+        elif self.is_right_after_riichi_called:
+            candidates = HaiGroup([])
+            for hai in self.juntehai:
+                new_juntehai = self.juntehai - hai
+                if Shanten(new_juntehai).shanten == 0:
+                    candidates += hai
+            return candidates
+
+        # Right after calling chii or pon
+        elif self.is_right_after_chii_called or self.is_right_after_pon_called:
+            last_huuro = self.huuros[-1]
+            if not isinstance(last_huuro, (Chii, Pon)):
+                raise Exception()
+
+            candidates = HaiGroup([])
+            for hai in self.juntehai:
+                if hai not in last_huuro.kuikae_hais:
+                    candidates += hai
+            return candidates
+
+        else:
+            return self.juntehai
 
     def list_chii_candidates(self) -> list[Chii]:
         # Not enoguh yama
