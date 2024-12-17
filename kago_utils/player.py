@@ -112,10 +112,15 @@ class Player:
 
         return candidates
 
-    def list_chii_candidates(self, stolen: Hai) -> list[Chii]:
+    def list_chii_candidates(self) -> list[Chii]:
         # Not enoguh yama
         if len(self.game.yama) == 0:
             return []
+
+        if self.game.last_dahai is None or self.game.last_teban is None:
+            raise Exception()
+
+        stolen = self.game.last_dahai
 
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
         prev1: dict[str, Hai | None] = {"b": None, "r": None}
@@ -155,10 +160,16 @@ class Player:
 
         return candidates
 
-    def list_pon_candidates(self, stolen: Hai, from_who: Zaichi) -> list[Pon]:
+    def list_pon_candidates(self) -> list[Pon]:
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
+
+        if self.game.last_dahai is None or self.game.last_teban is None:
+            raise Exception()
+
+        stolen = self.game.last_dahai
+        from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
 
         candidates = []
         b = []
@@ -178,7 +189,7 @@ class Player:
 
         return candidates
 
-    def list_kakan_candidates(self, added: Hai) -> list[Kakan]:
+    def list_kakan_candidates(self) -> list[Kakan]:
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
@@ -194,12 +205,12 @@ class Player:
 
         candidates = []
         for huuro in self.huuros:
-            if isinstance(huuro, Pon) and huuro.hais[0].name == added.name:
+            if isinstance(huuro, Pon) and huuro.to_kakan().added in self.juntehai:
                 candidates.append(huuro.to_kakan())
 
         return candidates
 
-    def list_daiminkan_candidates(self, stolen: Hai, from_who: Zaichi) -> list[Daiminkan]:
+    def list_daiminkan_candidates(self) -> list[Daiminkan]:
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
@@ -212,6 +223,12 @@ class Player:
                     n_kan += 1
         if n_kan >= 4:
             return []
+
+        if self.game.last_dahai is None or self.game.last_teban is None:
+            raise Exception()
+
+        stolen = self.game.last_dahai
+        from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
 
         candidates = []
         hais = [hai for hai in self.juntehai if hai.name == stolen.name]
@@ -287,3 +304,9 @@ class Player:
     def find_player_by_zaichi(self, zaichi: Zaichi) -> Player:
         zaseki = (self.zaseki + zaichi.value) % 4
         return self.game.find_player_by_zaseki(zaseki)
+
+    def get_zaichi_from_zaseki(self, zaseki: int) -> Zaichi:
+        return Zaichi((zaseki - self.zaseki) % 4)
+
+    def get_zaseki_from_zaichi(self, zaichi: Zaichi) -> int:
+        return (self.zaseki + zaichi.value) % 4
