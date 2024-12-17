@@ -210,10 +210,9 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_string("123456789m11p112s")
 
-        player.is_right_after_riichi_called = False
         self.assertEqual(player.list_riichi_candidates(), True)
 
-        player.is_right_after_riichi_called = True
+        player.riichi()
         self.assertEqual(player.list_riichi_candidates(), False)
 
     def test_list_riichi_candidates_when_ten_is_not_enough(self):

@@ -54,6 +54,9 @@ class Player:
         self.juntehai += hai
         self.last_tsumo = hai
 
+    def riichi(self) -> None:
+        self.is_right_after_riichi_called = True
+
     def dahai(self, hai: Hai) -> None:
         self.juntehai -= hai
         self.last_dahai = hai
