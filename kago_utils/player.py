@@ -217,7 +217,7 @@ class Player:
         r = []
         # Shuffle juntehai to select b and r randomly.
         for hai in random.sample(self.juntehai, len(self.juntehai)):
-            if hai.name == stolen.name:
+            if hai.suit == stolen.suit and hai.number == stolen.number:
                 if hai.color == "b":
                     b.append(hai)
                 else:
@@ -272,7 +272,7 @@ class Player:
         from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
 
         candidates = []
-        hais = [hai for hai in self.juntehai if hai.name == stolen.name]
+        hais = [hai for hai in self.juntehai if hai.suit == stolen.suit and hai.number == stolen.number]
         if len(hais) >= 3:
             candidates.append(Daiminkan(hais=HaiGroup(hais + [stolen]), stolen=stolen, from_who=from_who))
 

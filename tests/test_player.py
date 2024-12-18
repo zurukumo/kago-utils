@@ -19,7 +19,7 @@ from kago_utils.zaichi import Zaichi
 # So, when comparing Tenhou’s game records in tests, we need to convert sequences like 0, 4, 8 or 1, 4, 8
 # into a standardized format, such as kuro1m|kuro2m|kuro3m, for accurate comparison.
 def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
-    return "|".join([hai.long_name for hai in huuro.hais])
+    return "|".join([hai.code for hai in huuro.hais])
 
 
 def game_factory():
