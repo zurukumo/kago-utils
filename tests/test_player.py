@@ -177,26 +177,26 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("12346666778899m")
+        player.juntehai = HaiGroup.from_code("12346666778899m")
         self.assertEqual(player.list_riichi_candidates(), True)
 
     def test_list_riichi_candidates_when_not_menzen(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456m11p112s")
+        player.juntehai = HaiGroup.from_code("123456m11p112s")
 
         player.huuros = []
         self.assertEqual(player.list_riichi_candidates(), True)
 
-        player.huuros = [Chii(hais=HaiGroup.from_string("789s"), stolen=HaiGroup.from_string("789s")[0])]
+        player.huuros = [Chii(hais=HaiGroup.from_code("789s"), stolen=HaiGroup.from_code("789s")[0])]
         self.assertEqual(player.list_riichi_candidates(), False)
 
     def test_list_riichi_candidates_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p112s")
+        player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
         player.is_riichi_completed = False
         self.assertEqual(player.list_riichi_candidates(), True)
@@ -208,7 +208,7 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p112s")
+        player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
         self.assertEqual(player.list_riichi_candidates(), True)
 
@@ -219,7 +219,7 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p112s")
+        player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
         player.ten = 1000
         self.assertEqual(player.list_riichi_candidates(), True)
@@ -231,7 +231,7 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p112s")
+        player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
         game.yama = [Hai(i) for i in range(4)]
         self.assertEqual(player.list_riichi_candidates(), True)
@@ -243,7 +243,7 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p159s")
+        player.juntehai = HaiGroup.from_code("123456789m11p159s")
 
         self.assertEqual(player.list_riichi_candidates(), False)
 
@@ -253,45 +253,45 @@ class TestPlayerListDahaiCandidates(unittest.TestCase):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p112s")
-        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("123456789m11p112s"))
+        player.juntehai = HaiGroup.from_code("123456789m11p112s")
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_code("123456789m11p112s"))
 
     def test_list_dahai_candidates_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123456789m11p112s")
-        player.last_tsumo = HaiGroup.from_string("1m")[0]
+        player.juntehai = HaiGroup.from_code("123456789m11p112s")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
         player.is_riichi_completed = True
-        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("1m"))
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_code("1m"))
 
     def test_list_dahai_candidates_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("12346666778899m")
+        player.juntehai = HaiGroup.from_code("12346666778899m")
         player.riichi()
-        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("14666699m"))
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_code("14666699m"))
 
     def test_list_dahai_candidates_right_after_calling_chii(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("123m1112223334z")
-        game.last_dahai = HaiGroup.from_string("4m")[0]
+        player.juntehai = HaiGroup.from_code("123m1112223334z")
+        game.last_dahai = HaiGroup.from_code("4m")[0]
         game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         player.chii(player.list_chii_candidates()[0])
-        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("1112223334z"))
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_code("1112223334z"))
 
     def test_list_dahai_candidates_right_after_calling_pon(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_string("555m1112223334z")
-        game.last_dahai = HaiGroup.from_string("0m")[0]
+        player.juntehai = HaiGroup.from_code("555m1112223334z")
+        game.last_dahai = HaiGroup.from_code("0m")[0]
         game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         player.pon(player.list_pon_candidates()[0])
-        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_string("1112223334z"))
+        self.assertEqual(player.list_dahai_candidates(), HaiGroup.from_code("1112223334z"))
 
 
 class TestPlayerListChiiCandidates(unittest.TestCase):
@@ -443,10 +443,10 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
         self.assertEqual(len(player1.list_kakan_candidates()), 1)
 
         player2.huuros = [
-            Ankan(hais=HaiGroup.from_string("1111z")),
-            Ankan(hais=HaiGroup.from_string("2222z")),
-            Ankan(hais=HaiGroup.from_string("3333z")),
-            Ankan(hais=HaiGroup.from_string("4444z")),
+            Ankan(hais=HaiGroup.from_code("1111z")),
+            Ankan(hais=HaiGroup.from_code("2222z")),
+            Ankan(hais=HaiGroup.from_code("3333z")),
+            Ankan(hais=HaiGroup.from_code("4444z")),
         ]
         self.assertEqual(len(player1.list_kakan_candidates()), 0)
 
@@ -503,10 +503,10 @@ class TestPlayerListDaiminkanCandidates(unittest.TestCase):
         self.assertEqual(len(player1.list_daiminkan_candidates()), 1)
 
         player2.huuros = [
-            Ankan(hais=HaiGroup.from_string("1111z")),
-            Ankan(hais=HaiGroup.from_string("2222z")),
-            Ankan(hais=HaiGroup.from_string("3333z")),
-            Ankan(hais=HaiGroup.from_string("4444z")),
+            Ankan(hais=HaiGroup.from_code("1111z")),
+            Ankan(hais=HaiGroup.from_code("2222z")),
+            Ankan(hais=HaiGroup.from_code("3333z")),
+            Ankan(hais=HaiGroup.from_code("4444z")),
         ]
         self.assertEqual(len(player1.list_daiminkan_candidates()), 0)
 
@@ -555,9 +555,9 @@ class TestPlayerListAnkanCandidates(unittest.TestCase):
         self.assertEqual(len(player1.list_ankan_candidates()), 1)
 
         player2.huuros = [
-            Ankan(hais=HaiGroup.from_string("1111z")),
-            Ankan(hais=HaiGroup.from_string("2222z")),
-            Ankan(hais=HaiGroup.from_string("3333z")),
-            Ankan(hais=HaiGroup.from_string("4444z")),
+            Ankan(hais=HaiGroup.from_code("1111z")),
+            Ankan(hais=HaiGroup.from_code("2222z")),
+            Ankan(hais=HaiGroup.from_code("3333z")),
+            Ankan(hais=HaiGroup.from_code("4444z")),
         ]
         self.assertEqual(len(player1.list_ankan_candidates()), 0)

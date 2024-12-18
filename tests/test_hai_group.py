@@ -120,8 +120,8 @@ class TestHaiGroupFromList(unittest.TestCase):
             HaiGroup.from_list(_list)
 
 
-class TestHaiGroupFromString(unittest.TestCase):
-    def test_from_string(self):
+class TestHaiGroupFromCode(unittest.TestCase):
+    def test_from_code(self):
         testcases = [
             ("1m1p1s1z", [0, 36, 72, 108]),
             ("1234m", [0, 4, 8, 12]),
@@ -134,37 +134,37 @@ class TestHaiGroupFromString(unittest.TestCase):
             ("0m0p0s", [16, 52, 88]),
         ]
 
-        for string, _list in testcases:
-            self.assertEqual(HaiGroup.from_string(string), HaiGroup.from_list(_list))
+        for code, _list in testcases:
+            self.assertEqual(HaiGroup.from_code(code), HaiGroup.from_list(_list))
 
-    def test_from_string_assert_warning(self):
+    def test_from_code_assert_warning(self):
         with self.assertWarns(UserWarning):
-            HaiGroup.from_string("1m1p1s1z")
+            HaiGroup.from_code("1m1p1s1z")
 
-    def test_from_string_with_5_same_name_hai(self):
-        string = "11111m"
+    def test_from_code_with_5_same_name_hai(self):
+        code = "11111m"
         with self.assertRaises(ValueError):
-            HaiGroup.from_string(string)
+            HaiGroup.from_code(code)
 
-    def test_from_string_with_invalid_zihai(self):
+    def test_from_code_with_invalid_zihai(self):
         with self.assertRaises(ValueError):
-            HaiGroup.from_string("0z")
-
-        with self.assertRaises(ValueError):
-            HaiGroup.from_string("8z")
+            HaiGroup.from_code("0z")
 
         with self.assertRaises(ValueError):
-            HaiGroup.from_string("9z")
+            HaiGroup.from_code("8z")
 
-    def test_from_string_with_invalid_format(self):
-        string = "123"
         with self.assertRaises(ValueError):
-            HaiGroup.from_string(string)
+            HaiGroup.from_code("9z")
 
-    def test_from_string_with_invalid_character(self):
-        string = "1x"
+    def test_from_code_with_invalid_format(self):
+        code = "123"
         with self.assertRaises(ValueError):
-            HaiGroup.from_string(string)
+            HaiGroup.from_code(code)
+
+    def test_from_code_with_invalid_character(self):
+        code = "1x"
+        with self.assertRaises(ValueError):
+            HaiGroup.from_code(code)
 
 
 class TestHaiGroupToCounter34(unittest.TestCase):
@@ -197,8 +197,8 @@ class TestHaiGroupToList(unittest.TestCase):
         self.assertEqual(HaiGroup(hais).to_list(), _list)
 
 
-class TestHaiGroupToString(unittest.TestCase):
-    def test_to_string(self):
+class TestHaiGroupToCode(unittest.TestCase):
+    def test_to_code(self):
         testcases = [
             ([Hai(0), Hai(135)], "1m7z"),
             ([Hai(16), Hai(52), Hai(88)], "0m0p0s"),
@@ -206,8 +206,8 @@ class TestHaiGroupToString(unittest.TestCase):
             ([Hai(0), Hai(8), Hai(17), Hai(24), Hai(32)], "13579m"),
         ]
 
-        for hais, string in testcases:
-            self.assertEqual(HaiGroup(hais).to_string(), string)
+        for hais, code in testcases:
+            self.assertEqual(HaiGroup(hais).to_code(), code)
 
 
 class TestHaiGroupValidate(unittest.TestCase):

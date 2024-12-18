@@ -161,7 +161,7 @@ class Shanten:
 
         n_yaochu_hai = 0
         has_toitsu = False
-        yaochu_hai_list = HaiGroup.from_string("19m19p19s1234567z").to_list34()
+        yaochu_hai_list = HaiGroup.from_code("19m19p19s1234567z").to_list34()
 
         for i in yaochu_hai_list:
             if juntehai_counter[i] >= 1:

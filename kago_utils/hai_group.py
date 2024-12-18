@@ -103,21 +103,21 @@ class HaiGroup(Sequence[Hai]):
         return [hai.id for hai in self.hais]
 
     @classmethod
-    def from_string(cls, string: str) -> Self:
+    def from_code(cls, code: str) -> Self:
         warnings.warn(
-            "Hai.from_string forcibly converts args into Hai instances, which may lead to inconsistencies.",
+            "Hai.from_code forcibly converts args into Hai instances, which may lead to inconsistencies.",
             UserWarning,
         )
 
         hais = []
         rest = cls.from_list(list(range(136)))
         suit = ""
-        for c in reversed(string):
+        for c in reversed(code):
             if c in "0123456789":
                 if suit == "":
-                    raise ValueError(f"Invalid string: found values without suit. Data: {string}")
+                    raise ValueError(f"Invalid code: found values without suit. Data: {code}")
                 if suit == "z" and c in "089":
-                    raise ValueError(f"Invalid string: found invalid value '{c}' in suit 'z'. Data: {string}")
+                    raise ValueError(f"Invalid code: found invalid value '{c}' in suit 'z'. Data: {code}")
 
                 for hai in rest:
                     if hai.code == c + suit:
@@ -125,17 +125,16 @@ class HaiGroup(Sequence[Hai]):
                         rest -= hai
                         break
                 else:
-                    raise ValueError(f"Invalid string: found too many same hais. Data: {string}")
+                    raise ValueError(f"Invalid code: found too many same hais. Data: {code}")
             elif c in "mpsz":
                 suit = c
             else:
                 raise ValueError(
-                    f"Invalid string: found invalid character '{c}'. "
-                    f"Expected 'm', 'p', 's', 'z', or '0'-'9'. Data: {string}"
+                    f"Invalid code: found invalid character '{c}'. Expected 'm', 'p', 's', 'z', or '0'-'9'. Data: {code}"
                 )
         return cls(hais)
 
-    def to_string(self) -> str:
+    def to_code(self) -> str:
         parts = {"m": "", "p": "", "s": "", "z": ""}
         for hai in self.hais:
             if hai.color == "r":
@@ -143,11 +142,11 @@ class HaiGroup(Sequence[Hai]):
             else:
                 parts[hai.suit] += str(hai.number)
 
-        string = ""
+        code = ""
         for suit, v in parts.items():
             if v != "":
-                string += v + suit
-        return string
+                code += v + suit
+        return code
 
     def validate(self) -> None:
         counter = self.to_counter()
