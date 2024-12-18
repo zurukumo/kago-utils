@@ -120,11 +120,7 @@ class HaiGroup(Sequence[Hai]):
                     raise ValueError(f"Invalid string: found invalid value '{c}' in suit 'z'. Data: {string}")
 
                 for hai in rest:
-                    if c != "0" and hai.suit == suit and hai.number == int(c) and hai.color == "b":
-                        hais.append(hai)
-                        rest -= hai
-                        break
-                    if c == "0" and hai.suit == suit and hai.number == 5 and hai.color == "r":
+                    if hai.code == c + suit:
                         hais.append(hai)
                         rest -= hai
                         break
