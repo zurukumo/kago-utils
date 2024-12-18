@@ -324,9 +324,9 @@ class Player:
         n_daisuushii_huuro = 0
         n_daisangen_huuro = 0
         for huuro in self.huuros:
-            if huuro.hais[0].name in ("5z", "6z", "7z"):
+            if huuro.hais[0].code in ("5z", "6z", "7z"):
                 n_daisangen_huuro += 1
-            if huuro.hais[0].name in ("1z", "2z", "3z", "4z"):
+            if huuro.hais[0].code in ("1z", "2z", "3z", "4z"):
                 n_daisuushii_huuro += 1
 
             if n_daisangen_huuro >= 3 or n_daisuushii_huuro >= 4:
