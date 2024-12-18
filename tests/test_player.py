@@ -526,17 +526,31 @@ class TestPlayerListAnkanCandidates(unittest.TestCase):
             hais = HaiGroup.from_list(test_case["hais"])
 
             player.juntehai = juntehai
+            player.last_tsumo = juntehai[-1]
 
             candidates = map(simplify_huuro, player.list_ankan_candidates())
             expected = simplify_huuro(Ankan(hais=hais))
 
             self.assertIn(expected, candidates)
 
+    def test_list_ankan_candidates_right_after_calling_riichi(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_code("0555m7z")
+        player.last_tsumo = HaiGroup.from_code("0m")[0]
+
+        self.assertEqual(len(player.list_ankan_candidates()), 1)
+
+        player.riichi()
+        self.assertEqual(len(player.list_ankan_candidates()), 0)
+
     def test_list_ankan_candidates_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
 
-        player.juntehai = HaiGroup.from_list([0, 1, 2, 3, 135])
+        player.juntehai = HaiGroup.from_code("0555m7z")
+        player.last_tsumo = HaiGroup.from_code("0m")[0]
 
         game.yama = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_ankan_candidates()), 1)
@@ -549,7 +563,8 @@ class TestPlayerListAnkanCandidates(unittest.TestCase):
         player1 = game.players[0]
         player2 = game.players[1]
 
-        player1.juntehai = HaiGroup.from_list([0, 1, 2, 3, 135])
+        player1.juntehai = HaiGroup.from_code("0555m7z")
+        player1.last_tsumo = HaiGroup.from_code("0m")[0]
 
         player2.huuros = []
         self.assertEqual(len(player1.list_ankan_candidates()), 1)
@@ -561,3 +576,47 @@ class TestPlayerListAnkanCandidates(unittest.TestCase):
             Ankan(hais=HaiGroup.from_code("4444z")),
         ]
         self.assertEqual(len(player1.list_ankan_candidates()), 0)
+
+    def test_list_ankan_candidates_when_riichi_is_completed(self):
+        game = game_factory()
+        player = game.players[0]
+
+        # Ankan without tsumohai
+        player.juntehai = HaiGroup.from_code("1111234m1112223z")
+        player.last_tsumo = HaiGroup.from_code("4m")[0]
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_ankan_candidates()), 1)
+
+        player.is_riichi_completed = True
+        self.assertEqual(len(player.list_ankan_candidates()), 0)
+
+        # Ankan that changes shanten
+        player.juntehai = HaiGroup.from_code("055567m11122233z")
+        player.last_tsumo = HaiGroup.from_code("0m")[0]
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_ankan_candidates()), 1)
+
+        player.is_riichi_completed = True
+        self.assertEqual(len(player.list_ankan_candidates()), 0)
+
+        # Ankan that changes machihais
+        player.juntehai = HaiGroup.from_code("05556m111222333z")
+        player.last_tsumo = HaiGroup.from_code("0m")[0]
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_ankan_candidates()), 1)
+
+        player.is_riichi_completed = True
+        self.assertEqual(len(player.list_ankan_candidates()), 0)
+
+        # Ankan that does not change shanten and machihais
+        player.juntehai = HaiGroup.from_code("05559m111222333z")
+        player.last_tsumo = HaiGroup.from_code("0m")[0]
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_ankan_candidates()), 1)
+
+        player.is_riichi_completed = True
+        self.assertEqual(len(player.list_ankan_candidates()), 1)

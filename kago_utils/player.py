@@ -154,12 +154,12 @@ class Player:
             return self.juntehai
 
     def list_chii_candidates(self) -> list[Chii]:
+        if self.game.last_dahai is None or self.game.last_teban is None:
+            raise Exception()
+
         # Not enoguh yama
         if len(self.game.yama) == 0:
             return []
-
-        if self.game.last_dahai is None or self.game.last_teban is None:
-            raise Exception()
 
         stolen = self.game.last_dahai
 
@@ -202,12 +202,12 @@ class Player:
         return candidates
 
     def list_pon_candidates(self) -> list[Pon]:
+        if self.game.last_dahai is None or self.game.last_teban is None:
+            raise Exception()
+
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
-
-        if self.game.last_dahai is None or self.game.last_teban is None:
-            raise Exception()
 
         stolen = self.game.last_dahai
         from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
@@ -252,6 +252,9 @@ class Player:
         return candidates
 
     def list_daiminkan_candidates(self) -> list[Daiminkan]:
+        if self.game.last_dahai is None or self.game.last_teban is None:
+            raise Exception()
+
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
@@ -265,9 +268,6 @@ class Player:
         if n_kan >= 4:
             return []
 
-        if self.game.last_dahai is None or self.game.last_teban is None:
-            raise Exception()
-
         stolen = self.game.last_dahai
         from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
 
@@ -279,6 +279,13 @@ class Player:
         return candidates
 
     def list_ankan_candidates(self) -> list[Ankan]:
+        if self.last_tsumo is None:
+            raise Exception()
+
+        # Right after calling riichi
+        if self.is_right_after_riichi_called:
+            return []
+
         # Not enough yama
         if len(self.game.yama) == 0:
             return []
@@ -294,10 +301,25 @@ class Player:
 
         candidates = []
         counter = self.juntehai.to_counter34()
-        for i in range(34):
-            if counter[i] >= 4:
-                base_id = i * 4
-                candidates.append(Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3])))
+
+        # When riichi completed, only ankan that does not change shanten and machihais is allowed
+        if self.is_riichi_completed:
+            if counter[self.last_tsumo.id // 4] >= 4:
+                base_id = self.last_tsumo.id // 4 * 4
+                ankan = Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3]))
+
+                shanten1 = Shanten(self.juntehai - self.last_tsumo)
+                shanten2 = Shanten(self.juntehai - ankan.hais)
+                if shanten1.shanten == shanten2.shanten and shanten1.yuukouhai == shanten2.yuukouhai:
+                    candidates.append(ankan)
+
+        # Otherwise, all ankans are allowed
+        else:
+            for i in range(34):
+                if counter[i] >= 4:
+                    base_id = i * 4
+                    ankan = Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3]))
+                    candidates.append(ankan)
 
         return candidates
 
