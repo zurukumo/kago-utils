@@ -332,6 +332,20 @@ class TestPlayerListChiiCandidates(unittest.TestCase):
         game.yama = []
         self.assertEqual(len(player.list_chii_candidates()), 0)
 
+    def test_list_chii_candidates_when_riichi_is_completed(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 4, 134, 135])
+        game.last_dahai = Hai(8)
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_chii_candidates()), 1)
+
+        player.is_riichi_completed = True
+        self.assertEqual(len(player.list_chii_candidates()), 0)
+
     def test_list_chii_candidates_when_cannot_dahai_after_chii(self):
         game = game_factory()
         player = game.players[0]
@@ -383,6 +397,20 @@ class TestPlayerListPonCandidates(unittest.TestCase):
         self.assertEqual(len(player.list_pon_candidates()), 1)
 
         game.yama = []
+        self.assertEqual(len(player.list_pon_candidates()), 0)
+
+    def test_list_pon_candidates_when_riichi_is_completed(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 134, 135])
+        game.last_dahai = Hai(2)
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_pon_candidates()), 1)
+
+        player.is_riichi_completed = True
         self.assertEqual(len(player.list_pon_candidates()), 0)
 
 
@@ -488,6 +516,20 @@ class TestPlayerListDaiminkanCandidates(unittest.TestCase):
         self.assertEqual(len(player.list_daiminkan_candidates()), 1)
 
         game.yama = []
+        self.assertEqual(len(player.list_daiminkan_candidates()), 0)
+
+    def test_list_daiminkan_candidates_when_riichi_is_completed(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 2, 135])
+        game.last_dahai = Hai(3)
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+
+        player.is_riichi_completed = False
+        self.assertEqual(len(player.list_daiminkan_candidates()), 1)
+
+        player.is_riichi_completed = True
         self.assertEqual(len(player.list_daiminkan_candidates()), 0)
 
     def test_list_daiminkan_candidates_when_four_kans_exist(self):

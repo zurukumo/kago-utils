@@ -161,6 +161,10 @@ class Player:
         if len(self.game.yama) == 0:
             return []
 
+        # Riichi completed
+        if self.is_riichi_completed:
+            return []
+
         stolen = self.game.last_dahai
 
         prev2: dict[str, Hai | None] = {"b": None, "r": None}
@@ -207,6 +211,10 @@ class Player:
 
         # Not enough yama
         if len(self.game.yama) == 0:
+            return []
+
+        # Riichi completed
+        if self.is_riichi_completed:
             return []
 
         stolen = self.game.last_dahai
@@ -257,6 +265,10 @@ class Player:
 
         # Not enough yama
         if len(self.game.yama) == 0:
+            return []
+
+        # Riichi completed
+        if self.is_riichi_completed:
             return []
 
         # Four kans exist
