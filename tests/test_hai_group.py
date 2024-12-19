@@ -16,12 +16,6 @@ class TestHaiGroupFromCounter34(unittest.TestCase):
         hais = [Hai(0), Hai(132)]
         self.assertEqual(HaiGroup.from_counter34(counter), HaiGroup(hais))
 
-    def test_from_counter34_assert_warning(self):
-        counter = [0] * 34
-        counter[0] = counter[33] = 1
-        with self.assertWarns(UserWarning):
-            HaiGroup.from_counter34(counter)
-
     def test_from_counter34_with_too_short_length(self):
         counter = [0] * 33
         with self.assertRaises(ValueError):
@@ -77,11 +71,6 @@ class TestHaiGroupFromList34(unittest.TestCase):
         hais = [Hai(0), Hai(132)]
         self.assertEqual(HaiGroup.from_list34(_list), HaiGroup(hais))
 
-    def test_from_list34_assert_warning(self):
-        _list = [0, 33]
-        with self.assertWarns(UserWarning):
-            HaiGroup.from_list34(_list)
-
     def test_from_list34_with_negative_value(self):
         _list = [-1]
         with self.assertRaises(ValueError):
@@ -136,10 +125,6 @@ class TestHaiGroupFromCode(unittest.TestCase):
 
         for code, _list in testcases:
             self.assertEqual(HaiGroup.from_code(code), HaiGroup.from_list(_list))
-
-    def test_from_code_assert_warning(self):
-        with self.assertWarns(UserWarning):
-            HaiGroup.from_code("1m1p1s1z")
 
     def test_from_code_with_5_same_name_hai(self):
         code = "11111m"

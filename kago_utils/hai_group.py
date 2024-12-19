@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import warnings
 from collections.abc import Sequence
 from typing import Iterator, Self, overload
 
@@ -17,11 +16,6 @@ class HaiGroup(Sequence[Hai]):
 
     @classmethod
     def from_counter34(cls, counter: list[int]) -> Self:
-        warnings.warn(
-            "Hai.from_counter34 forcibly converts args into Hai instances, which may lead to inconsistencies.",
-            UserWarning,
-        )
-
         if len(counter) != 34:
             raise ValueError(f"Invalid counter: length of counter is {len(counter)}, but expected 34.")
 
@@ -68,11 +62,6 @@ class HaiGroup(Sequence[Hai]):
 
     @classmethod
     def from_list34(cls, _list: list[int]) -> Self:
-        warnings.warn(
-            "Hai.from_list34 forcibly converts args into Hai instances, which may lead to inconsistencies.",
-            UserWarning,
-        )
-
         if any(not isinstance(v, int) for v in _list):
             raise ValueError(f"Invalid list: found non-integer values in list. Data: {_list}")
 
@@ -104,11 +93,6 @@ class HaiGroup(Sequence[Hai]):
 
     @classmethod
     def from_code(cls, code: str) -> Self:
-        warnings.warn(
-            "Hai.from_code forcibly converts args into Hai instances, which may lead to inconsistencies.",
-            UserWarning,
-        )
-
         hais = []
         rest = cls.from_list(list(range(136)))
         suit = ""
