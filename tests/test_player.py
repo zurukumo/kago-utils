@@ -48,11 +48,24 @@ class TestPlayerChii(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.last_dahai = Hai(0)
         chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         player.chii(chii)
 
         self.assertIn(chii, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52]))
+
+    def test_chii_with_invalid_chii(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.TOIMEN)
+        game.last_dahai = Hai(0)
+        chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(4))
+        with self.assertRaises(ValueError):
+            player.chii(chii)
 
 
 class TestPlayerPon(unittest.TestCase):
@@ -61,11 +74,24 @@ class TestPlayerPon(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.last_dahai = Hai(2)
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
         player.pon(pon)
 
         self.assertIn(pon, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24]))
+
+    def test_pon_with_invalid_pon(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.TOIMEN)
+        game.last_dahai = Hai(2)
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(1), from_who=Zaichi.KAMICHA)
+        with self.assertRaises(ValueError):
+            player.pon(pon)
 
 
 class TestPlayerKakan(unittest.TestCase):
@@ -74,14 +100,29 @@ class TestPlayerKakan(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.JICHA)
+        player.last_tsumo = Hai(3)
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
-        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)
         player.huuros = [pon]
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)
         player.kakan(kakan)
 
         self.assertIn(kakan, player.huuros)
         self.assertNotIn(pon, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24]))
+
+    def test_kakan_with_invalid_kakan(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.JICHA)
+        player.last_tsumo = Hai(3)
+        pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
+        player.huuros = [pon]
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(1), from_who=Zaichi.KAMICHA)
+        with self.assertRaises(ValueError):
+            player.kakan(kakan)
 
 
 class TestPlayerDaiminkan(unittest.TestCase):
@@ -90,11 +131,24 @@ class TestPlayerDaiminkan(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.last_dahai = Hai(3)
         daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)
         player.daiminkan(daiminkan)
 
         self.assertIn(daiminkan, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
+
+    def test_daiminkan_with_invalid_daiminkan(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.last_dahai = Hai(3)
+        daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
+        with self.assertRaises(ValueError):
+            player.daiminkan(daiminkan)
 
 
 class TestPlayerAnkan(unittest.TestCase):
@@ -103,11 +157,25 @@ class TestPlayerAnkan(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.JICHA)
+        player.last_tsumo = Hai(3)
         ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
         player.ankan(ankan)
 
         self.assertIn(ankan, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
+
+    def test_ankan_with_invalid_ankan(self):
+        game = game_factory()
+        player = game.players[0]
+
+        player.juntehai = HaiGroup.from_list([0, 1, 2, 3, 4, 8, 12, 108, 109, 110, 112, 113, 114, 115])
+        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.JICHA)
+        player.last_tsumo = Hai(12)
+        player.is_riichi_completed = True
+        ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
+        with self.assertRaises(ValueError):
+            player.ankan(ankan)
 
 
 class TestPlayerIsMenzen(unittest.TestCase):

@@ -68,31 +68,70 @@ class Player:
         self.last_dahai = hai
 
     def chii(self, chii: Chii) -> None:
-        self.huuros.append(chii)
-        self.juntehai -= chii.hais - chii.stolen
-        self.is_right_after_chii_called = True
-
-    def pon(self, pon: Pon) -> None:
-        self.huuros.append(pon)
-        self.juntehai -= pon.hais - pon.stolen
-        self.is_right_after_pon_called = True
-
-    def kakan(self, kakan: Kakan) -> None:
-        for i, huuro in enumerate(self.huuros):
-            if isinstance(huuro, Pon) and huuro.can_become_kakan(kakan):
-                self.huuros[i] = kakan
-                self.juntehai -= kakan.added
+        for candidate in self.list_chii_candidates():
+            if (
+                chii.hais.to_code() == candidate.hais.to_code()
+                and chii.stolen == candidate.stolen
+                and chii.from_who == candidate.from_who
+            ):
+                self.huuros.append(chii)
+                self.juntehai -= chii.hais - chii.stolen
+                self.is_right_after_chii_called = True
                 return
 
-        raise ValueError(f"Invalid data: there is no pon that can become given kakan. Data: {kakan}")
+        raise ValueError("Invalid Chii")
+
+    def pon(self, pon: Pon) -> None:
+        for candidate in self.list_pon_candidates():
+            if (
+                pon.hais.to_code() == candidate.hais.to_code()
+                and pon.stolen == candidate.stolen
+                and pon.from_who == candidate.from_who
+            ):
+                self.huuros.append(pon)
+                self.juntehai -= pon.hais - pon.stolen
+                self.is_right_after_pon_called = True
+                return
+
+        raise ValueError("Invalid Pon")
+
+    def kakan(self, kakan: Kakan) -> None:
+        for candaidate in self.list_kakan_candidates():
+            if (
+                kakan.hais.to_code() == candaidate.hais.to_code()
+                and kakan.stolen == candaidate.stolen
+                and kakan.added == candaidate.added
+                and kakan.from_who == candaidate.from_who
+            ):
+                for i, huuro in enumerate(self.huuros):
+                    if isinstance(huuro, Pon) and huuro.can_become_kakan(kakan):
+                        self.huuros[i] = kakan
+                        self.juntehai -= kakan.added
+                        return
+
+        raise ValueError("Invalid Kakan")
 
     def daiminkan(self, daiminkan: Daiminkan) -> None:
-        self.huuros.append(daiminkan)
-        self.juntehai -= daiminkan.hais - daiminkan.stolen
+        for candidate in self.list_daiminkan_candidates():
+            if (
+                daiminkan.hais.to_code() == candidate.hais.to_code()
+                and daiminkan.stolen == candidate.stolen
+                and daiminkan.from_who == candidate.from_who
+            ):
+                self.huuros.append(daiminkan)
+                self.juntehai -= daiminkan.hais - daiminkan.stolen
+                return
+
+        raise ValueError("Invalid Daiminkan")
 
     def ankan(self, ankan: Ankan) -> None:
-        self.huuros.append(ankan)
-        self.juntehai -= ankan.hais
+        for candidate in self.list_ankan_candidates():
+            if ankan.hais.to_code() == candidate.hais.to_code():
+                self.huuros.append(ankan)
+                self.juntehai -= ankan.hais
+                return
+
+        raise ValueError("Invalid Ankan")
 
     def list_riichi_candidates(self) -> bool:
         # Not menzen
