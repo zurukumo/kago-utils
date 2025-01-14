@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal
 
 from kago_utils.hai import Hai
+from kago_utils.yama import Yama
 
 if TYPE_CHECKING:
     from kago_utils.player import Player
@@ -10,6 +11,7 @@ if TYPE_CHECKING:
 
 class Game:
     players: list[Player]
+    yama: Yama
 
     kyoku: int
     honba: int
@@ -19,12 +21,11 @@ class Game:
     last_teban: int | None
     last_dahai: Hai | None
 
-    yama: list[Hai]
-
-    __slots__ = ("players", "kyoku", "honba", "kyoutaku", "teban", "last_teban", "last_dahai", "yama")
+    __slots__ = ("players", "yama", "kyoku", "honba", "kyoutaku", "teban", "last_teban", "last_dahai")
 
     def __init__(self) -> None:
         self.players = []
+        self.yama = Yama()
 
     #######################
     ### Utility methods ###

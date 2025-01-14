@@ -24,7 +24,7 @@ def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
 
 def game_factory():
     game = Game()
-    game.yama = [Hai(i) for i in range(136)]
+    game.yama.generate()
 
     for i in range(4):
         player = Player(id=str(i))
@@ -301,10 +301,10 @@ class TestPlayerListRiichiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
-        game.yama = [Hai(i) for i in range(4)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(4)]
         self.assertEqual(player.list_riichi_candidates(), True)
 
-        game.yama = [Hai(i) for i in range(3)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(3)]
         self.assertEqual(player.list_riichi_candidates(), False)
 
     def test_list_riichi_candidates_when_not_tenpai(self):
@@ -394,10 +394,10 @@ class TestPlayerListChiiCandidates(unittest.TestCase):
         game.last_dahai = Hai(8)
         game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
-        game.yama = [Hai(i) for i in range(1)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_chii_candidates()), 1)
 
-        game.yama = []
+        game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_chii_candidates()), 0)
 
     def test_list_chii_candidates_when_riichi_is_completed(self):
@@ -461,10 +461,10 @@ class TestPlayerListPonCandidates(unittest.TestCase):
         game.last_dahai = Hai(2)
         game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
-        game.yama = [Hai(i) for i in range(1)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_pon_candidates()), 1)
 
-        game.yama = []
+        game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_pon_candidates()), 0)
 
     def test_list_pon_candidates_when_riichi_is_completed(self):
@@ -521,10 +521,10 @@ class TestPlayerListKakanCandidates(unittest.TestCase):
         player.juntehai = HaiGroup.from_list([3, 135])
         player.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)]
 
-        game.yama = [Hai(i) for i in range(1)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_kakan_candidates()), 1)
 
-        game.yama = []
+        game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_kakan_candidates()), 0)
 
     def test_list_kakan_candidates_when_four_kans_exist(self):
@@ -580,10 +580,10 @@ class TestPlayerListDaiminkanCandidates(unittest.TestCase):
         game.last_dahai = Hai(3)
         game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
-        game.yama = [Hai(i) for i in range(1)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_daiminkan_candidates()), 1)
 
-        game.yama = []
+        game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_daiminkan_candidates()), 0)
 
     def test_list_daiminkan_candidates_when_riichi_is_completed(self):
@@ -662,10 +662,10 @@ class TestPlayerListAnkanCandidates(unittest.TestCase):
         player.juntehai = HaiGroup.from_code("0555m7z")
         player.last_tsumo = HaiGroup.from_code("0m")[0]
 
-        game.yama = [Hai(i) for i in range(1)]
+        game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_ankan_candidates()), 1)
 
-        game.yama = []
+        game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_ankan_candidates()), 0)
 
     def test_list_ankan_candidates_when_four_kans_exist(self):

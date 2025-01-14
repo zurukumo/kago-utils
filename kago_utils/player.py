@@ -151,7 +151,7 @@ class Player:
             return False
 
         # Not enough yama
-        if len(self.game.yama) < 4:
+        if self.game.yama.rest_tsumo_count < 4:
             return False
 
         # Not tenpai
@@ -197,7 +197,7 @@ class Player:
             raise Exception()
 
         # Not enoguh yama
-        if len(self.game.yama) == 0:
+        if self.game.yama.rest_tsumo_count == 0:
             return []
 
         # Riichi completed
@@ -249,7 +249,7 @@ class Player:
             raise Exception()
 
         # Not enough yama
-        if len(self.game.yama) == 0:
+        if self.game.yama.rest_tsumo_count == 0:
             return []
 
         # Riichi completed
@@ -279,7 +279,7 @@ class Player:
 
     def list_kakan_candidates(self) -> list[Kakan]:
         # Not enough yama
-        if len(self.game.yama) == 0:
+        if self.game.yama.rest_tsumo_count == 0:
             return []
 
         # Four kans exist
@@ -303,7 +303,7 @@ class Player:
             raise Exception()
 
         # Not enough yama
-        if len(self.game.yama) == 0:
+        if self.game.yama.rest_tsumo_count == 0:
             return []
 
         # Riichi completed
@@ -338,7 +338,7 @@ class Player:
             return []
 
         # Not enough yama
-        if len(self.game.yama) == 0:
+        if self.game.yama.rest_tsumo_count == 0:
             return []
 
         # Four kans exist
