@@ -10,7 +10,7 @@ from kago_utils.player import Player
 from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 
-class Agari:
+class AgariCalculator:
     YAOCHUHAI = (0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
     YAKU = (
         "門前清自摸和",
@@ -199,14 +199,14 @@ class Agari:
                     hu += 2
             elif block.type == "koutsu":
                 tmp = 2
-                if block.hais[0] in Agari.YAOCHUHAI:
+                if block.hais[0] in AgariCalculator.YAOCHUHAI:
                     tmp *= 2
                 if block.minan == "an":
                     tmp *= 2
                 hu += tmp
             elif block.type == "kantsu":
                 tmp = 8
-                if block.hais[0] in Agari.YAOCHUHAI:
+                if block.hais[0] in AgariCalculator.YAOCHUHAI:
                     tmp *= 2
                 if block.minan == "an":
                     tmp *= 2
@@ -318,20 +318,20 @@ class Agari:
         return ten_movement
 
     def get_jokyo_yaku(self) -> dict[str, int]:
-        jokyo_yaku = Agari.initialize_yaku()
+        jokyo_yaku = AgariCalculator.initialize_yaku()
 
         # TODO: Not implemented yet
         return jokyo_yaku
 
     def get_zenbu_yaku(self) -> dict[str, int]:
-        zenbu_yaku = Agari.initialize_yaku()
+        zenbu_yaku = AgariCalculator.initialize_yaku()
         counter = self.zentehai.to_counter34()
         total = sum(counter)
 
-        if sum([counter[i] for i in Agari.YAOCHUHAI]) == 0:
+        if sum([counter[i] for i in AgariCalculator.YAOCHUHAI]) == 0:
             zenbu_yaku["断幺九"] = 1
 
-        if sum([counter[i] for i in Agari.YAOCHUHAI]) == total:
+        if sum([counter[i] for i in AgariCalculator.YAOCHUHAI]) == total:
             zenbu_yaku["混老頭"] = 2
 
         if (
@@ -372,7 +372,7 @@ class Agari:
 
     # 部分役
     def get_bubun_yaku_for_regular(self, blocks: list[TehaiBlock], is_pinhu: bool) -> dict[str, int]:
-        bubun_yaku = Agari.initialize_yaku()
+        bubun_yaku = AgariCalculator.initialize_yaku()
 
         # Toistu, Shuntsu, Koutsu and Kantsu pattern counter
         tp = [0] * 34  # Toitsu pattern
@@ -417,7 +417,7 @@ class Agari:
         if kp[33]:
             bubun_yaku["役牌 中"] = 1
 
-        if sum(tp[i] + kp[i] for i in Agari.YAOCHUHAI) + sum(sp[i] for i in (0, 6, 7, 13, 14, 20)) == 5:
+        if sum(tp[i] + kp[i] for i in AgariCalculator.YAOCHUHAI) + sum(sp[i] for i in (0, 6, 7, 13, 14, 20)) == 5:
             bubun_yaku["混全帯幺九"] = 1 + self.player.is_menzen
 
         if (sp[0] and sp[3] and sp[6]) or (sp[7] and sp[10] and sp[13]) or (sp[14] and sp[17] and sp[20]):
@@ -475,19 +475,19 @@ class Agari:
         return bubun_yaku
 
     def get_bubun_yaku_for_kokushimusou(self) -> dict[str, int]:
-        bubun_yaku = Agari.initialize_yaku()
+        bubun_yaku = AgariCalculator.initialize_yaku()
         counter = self.juntehai.to_counter34()
 
-        if all(counter[i] in [1, 2] for i in Agari.YAOCHUHAI):
+        if all(counter[i] in [1, 2] for i in AgariCalculator.YAOCHUHAI):
             bubun_yaku["国士無双"] = 13
 
-        if all(counter[i] in [1, 2] for i in Agari.YAOCHUHAI) and counter[self.agarihai.id // 4] == 2:
+        if all(counter[i] in [1, 2] for i in AgariCalculator.YAOCHUHAI) and counter[self.agarihai.id // 4] == 2:
             bubun_yaku["国士無双13面"] = 13
 
         return bubun_yaku
 
     def get_bubun_yaku_for_chiitoitsu(self) -> dict[str, int]:
-        bubun_yaku = Agari.initialize_yaku()
+        bubun_yaku = AgariCalculator.initialize_yaku()
         counter = self.juntehai.to_counter34()
 
         if sum(counter[i] == 2 for i in range(34)) == 7:
@@ -501,7 +501,7 @@ class Agari:
         zenbu_yaku: dict[str, int],
         bubun_yaku: dict[str, int],
     ) -> dict[str, int] | None:
-        yaku = Agari.initialize_yaku()
+        yaku = AgariCalculator.initialize_yaku()
         for key in yaku.keys():
             yaku[key] = jokyo_yaku[key] + zenbu_yaku[key] + bubun_yaku[key]
 

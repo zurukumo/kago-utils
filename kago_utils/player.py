@@ -8,7 +8,7 @@ from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
-from kago_utils.shanten import Shanten
+from kago_utils.shanten_calculator import ShantenCalculator
 from kago_utils.zaichi import Zaichi
 
 
@@ -155,7 +155,7 @@ class Player:
             return False
 
         # Not tenpai
-        if Shanten(self.juntehai).shanten > 0:
+        if ShantenCalculator(self.juntehai).shanten > 0:
             return False
 
         return True
@@ -173,7 +173,7 @@ class Player:
             candidates = HaiGroup([])
             for hai in self.juntehai:
                 new_juntehai = self.juntehai - hai
-                if Shanten(new_juntehai).shanten == 0:
+                if ShantenCalculator(new_juntehai).shanten == 0:
                     candidates += hai
             return candidates
 
@@ -359,8 +359,8 @@ class Player:
                 base_id = self.last_tsumo.id // 4 * 4
                 ankan = Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3]))
 
-                shanten1 = Shanten(self.juntehai - self.last_tsumo)
-                shanten2 = Shanten(self.juntehai - ankan.hais)
+                shanten1 = ShantenCalculator(self.juntehai - self.last_tsumo)
+                shanten2 = ShantenCalculator(self.juntehai - ankan.hais)
                 if shanten1.shanten == shanten2.shanten and shanten1.yuukouhai == shanten2.yuukouhai:
                     candidates.append(ankan)
 

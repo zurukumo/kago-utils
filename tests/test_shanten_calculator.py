@@ -6,7 +6,7 @@ import numpy as np
 from shanten_tools import shanten as external_shanten
 
 from kago_utils.hai_group import HaiGroup
-from kago_utils.shanten import Shanten
+from kago_utils.shanten_calculator import ShantenCalculator
 
 
 def generate_random_juntehai(juntehai_length: int):
@@ -35,29 +35,29 @@ def calculate_shanten_external(juntehai: HaiGroup):
     return external_shanten(np.array(juntehai, dtype=np.uint8)) - 1
 
 
-class TestShantenInit(unittest.TestCase):
+class TestShantenCalculatorInit(unittest.TestCase):
     def test_init(self):
         for juntehai_length in [1, 2, 4, 5, 7, 8, 10, 11, 13, 14]:
             juntehai = HaiGroup.from_list(list(range(juntehai_length)))
-            Shanten(juntehai)
+            ShantenCalculator(juntehai)
 
     def test_init_with_juntehai_whose_length_is_invalid(self):
         juntehai = HaiGroup.from_list(list(range(3)))
         with self.assertRaises(ValueError):
-            Shanten(juntehai)
+            ShantenCalculator(juntehai)
 
     def test_init_with_juntehai_whose_length_is_too_long(self):
         juntehai = HaiGroup.from_list(list(range(15)))
         with self.assertRaises(ValueError):
-            Shanten(juntehai)
+            ShantenCalculator(juntehai)
 
     def test_init_with_juntehai_having_same_hai(self):
         juntehai = HaiGroup.from_list(list(range(12)) + [12] * 2)
         with self.assertRaises(ValueError):
-            Shanten(juntehai)
+            ShantenCalculator(juntehai)
 
 
-class TestCalculateShantenWithRandomTehai(unittest.TestCase):
+class TestShantenCalculatorShantenWithRandomTehai(unittest.TestCase):
     n_assertion = 1000
     # format: (juntehai_length, n_huuro)
     tehai_patterns = [(14, 0), (13, 0), (11, 1), (10, 1), (8, 2), (7, 2), (5, 3), (4, 3), (2, 4), (1, 4)]
@@ -66,7 +66,7 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
         for juntehai_length, n_huuro in self.tehai_patterns:
             for _ in range(self.n_assertion):
                 juntehai = generate_random_juntehai(juntehai_length)
-                result = Shanten(juntehai).shanten
+                result = ShantenCalculator(juntehai).shanten
                 expected = calculate_shanten_external(juntehai)
                 msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
                 self.assertEqual(result, expected, msg)
@@ -75,7 +75,7 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
         for juntehai_length, n_huuro in self.tehai_patterns:
             for _ in range(self.n_assertion):
                 juntehai = generate_random_juntehai_for_honitsu(juntehai_length)
-                result = Shanten(juntehai).shanten
+                result = ShantenCalculator(juntehai).shanten
                 expected = calculate_shanten_external(juntehai)
                 msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
                 self.assertEqual(result, expected, msg)
@@ -84,26 +84,26 @@ class TestCalculateShantenWithRandomTehai(unittest.TestCase):
         for juntehai_length, n_huuro in self.tehai_patterns:
             for _ in range(self.n_assertion):
                 juntehai = generate_random_juntehai_for_chinitsu(juntehai_length)
-                result = Shanten(juntehai).shanten
+                result = ShantenCalculator(juntehai).shanten
                 expected = calculate_shanten_external(juntehai)
                 msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
                 self.assertEqual(result, expected, msg)
 
 
 # ref: https://mahjong.ara.black/etc/shanten/shanten9.htm
-class TestCalculateShantenWithAraTehai(unittest.TestCase):
+class TestShantenCalculatorShantenWithAraTehai(unittest.TestCase):
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_normal_10000_txt = os.path.join(current_dir, "data/shanten/p_normal_10000.txt")
-    p_hon_10000_txt = os.path.join(current_dir, "data/shanten/p_hon_10000.txt")
-    p_tin_10000_txt = os.path.join(current_dir, "data/shanten/p_tin_10000.txt")
-    p_koku_10000_txt = os.path.join(current_dir, "data/shanten/p_koku_10000.txt")
+    p_normal_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_normal_10000.txt")
+    p_hon_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_hon_10000.txt")
+    p_tin_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_tin_10000.txt")
+    p_koku_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_koku_10000.txt")
 
     def test_shanten_normal_10000(self):
         with open(self.p_normal_10000_txt, "rb") as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 juntehai = HaiGroup.from_list34(problem[:14])
-                shanten = Shanten(juntehai)
+                shanten = ShantenCalculator(juntehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"juntehai: {juntehai.to_code()}"
@@ -114,7 +114,7 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 juntehai = HaiGroup.from_list34(problem[:14])
-                shanten = Shanten(juntehai)
+                shanten = ShantenCalculator(juntehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"juntehai: {juntehai.to_code()}"
@@ -125,7 +125,7 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 juntehai = HaiGroup.from_list34(problem[:14])
-                shanten = Shanten(juntehai)
+                shanten = ShantenCalculator(juntehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"juntehai: {juntehai.to_code()}"
@@ -136,25 +136,25 @@ class TestCalculateShantenWithAraTehai(unittest.TestCase):
             for row in f.readlines():
                 problem = list(map(int, row.split()))
                 juntehai = HaiGroup.from_list34(problem[:14])
-                shanten = Shanten(juntehai)
+                shanten = ShantenCalculator(juntehai)
                 result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
                 expected = problem[14:]
                 msg = f"juntehai: {juntehai.to_code()}"
                 self.assertEqual(result, expected, msg)
 
 
-class TestCalculateShantenWithHandmadeTehai(unittest.TestCase):
+class TestShantenCalculatorShantenWithHandmadeTehai(unittest.TestCase):
     # format: (juntehai, expected)
     test_cases = [(HaiGroup.from_code("23466669999m111z"), 1), (HaiGroup.from_code("1111345567m111z"), 1)]
 
     def test_shanten_when_juntehai_length_is_invalid(self):
         for juntehai, expected in self.test_cases:
-            result = Shanten(juntehai).shanten
+            result = ShantenCalculator(juntehai).shanten
             msg = f"juntehai: {juntehai}"
             self.assertEqual(result, expected, msg)
 
 
-class TestCalculateShantenWithInvalidTehai(unittest.TestCase):
+class TestShantenCalculatorShantenWithInvalidTehai(unittest.TestCase):
     test_cases = [
         HaiGroup.from_code(""),
         HaiGroup.from_code("111m"),
@@ -166,10 +166,10 @@ class TestCalculateShantenWithInvalidTehai(unittest.TestCase):
     def test_shanten(self):
         for juntehai in self.test_cases:
             with self.assertRaises(ValueError):
-                Shanten(juntehai).shanten
+                ShantenCalculator(juntehai).shanten
 
 
-class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
+class TestShantenCalculatorYuukouhaiWithHandmadeTehai(unittest.TestCase):
     # format: (juntehai, expected)
     code_test_cases: list[tuple[str, str]] = [
         # 13
@@ -255,17 +255,17 @@ class TestCalculateYuukouhaiWithHandmadeTehai(unittest.TestCase):
 
     def test_yuukouhai(self):
         for juntehai, expected in self.code_test_cases:
-            result = Shanten(HaiGroup.from_code(juntehai)).yuukouhai.to_code()
+            result = ShantenCalculator(HaiGroup.from_code(juntehai)).yuukouhai.to_code()
             msg = f"juntehai: {juntehai}, expected: {expected}, result: {result}"
             self.assertEqual(result, expected, msg)
 
         for juntehai, expected in self.list_test_cases:
-            result = Shanten(HaiGroup.from_list(juntehai)).yuukouhai.to_list()
+            result = ShantenCalculator(HaiGroup.from_list(juntehai)).yuukouhai.to_list()
             msg = f"juntehai: {juntehai}, expected: {expected}, result: {result}"
             self.assertEqual(result, expected, msg)
 
 
-class TestCalculateYuukouhaiWithInvalidTehai(unittest.TestCase):
+class TestShantenCalculatorYuukouhaiWithInvalidTehai(unittest.TestCase):
     test_cases = [
         HaiGroup.from_code(""),
         HaiGroup.from_code("11m"),
@@ -281,7 +281,7 @@ class TestCalculateYuukouhaiWithInvalidTehai(unittest.TestCase):
     def test_yuukouhai_when_juntehai_length_is_invalid(self):
         for juntehai in self.test_cases:
             with self.assertRaises(ValueError):
-                Shanten(juntehai).yuukouhai
+                ShantenCalculator(juntehai).yuukouhai
 
 
 if __name__ == "__main__":

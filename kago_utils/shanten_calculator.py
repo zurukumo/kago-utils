@@ -7,7 +7,7 @@ import pickle
 from kago_utils.hai_group import HaiGroup
 
 
-class Shanten:
+class ShantenCalculator:
     suuhai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
     zihai_distance_table: dict[tuple[tuple[int, ...], int], int] | None = None
 
@@ -28,7 +28,7 @@ class Shanten:
     __yuukouhai: HaiGroup | None
 
     def __init__(self, juntehai: HaiGroup) -> None:
-        Shanten.validate_juntehai(juntehai)
+        ShantenCalculator.validate_juntehai(juntehai)
 
         self.__juntehai = juntehai
         self.__shanten = None
@@ -107,8 +107,8 @@ class Shanten:
         return shanten
 
     def __calculate__regular_shanten(self) -> int:
-        Shanten.__load_patterns()
-        if Shanten.suuhai_distance_table is None or Shanten.zihai_distance_table is None:
+        ShantenCalculator.__load_patterns()
+        if ShantenCalculator.suuhai_distance_table is None or ShantenCalculator.zihai_distance_table is None:
             raise RuntimeError("Patterns are not loaded")
 
         juntehai_counter = self.__juntehai.to_counter34()
@@ -127,10 +127,10 @@ class Shanten:
                 n_souzu = n_souzu_mentsu * 3 + n_souzu_jantou * 2
                 n_zihai = n_zihai_mentsu * 3 + n_zihai_jantou * 2
 
-                manzu_distance = Shanten.suuhai_distance_table[(manzu, n_manzu)]
-                pinzu_distance = Shanten.suuhai_distance_table[(pinzu, n_pinzu)]
-                souzu_distance = Shanten.suuhai_distance_table[(souzu, n_souzu)]
-                zihai_distance = Shanten.zihai_distance_table[(zihai, n_zihai)]
+                manzu_distance = ShantenCalculator.suuhai_distance_table[(manzu, n_manzu)]
+                pinzu_distance = ShantenCalculator.suuhai_distance_table[(pinzu, n_pinzu)]
+                souzu_distance = ShantenCalculator.suuhai_distance_table[(souzu, n_souzu)]
+                zihai_distance = ShantenCalculator.zihai_distance_table[(zihai, n_zihai)]
 
                 min_shanten = min(min_shanten, manzu_distance + pinzu_distance + souzu_distance + zihai_distance - 1)
 
@@ -186,7 +186,7 @@ class Shanten:
         for i in range(136):
             new_juntehai = self.__juntehai + HaiGroup.from_list([i])
             try:
-                new_shanten = Shanten(new_juntehai).shanten
+                new_shanten = ShantenCalculator(new_juntehai).shanten
                 if new_shanten < current_shanten:
                     yuukouhai.append(i)
             except ValueError:
