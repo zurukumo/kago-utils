@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 from kago_utils.hai import Hai
+from kago_utils.player import Player
 from kago_utils.yama import Yama
-
-if TYPE_CHECKING:
-    from kago_utils.player import Player
 
 
 class Game:

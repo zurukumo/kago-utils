@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import random
 from itertools import product
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
-from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
 from kago_utils.shanten_calculator import ShantenCalculator
 from kago_utils.zaichi import Zaichi
+
+if TYPE_CHECKING:
+    from kago_utils.game import Game
 
 
 class Player:
