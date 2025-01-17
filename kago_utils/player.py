@@ -8,7 +8,6 @@ from kago_utils.action import Dahai
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
-from kago_utils.shanten_calculator import ShantenCalculator
 from kago_utils.zaichi import Zaichi
 
 if TYPE_CHECKING:
@@ -72,6 +71,9 @@ class Player:
         self.last_tsumo = hai
         self.is_right_after_rinshan_tsumo = True
 
+    def tsumoho(self) -> None:
+        pass
+
     def riichi(self) -> None:
         self.is_right_after_riichi_called = True
 
@@ -108,7 +110,7 @@ class Player:
         raise ValueError("Invalid Pon")
 
     def kakan(self, kakan: Kakan) -> None:
-        for candaidate in self.list_kakan_candidates():
+        for candaidate in self.game.tsumoho_riichi_ankan_kakan_dahai_resolver.kakan_candidates[self.id]:
             if (
                 kakan.hais.to_code() == candaidate.hais.to_code()
                 and kakan.stolen == candaidate.stolen
@@ -137,72 +139,13 @@ class Player:
         raise ValueError("Invalid Daiminkan")
 
     def ankan(self, ankan: Ankan) -> None:
-        for candidate in self.list_ankan_candidates():
+        for candidate in self.game.tsumoho_riichi_ankan_kakan_dahai_resolver.ankan_candidates[self.id]:
             if ankan.hais.to_code() == candidate.hais.to_code():
                 self.huuros.append(ankan)
                 self.juntehai -= ankan.hais
                 return
 
         raise ValueError("Invalid Ankan")
-
-    def list_riichi_candidates(self) -> bool:
-        # Not menzen
-        if not self.is_menzen:
-            return False
-
-        # Riichi completed
-        if self.is_riichi_completed:
-            return False
-
-        # Right after calling riichi
-        if self.is_right_after_riichi_called:
-            return False
-
-        # Not enough ten
-        if self.ten < 1000:
-            return False
-
-        # Not enough yama
-        if self.game.yama.rest_tsumo_count < 4:
-            return False
-
-        # Not tenpai
-        if ShantenCalculator(self.juntehai).shanten > 0:
-            return False
-
-        return True
-
-    def list_dahai_candidates(self) -> HaiGroup:
-        # Riichi completed
-        if self.is_riichi_completed:
-            if self.last_tsumo is None:
-                raise Exception()
-
-            return HaiGroup([self.last_tsumo])
-
-        # Right after calling riichi
-        elif self.is_right_after_riichi_called:
-            candidates = HaiGroup([])
-            for hai in self.juntehai:
-                new_juntehai = self.juntehai - hai
-                if ShantenCalculator(new_juntehai).shanten == 0:
-                    candidates += hai
-            return candidates
-
-        # Right after calling chii or pon
-        elif self.is_right_after_chii_called or self.is_right_after_pon_called:
-            last_huuro = self.huuros[-1]
-            if not isinstance(last_huuro, (Chii, Pon)):
-                raise Exception()
-
-            candidates = HaiGroup([])
-            for hai in self.juntehai:
-                if hai not in last_huuro.kuikae_hais:
-                    candidates += hai
-            return candidates
-
-        else:
-            return self.juntehai
 
     def list_chii_candidates(self) -> list[Chii]:
         if self.game.last_dahai is None or self.game.last_teban is None:
@@ -289,27 +232,6 @@ class Player:
 
         return candidates
 
-    def list_kakan_candidates(self) -> list[Kakan]:
-        # Not enough yama
-        if self.game.yama.rest_tsumo_count == 0:
-            return []
-
-        # Four kans exist
-        n_kan = 0
-        for player in self.game.players:
-            for huuro in player.huuros:
-                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
-                    n_kan += 1
-        if n_kan >= 4:
-            return []
-
-        candidates = []
-        for huuro in self.huuros:
-            if isinstance(huuro, Pon) and huuro.to_kakan().added in self.juntehai:
-                candidates.append(huuro.to_kakan())
-
-        return candidates
-
     def list_daiminkan_candidates(self) -> list[Daiminkan]:
         if self.game.last_dahai is None or self.game.last_teban is None:
             raise Exception()
@@ -338,51 +260,6 @@ class Player:
         hais = [hai for hai in self.juntehai if hai.suit == stolen.suit and hai.number == stolen.number]
         if len(hais) >= 3:
             candidates.append(Daiminkan(hais=HaiGroup(hais + [stolen]), stolen=stolen, from_who=from_who))
-
-        return candidates
-
-    def list_ankan_candidates(self) -> list[Ankan]:
-        if self.last_tsumo is None:
-            raise Exception()
-
-        # Right after calling riichi
-        if self.is_right_after_riichi_called:
-            return []
-
-        # Not enough yama
-        if self.game.yama.rest_tsumo_count == 0:
-            return []
-
-        # Four kans exist
-        n_kan = 0
-        for player in self.game.players:
-            for huuro in player.huuros:
-                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
-                    n_kan += 1
-        if n_kan >= 4:
-            return []
-
-        candidates = []
-        counter = self.juntehai.to_counter34()
-
-        # When riichi completed, only ankan that does not change shanten and machihais is allowed
-        if self.is_riichi_completed:
-            if counter[self.last_tsumo.id // 4] >= 4:
-                base_id = self.last_tsumo.id // 4 * 4
-                ankan = Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3]))
-
-                shanten1 = ShantenCalculator(self.juntehai - self.last_tsumo)
-                shanten2 = ShantenCalculator(self.juntehai - ankan.hais)
-                if shanten1.shanten == shanten2.shanten and shanten1.yuukouhai == shanten2.yuukouhai:
-                    candidates.append(ankan)
-
-        # Otherwise, all ankans are allowed
-        else:
-            for i in range(34):
-                if counter[i] >= 4:
-                    base_id = i * 4
-                    ankan = Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3]))
-                    candidates.append(ankan)
 
         return candidates
 
