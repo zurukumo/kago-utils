@@ -28,7 +28,6 @@ def game_factory():
 
     for i in range(4):
         player = Player(id=str(i))
-        player.ten = 25000
         game.add_player(player)
 
     return game

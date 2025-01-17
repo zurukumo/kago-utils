@@ -49,6 +49,7 @@ class Player:
 
     def __init__(self, id: str) -> None:
         self.id = id
+        self.ten = 25000
         self.reset()
 
     def reset(self) -> None:
