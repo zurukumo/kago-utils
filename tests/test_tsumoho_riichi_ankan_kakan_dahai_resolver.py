@@ -35,7 +35,7 @@ def game_factory():
     return game
 
 
-class TestTsumohoRiichiAnkanKakanDahaiResolverListRiichiCandidates(unittest.TestCase):
+class TestListRiichiCandidates(unittest.TestCase):
     def test_list_riichi_candidates(self):
         game = game_factory()
         player = game.players[0]
@@ -120,7 +120,7 @@ class TestTsumohoRiichiAnkanKakanDahaiResolverListRiichiCandidates(unittest.Test
         self.assertEqual(resolver.list_riichi_candidates(player), [])
 
 
-class TestTsumohoRiichiAnkanKakanDahaiResolverListAnkanCandidates(unittest.TestCase):
+class TestListAnkanCandidates(unittest.TestCase):
     def test_list_ankan_candidates(self):
         game = game_factory()
         player = game.players[0]
@@ -236,7 +236,7 @@ class TestTsumohoRiichiAnkanKakanDahaiResolverListAnkanCandidates(unittest.TestC
         self.assertEqual(len(resolver.list_ankan_candidates(player)), 1)
 
 
-class TestTsumohoRiichiAnkanKakanDahaiResolverListKakanCandidates(unittest.TestCase):
+class TestListKakanCandidates(unittest.TestCase):
     def test_list_kakan_candidates(self):
         game = game_factory()
         player = game.teban_player
@@ -304,7 +304,7 @@ class TestTsumohoRiichiAnkanKakanDahaiResolverListKakanCandidates(unittest.TestC
         self.assertEqual(len(resolver.list_kakan_candidates(player1)), 0)
 
 
-class TestTsumohoRiichiAnkanKakanDahaiResolverListDahaiCandidates(unittest.TestCase):
+class TestListDahaiCandidates(unittest.TestCase):
     def test_list_dahai_candidates(self):
         game = game_factory()
         player = game.players[0]

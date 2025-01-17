@@ -4,12 +4,12 @@ from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 
 
-class TestHaiGroupInit(unittest.TestCase):
+class TestInit(unittest.TestCase):
     def test_init(self):
         HaiGroup([Hai(0), Hai(1), Hai(134), Hai(135)])
 
 
-class TestHaiGroupFromCounter34(unittest.TestCase):
+class TestFromCounter34(unittest.TestCase):
     def test_from_counter34(self):
         counter = [0] * 34
         counter[0] = counter[33] = 1
@@ -37,7 +37,7 @@ class TestHaiGroupFromCounter34(unittest.TestCase):
             HaiGroup.from_counter34(counter)
 
 
-class TestHaiGroupFromCounter(unittest.TestCase):
+class TestFromCounter(unittest.TestCase):
     def test_from_counter(self):
         counter = [0] * 136
         counter[0] = counter[135] = 1
@@ -65,7 +65,7 @@ class TestHaiGroupFromCounter(unittest.TestCase):
             HaiGroup.from_counter(counter)
 
 
-class TestHaiGroupFromList34(unittest.TestCase):
+class TestFromList34(unittest.TestCase):
     def test_from_list34(self):
         _list = [0, 33]
         hais = [Hai(0), Hai(132)]
@@ -87,7 +87,7 @@ class TestHaiGroupFromList34(unittest.TestCase):
             HaiGroup.from_list34(_list)
 
 
-class TestHaiGroupFromList(unittest.TestCase):
+class TestFromList(unittest.TestCase):
     def test_from_list(self):
         _list = [0, 135]
         hais = [Hai(0), Hai(135)]
@@ -109,7 +109,7 @@ class TestHaiGroupFromList(unittest.TestCase):
             HaiGroup.from_list(_list)
 
 
-class TestHaiGroupFromCode(unittest.TestCase):
+class TestFromCode(unittest.TestCase):
     def test_from_code(self):
         testcases = [
             ("1m1p1s1z", [0, 36, 72, 108]),
@@ -152,7 +152,7 @@ class TestHaiGroupFromCode(unittest.TestCase):
             HaiGroup.from_code(code)
 
 
-class TestHaiGroupToCounter34(unittest.TestCase):
+class TestToCounter34(unittest.TestCase):
     def test_to_counter34(self):
         hais = [Hai(0), Hai(135)]
         counter = [0] * 34
@@ -160,7 +160,7 @@ class TestHaiGroupToCounter34(unittest.TestCase):
         self.assertEqual(HaiGroup(hais).to_counter34(), counter)
 
 
-class TestHaiGroupToCounter(unittest.TestCase):
+class TestToCounter(unittest.TestCase):
     def test_to_counter(self):
         hais = [Hai(0), Hai(135)]
         counter = [0] * 136
@@ -168,21 +168,21 @@ class TestHaiGroupToCounter(unittest.TestCase):
         self.assertEqual(HaiGroup(hais).to_counter(), counter)
 
 
-class TestHaiGroupToList34(unittest.TestCase):
+class TestToList34(unittest.TestCase):
     def test_to_list34(self):
         hais = [Hai(0), Hai(135)]
         _list = [0, 33]
         self.assertEqual(HaiGroup(hais).to_list34(), _list)
 
 
-class TestHaiGroupToList(unittest.TestCase):
+class TestToList(unittest.TestCase):
     def test_to_list(self):
         hais = [Hai(0), Hai(135)]
         _list = [0, 135]
         self.assertEqual(HaiGroup(hais).to_list(), _list)
 
 
-class TestHaiGroupToCode(unittest.TestCase):
+class TestToCode(unittest.TestCase):
     def test_to_code(self):
         testcases = [
             ([Hai(0), Hai(135)], "1m7z"),
@@ -195,7 +195,7 @@ class TestHaiGroupToCode(unittest.TestCase):
             self.assertEqual(HaiGroup(hais).to_code(), code)
 
 
-class TestHaiGroupValidate(unittest.TestCase):
+class TestValidate(unittest.TestCase):
     def test_validate(self):
         hai_group = HaiGroup.from_list([0, 1, 2])
         hai_group.validate()
@@ -206,7 +206,7 @@ class TestHaiGroupValidate(unittest.TestCase):
             hai_group.validate()
 
 
-class TestHaiGroupEq(unittest.TestCase):
+class TestEq(unittest.TestCase):
     def test_eq(self):
         hai_group1 = HaiGroup([Hai(1), Hai(2)])
         hai_group2 = HaiGroup([Hai(1), Hai(2)])
@@ -222,7 +222,7 @@ class TestHaiGroupEq(unittest.TestCase):
         self.assertNotEqual(hai_group, 1)
 
 
-class TestHaiGroupAdd(unittest.TestCase):
+class TestAdd(unittest.TestCase):
     def test_add_hai_group_and_hai(self):
         hai_group = HaiGroup([Hai(0), Hai(1)])
         hai = Hai(2)
@@ -241,7 +241,7 @@ class TestHaiGroupAdd(unittest.TestCase):
             hai_group + 1
 
 
-class TestHaiGroupSub(unittest.TestCase):
+class TestSub(unittest.TestCase):
     def test_sub_hai_group_and_hai(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         hai = Hai(2)
@@ -266,7 +266,7 @@ class TestHaiGroupSub(unittest.TestCase):
             hai_group - 1
 
 
-class TestHaiGroupOr(unittest.TestCase):
+class TestOr(unittest.TestCase):
     def test_or_hai_group_and_hai_group(self):
         hai_group1 = HaiGroup([Hai(0), Hai(1), Hai(2)])
         hai_group2 = HaiGroup([Hai(1), Hai(2), Hai(3)])
@@ -274,7 +274,7 @@ class TestHaiGroupOr(unittest.TestCase):
         self.assertEqual(hai_group1 | hai_group2, hai_group_union)
 
 
-class TestHaiGroupAnd(unittest.TestCase):
+class TestAnd(unittest.TestCase):
     def test_and_hai_group_and_hai_group(self):
         hai_group1 = HaiGroup([Hai(0), Hai(1), Hai(2)])
         hai_group2 = HaiGroup([Hai(1), Hai(2), Hai(3)])
@@ -282,13 +282,13 @@ class TestHaiGroupAnd(unittest.TestCase):
         self.assertEqual(hai_group1 & hai_group2, hai_group_intersection)
 
 
-class TestHaiGroupLen(unittest.TestCase):
+class TestLen(unittest.TestCase):
     def test_len(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         self.assertEqual(len(hai_group), 3)
 
 
-class TestHaiGroupGetitem(unittest.TestCase):
+class TestGetitem(unittest.TestCase):
     def test_getitem_with_int(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         self.assertEqual(hai_group[0], Hai(0))
@@ -306,14 +306,14 @@ class TestHaiGroupGetitem(unittest.TestCase):
             hai_group[1.0]
 
 
-class TestHaiGroupIter(unittest.TestCase):
+class TestIter(unittest.TestCase):
     def test_iter(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         for i, hai in enumerate(hai_group):
             self.assertEqual(hai, Hai(i))
 
 
-class TestHaiGroupContains(unittest.TestCase):
+class TestContains(unittest.TestCase):
     def test_contains(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         self.assertEqual(Hai(0) in hai_group, True)
@@ -325,7 +325,7 @@ class TestHaiGroupContains(unittest.TestCase):
             0 in hai_group
 
 
-class TestHaiGroupRepr(unittest.TestCase):
+class TestRepr(unittest.TestCase):
     def test_repr(self):
         hai_group = HaiGroup([Hai(0), Hai(1), Hai(2)])
         self.assertEqual(repr(hai_group), "HaiGroup([Hai(0), Hai(1), Hai(2)])")

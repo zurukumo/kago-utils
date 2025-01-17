@@ -33,7 +33,7 @@ def game_factory():
     return game
 
 
-class TestPlayerChii(unittest.TestCase):
+class TestChii(unittest.TestCase):
     def test_chii(self):
         game = game_factory()
         player = game.players[0]
@@ -59,7 +59,7 @@ class TestPlayerChii(unittest.TestCase):
             player.chii(chii)
 
 
-class TestPlayerPon(unittest.TestCase):
+class TestPon(unittest.TestCase):
     def test_pon(self):
         game = game_factory()
         player = game.players[0]
@@ -85,7 +85,7 @@ class TestPlayerPon(unittest.TestCase):
             player.pon(pon)
 
 
-class TestPlayerKakan(unittest.TestCase):
+class TestKakan(unittest.TestCase):
     def test_kakan(self):
         game = game_factory()
         game.teban = 0
@@ -121,7 +121,7 @@ class TestPlayerKakan(unittest.TestCase):
             player.kakan(kakan)
 
 
-class TestPlayerDaiminkan(unittest.TestCase):
+class TestDaiminkan(unittest.TestCase):
     def test_daiminkan(self):
         game = game_factory()
         player = game.players[0]
@@ -147,7 +147,7 @@ class TestPlayerDaiminkan(unittest.TestCase):
             player.daiminkan(daiminkan)
 
 
-class TestPlayerAnkan(unittest.TestCase):
+class TestAnkan(unittest.TestCase):
     def test_ankan(self):
         game = game_factory()
         game.teban = 0
@@ -179,7 +179,7 @@ class TestPlayerAnkan(unittest.TestCase):
             player.ankan(ankan)
 
 
-class TestPlayerIsMenzen(unittest.TestCase):
+class TestIsMenzen(unittest.TestCase):
     def test_is_menzen_without_huuros(self):
         game = game_factory()
         player = game.players[0]
@@ -241,7 +241,7 @@ class TestPlayerIsMenzen(unittest.TestCase):
         self.assertFalse(player.is_menzen)
 
 
-class TestPlayerJicha(unittest.TestCase):
+class TestJicha(unittest.TestCase):
     def test_jicha(self):
         game = game_factory()
         player = game.players[0]
@@ -249,7 +249,7 @@ class TestPlayerJicha(unittest.TestCase):
         self.assertEqual(player.jicha, game.players[0])
 
 
-class TestPlayerKamicha(unittest.TestCase):
+class TestKamicha(unittest.TestCase):
     def test_kamicha(self):
         game = game_factory()
         player = game.players[0]
@@ -257,7 +257,7 @@ class TestPlayerKamicha(unittest.TestCase):
         self.assertEqual(player.kamicha, game.players[3])
 
 
-class TestPlayerToimen(unittest.TestCase):
+class TestToimen(unittest.TestCase):
     def test_toimen(self):
         game = game_factory()
         player = game.players[0]
@@ -265,7 +265,7 @@ class TestPlayerToimen(unittest.TestCase):
         self.assertEqual(player.toimen, game.players[2])
 
 
-class TestPlayerSimocha(unittest.TestCase):
+class TestSimocha(unittest.TestCase):
     def test_simocha(self):
         game = game_factory()
         player = game.players[0]
@@ -273,7 +273,7 @@ class TestPlayerSimocha(unittest.TestCase):
         self.assertEqual(player.simocha, game.players[1])
 
 
-class TestPlayerListChiiCandidates(unittest.TestCase):
+class TestListChiiCandidates(unittest.TestCase):
     def test_list_chii_candidates(self):
         game = game_factory()
         player = game.players[0]
@@ -339,7 +339,7 @@ class TestPlayerListChiiCandidates(unittest.TestCase):
         self.assertEqual(len(player.list_chii_candidates()), 0)
 
 
-class TestPlayerListPonCandidates(unittest.TestCase):
+class TestListPonCandidates(unittest.TestCase):
     def test_list_pon_candidates(self):
         game = game_factory()
         player = game.players[0]
@@ -393,7 +393,7 @@ class TestPlayerListPonCandidates(unittest.TestCase):
         self.assertEqual(len(player.list_pon_candidates()), 0)
 
 
-class TestPlayerListDaiminkanCandidates(unittest.TestCase):
+class TestListDaiminkanCandidates(unittest.TestCase):
     def test_list_daiminkan_candidates(self):
         game = game_factory()
         player = game.players[0]
@@ -465,3 +465,7 @@ class TestPlayerListDaiminkanCandidates(unittest.TestCase):
             Ankan(hais=HaiGroup.from_code("4444z")),
         ]
         self.assertEqual(len(player1.list_daiminkan_candidates()), 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

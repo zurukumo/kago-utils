@@ -6,7 +6,7 @@ from kago_utils.huuro import Chii
 from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 
-class TestTehaiDecomposer(unittest.TestCase):
+class TestDecompose(unittest.TestCase):
     def test_decompose(self):
         juntehai = HaiGroup.from_code("111222333m66677z")
         huuros = []
@@ -94,3 +94,7 @@ class TestTehaiDecomposer(unittest.TestCase):
                 TehaiBlock("koutsu", [32, 32, 32]),
             ],
         )
+
+
+if __name__ == "__main__":
+    unittest.main()

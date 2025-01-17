@@ -4,12 +4,12 @@ from kago_utils.hai import Hai
 from kago_utils.yama import Yama
 
 
-class TestYamaInit(unittest.TestCase):
+class TestInit(unittest.TestCase):
     def test_init(self):
         Yama()
 
 
-class TestYamaGenerate(unittest.TestCase):
+class TestGenerate(unittest.TestCase):
     def test_generate(self):
         yama1 = Yama()
         yama1.generate()
@@ -24,7 +24,7 @@ class TestYamaGenerate(unittest.TestCase):
         self.assertNotEqual(yama1.tsumo_hais, yama2.tsumo_hais)
 
 
-class TestYamaTsumo(unittest.TestCase):
+class TestTsumo(unittest.TestCase):
     def test_tsumo(self):
         yama = Yama()
         yama.generate()
@@ -79,7 +79,7 @@ class TestYamaTsumo(unittest.TestCase):
             yama.tsumo()
 
 
-class TestYamaRinshanTsumo(unittest.TestCase):
+class TestRinshanTsumo(unittest.TestCase):
     def test_rinshan_tsumo(self):
         yama = Yama()
         yama.generate()
@@ -108,7 +108,7 @@ class TestYamaRinshanTsumo(unittest.TestCase):
             yama.rinshan_tsumo()
 
 
-class TestYamaOpenDoraHyoujiHai(unittest.TestCase):
+class TestOpenDoraHyoujiHai(unittest.TestCase):
     def test_open_dora_hyouji_hai(self):
         yama = Yama()
         yama.generate()
@@ -119,7 +119,7 @@ class TestYamaOpenDoraHyoujiHai(unittest.TestCase):
         self.assertEqual(yama.n_open_dora_hyouji_hais, 2)
 
 
-class TestYamaOpenedDoraHyoujiHai(unittest.TestCase):
+class TestOpenedDoraHyoujiHai(unittest.TestCase):
     def test_opened_dora_hyouji_hais(self):
         yama = Yama()
         yama.generate()
@@ -130,7 +130,7 @@ class TestYamaOpenedDoraHyoujiHai(unittest.TestCase):
         self.assertEqual(len(yama.opened_dora_hyouji_hais), 2)
 
 
-class TestYamaOpenedUradoraHyoujiHai(unittest.TestCase):
+class TestOpenedUradoraHyoujiHai(unittest.TestCase):
     def test_opened_uradora_hyouji_hais(self):
         yama = Yama()
         yama.generate()
@@ -141,7 +141,7 @@ class TestYamaOpenedUradoraHyoujiHai(unittest.TestCase):
         self.assertEqual(len(yama.opened_uradora_hyouji_hais), 2)
 
 
-class TestYamaRestTsumoCount(unittest.TestCase):
+class TestRestTsumoCount(unittest.TestCase):
     def test_rest_tsumo_count(self):
         yama = Yama()
         yama.generate()
