@@ -4,6 +4,7 @@ import random
 from itertools import product
 from typing import TYPE_CHECKING, Literal
 
+from kago_utils.action import Dahai
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
@@ -65,9 +66,9 @@ class Player:
     def riichi(self) -> None:
         self.is_right_after_riichi_called = True
 
-    def dahai(self, hai: Hai) -> None:
-        self.juntehai -= hai
-        self.last_dahai = hai
+    def dahai(self, dahai: Dahai) -> None:
+        self.juntehai -= dahai.hai
+        self.last_dahai = dahai.hai
 
     def chii(self, chii: Chii) -> None:
         for candidate in self.list_chii_candidates():
