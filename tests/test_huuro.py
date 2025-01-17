@@ -150,7 +150,7 @@ class TestPonCanBecomeKakan(unittest.TestCase):
 
     def test_can_become_kakan_with_not_same_from_who(self):
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
-        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(3), from_who=Zaichi.SIMOCHA)
+        kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(3), from_who=Zaichi.SHIMOCHA)
         self.assertFalse(pon.can_become_kakan(kakan))
 
 
@@ -202,7 +202,7 @@ class TestPonComparison(unittest.TestCase):
 
     def test_eq_with_not_same_from_who(self):
         pon1 = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
-        pon2 = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.SIMOCHA)
+        pon2 = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.SHIMOCHA)
         self.assertNotEqual(pon1, pon2)
 
     def test_eq_with_int(self):
@@ -228,7 +228,7 @@ class TestKakanComparison(unittest.TestCase):
 
     def test_eq_with_not_same_from_who(self):
         kakan1 = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.KAMICHA)
-        kakan2 = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.SIMOCHA)
+        kakan2 = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(1), from_who=Zaichi.SHIMOCHA)
         self.assertNotEqual(kakan1, kakan2)
 
     def test_eq_with_int(self):
@@ -249,7 +249,7 @@ class TestDaiminkanComparison(unittest.TestCase):
 
     def test_eq_with_not_same_from_who(self):
         daiminkan1 = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.KAMICHA)
-        daiminkan2 = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.SIMOCHA)
+        daiminkan2 = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.SHIMOCHA)
         self.assertNotEqual(daiminkan1, daiminkan2)
 
     def test_eq_with_int(self):

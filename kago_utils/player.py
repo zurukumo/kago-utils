@@ -313,8 +313,8 @@ class Player:
         return self.find_player_by_zaichi(Zaichi.TOIMEN)
 
     @property
-    def simocha(self) -> Player:
-        return self.find_player_by_zaichi(Zaichi.SIMOCHA)
+    def shimocha(self) -> Player:
+        return self.find_player_by_zaichi(Zaichi.SHIMOCHA)
 
     #######################
     ### Utility methods ###

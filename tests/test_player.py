@@ -265,12 +265,12 @@ class TestToimen(unittest.TestCase):
         self.assertEqual(player.toimen, game.players[2])
 
 
-class TestSimocha(unittest.TestCase):
-    def test_simocha(self):
+class TestShimocha(unittest.TestCase):
+    def test_shimocha(self):
         game = game_factory()
         player = game.players[0]
 
-        self.assertEqual(player.simocha, game.players[1])
+        self.assertEqual(player.shimocha, game.players[1])
 
 
 class TestListChiiCandidates(unittest.TestCase):

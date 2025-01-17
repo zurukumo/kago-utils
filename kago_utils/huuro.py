@@ -122,8 +122,8 @@ class Pon:
             raise ValueError("Invalid Pon: hais should contain stolen hai")
 
     def __validate_from_who_is_taacha(self) -> None:
-        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
-            raise ValueError("Invalid Pon: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA")
+        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SHIMOCHA]:
+            raise ValueError("Invalid Pon: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SHIMOCHA")
 
     def can_become_kakan(self, kakan: Kakan) -> bool:
         return all(
@@ -206,8 +206,8 @@ class Kakan:
             raise ValueError("Invalid Kakan: hais should contain added hai")
 
     def __validate_from_who_is_taacha(self) -> None:
-        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
-            raise ValueError("Invalid Kakan: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA")
+        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SHIMOCHA]:
+            raise ValueError("Invalid Kakan: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SHIMOCHA")
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Kakan):
@@ -264,8 +264,8 @@ class Daiminkan:
             raise ValueError("Invalid Daiminkan: hais should contain stolen hai")
 
     def __validate_from_who_is_taacha(self) -> None:
-        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SIMOCHA]:
-            raise ValueError("Invalid Daiminkan: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SIMOCHA")
+        if self.from_who not in [Zaichi.KAMICHA, Zaichi.TOIMEN, Zaichi.SHIMOCHA]:
+            raise ValueError("Invalid Daiminkan: from_who should be Zaichi.KAMICHA, Zaichi.TOIMEN, or Zaichi.SHIMOCHA")
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Daiminkan):
