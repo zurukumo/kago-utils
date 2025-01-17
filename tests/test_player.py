@@ -33,14 +33,6 @@ def game_factory():
     return game
 
 
-class TestPlayerInit(unittest.TestCase):
-    def test_init(self):
-        game = game_factory()
-        player = game.players[0]
-
-        player.juntehai = HaiGroup.from_list(list(range(14)))
-
-
 class TestPlayerChii(unittest.TestCase):
     def test_chii(self):
         game = game_factory()
