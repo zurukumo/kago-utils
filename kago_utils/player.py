@@ -29,6 +29,7 @@ class Player:
     is_right_after_riichi_called: bool
     is_right_after_chii_called: bool
     is_right_after_pon_called: bool
+    is_right_after_rinshan_tsumo: bool
 
     __slots__ = (
         "id",
@@ -43,6 +44,7 @@ class Player:
         "is_right_after_riichi_called",
         "is_right_after_chii_called",
         "is_right_after_pon_called",
+        "is_right_after_rinshan_tsumo",
     )
 
     def __init__(self, id: str) -> None:
@@ -62,6 +64,12 @@ class Player:
     def tsumo(self, hai: Hai) -> None:
         self.juntehai += hai
         self.last_tsumo = hai
+        self.is_right_after_rinshan_tsumo = False
+
+    def rinshan_tsumo(self, hai: Hai) -> None:
+        self.juntehai += hai
+        self.last_tsumo = hai
+        self.is_right_after_rinshan_tsumo = True
 
     def riichi(self) -> None:
         self.is_right_after_riichi_called = True
