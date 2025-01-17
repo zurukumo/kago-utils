@@ -423,6 +423,22 @@ class Player:
     def is_menzen(self) -> bool:
         return not any(isinstance(huuro, (Chii, Pon, Kakan, Daiminkan)) for huuro in self.huuros)
 
+    @property
+    def jicha(self) -> Player:
+        return self.find_player_by_zaichi(Zaichi.JICHA)
+
+    @property
+    def kamicha(self) -> Player:
+        return self.find_player_by_zaichi(Zaichi.KAMICHA)
+
+    @property
+    def toimen(self) -> Player:
+        return self.find_player_by_zaichi(Zaichi.TOIMEN)
+
+    @property
+    def simocha(self) -> Player:
+        return self.find_player_by_zaichi(Zaichi.SIMOCHA)
+
     #######################
     ### Utility methods ###
     #######################

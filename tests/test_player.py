@@ -239,6 +239,38 @@ class TestPlayerIsMenzen(unittest.TestCase):
         self.assertFalse(player.is_menzen)
 
 
+class TestPlayerJicha(unittest.TestCase):
+    def test_jicha(self):
+        game = game_factory()
+        player = game.players[0]
+
+        self.assertEqual(player.jicha, game.players[0])
+
+
+class TestPlayerKamicha(unittest.TestCase):
+    def test_kamicha(self):
+        game = game_factory()
+        player = game.players[0]
+
+        self.assertEqual(player.kamicha, game.players[3])
+
+
+class TestPlayerToimen(unittest.TestCase):
+    def test_toimen(self):
+        game = game_factory()
+        player = game.players[0]
+
+        self.assertEqual(player.toimen, game.players[2])
+
+
+class TestPlayerSimocha(unittest.TestCase):
+    def test_simocha(self):
+        game = game_factory()
+        player = game.players[0]
+
+        self.assertEqual(player.simocha, game.players[1])
+
+
 class TestPlayerListRiichiCandidates(unittest.TestCase):
     def test_list_riichi_candidates(self):
         game = game_factory()
