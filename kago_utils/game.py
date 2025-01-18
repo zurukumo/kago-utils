@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from kago_utils.actions import Ankan, Dahai, Daiminkan, Kakan, Riichi, Tsumoho, Waiting
+from kago_utils.actions import Ankan, Dahai, Daiminkan, Kakan, Riichi, Tsumoho, Wait
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
 from kago_utils.player import Player
@@ -112,7 +112,7 @@ class Game:
                 self.teban_player.dahai(action)
                 self.teban, self.last_teban = (self.teban + 1) % 4, self.teban
                 self.state = "tsumo"
-            case Waiting():
+            case Wait():
                 pass
 
     def rinshan_tsumo(self) -> None:

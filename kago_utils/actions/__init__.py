@@ -7,7 +7,7 @@ from .pon import Pon
 from .riichi import Riichi
 from .ronho import Ronho
 from .tsumoho import Tsumoho
-from .waiting import Waiting
+from .wait import Wait
 
 __all__ = (
     "Ankan",
@@ -19,5 +19,5 @@ __all__ = (
     "Riichi",
     "Ronho",
     "Tsumoho",
-    "Waiting",
+    "Wait",
 )

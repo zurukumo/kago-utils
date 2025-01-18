@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho, Waiting
+from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho, Wait
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
@@ -92,12 +92,12 @@ class TebanActionResolver:
         if dahai in self.dahai_candidates[player.id]:
             self.choice[player.id] = dahai
 
-    def resolve(self) -> Tsumoho | Riichi | Ankan | Kakan | Dahai | Waiting:
+    def resolve(self) -> Tsumoho | Riichi | Ankan | Kakan | Dahai | Wait:
         choice = self.choice[self.game.teban_player.id]
         if choice is not None:
             return choice
 
-        return Waiting()
+        return Wait()
 
     def list_tsumoho_candidates(self, player: Player) -> list[Tsumoho]:
         # Not agari
