@@ -384,7 +384,7 @@ class TestListDahaiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_code("123m1112223334z")
         game.last_dahai = HaiGroup.from_code("4m")[0]
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         player.chii(Chii(hais=HaiGroup.from_code("234m"), stolen=HaiGroup.from_code("4m")[0]))
         self.assertEqual(
             resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]
@@ -397,7 +397,7 @@ class TestListDahaiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_code("555m1112223334z")
         game.last_dahai = HaiGroup.from_code("0m")[0]
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         player.pon(Pon(hais=HaiGroup.from_code("055m"), stolen=HaiGroup.from_code("0m")[0], from_who=Zaichi.KAMICHA))
         self.assertEqual(
             resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]

@@ -39,7 +39,7 @@ class TestChii(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         game.last_dahai = Hai(0)
         chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         player.chii(chii)
@@ -52,7 +52,7 @@ class TestChii(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.TOIMEN)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.TOIMEN)
         game.last_dahai = Hai(0)
         chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(4))
         with self.assertRaises(ValueError):
@@ -65,7 +65,7 @@ class TestPon(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         game.last_dahai = Hai(2)
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
         player.pon(pon)
@@ -78,7 +78,7 @@ class TestPon(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.TOIMEN)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.TOIMEN)
         game.last_dahai = Hai(2)
         pon = Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(1), from_who=Zaichi.KAMICHA)
         with self.assertRaises(ValueError):
@@ -127,7 +127,7 @@ class TestDaiminkan(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         game.last_dahai = Hai(3)
         daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(3), from_who=Zaichi.KAMICHA)
         player.daiminkan(daiminkan)
@@ -140,7 +140,7 @@ class TestDaiminkan(unittest.TestCase):
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
         game.last_dahai = Hai(3)
         daiminkan = Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), from_who=Zaichi.KAMICHA)
         with self.assertRaises(ValueError):
@@ -290,7 +290,7 @@ class TestListChiiCandidates(unittest.TestCase):
 
             player.juntehai = juntehai
             game.last_dahai = stolen
-            game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+            game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
             candidates = map(simplify_huuro, player.list_chii_candidates())
             expected = simplify_huuro(Chii(hais=hais, stolen=stolen))
@@ -303,7 +303,7 @@ class TestListChiiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_list([0, 4, 134, 135])
         game.last_dahai = Hai(8)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_chii_candidates()), 1)
@@ -317,7 +317,7 @@ class TestListChiiCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_list([0, 4, 134, 135])
         game.last_dahai = Hai(8)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         player.is_riichi_completed = False
         self.assertEqual(len(player.list_chii_candidates()), 1)
@@ -330,7 +330,7 @@ class TestListChiiCandidates(unittest.TestCase):
         player = game.players[0]
 
         game.last_dahai = Hai(10)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         player.juntehai = HaiGroup.from_list([0, 4, 8, 9, 133, 134, 135])
         self.assertEqual(len(player.list_chii_candidates()), 1)
@@ -357,7 +357,7 @@ class TestListPonCandidates(unittest.TestCase):
 
             player.juntehai = juntehai
             game.last_dahai = stolen
-            game.last_teban = player.get_zaseki_from_zaichi(from_who)
+            game.teban = player.get_zaseki_from_zaichi(from_who)
 
             candidates = map(simplify_huuro, player.list_pon_candidates())
             expected = simplify_huuro(Pon(hais=hais, stolen=stolen, from_who=from_who))
@@ -370,7 +370,7 @@ class TestListPonCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_list([0, 1, 134, 135])
         game.last_dahai = Hai(2)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_pon_candidates()), 1)
@@ -384,7 +384,7 @@ class TestListPonCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_list([0, 1, 134, 135])
         game.last_dahai = Hai(2)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         player.is_riichi_completed = False
         self.assertEqual(len(player.list_pon_candidates()), 1)
@@ -411,7 +411,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
 
             player.juntehai = juntehai
             game.last_dahai = stolen
-            game.last_teban = player.get_zaseki_from_zaichi(from_who)
+            game.teban = player.get_zaseki_from_zaichi(from_who)
 
             candidates = map(simplify_huuro, player.list_daiminkan_candidates())
             expected = simplify_huuro(Daiminkan(hais=hais, stolen=stolen, from_who=from_who))
@@ -424,7 +424,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_list([0, 1, 2, 135])
         game.last_dahai = Hai(3)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         game.yama.tsumo_hais = [Hai(i) for i in range(1)]
         self.assertEqual(len(player.list_daiminkan_candidates()), 1)
@@ -438,7 +438,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
 
         player.juntehai = HaiGroup.from_list([0, 1, 2, 135])
         game.last_dahai = Hai(3)
-        game.last_teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         player.is_riichi_completed = False
         self.assertEqual(len(player.list_daiminkan_candidates()), 1)
@@ -453,7 +453,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
 
         player1.juntehai = HaiGroup.from_list([0, 1, 2, 135])
         game.last_dahai = Hai(3)
-        game.last_teban = player1.get_zaseki_from_zaichi(Zaichi.KAMICHA)
+        game.teban = player1.get_zaseki_from_zaichi(Zaichi.KAMICHA)
 
         player2.huuros = []
         self.assertEqual(len(player1.list_daiminkan_candidates()), 1)

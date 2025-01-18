@@ -147,7 +147,7 @@ class Player:
         raise ValueError("Invalid Ankan")
 
     def list_chii_candidates(self) -> list[Chii]:
-        if self.game.last_dahai is None or self.game.last_teban is None:
+        if self.game.last_dahai is None:
             raise Exception()
 
         # Not enoguh yama
@@ -199,7 +199,7 @@ class Player:
         return candidates
 
     def list_pon_candidates(self) -> list[Pon]:
-        if self.game.last_dahai is None or self.game.last_teban is None:
+        if self.game.last_dahai is None:
             raise Exception()
 
         # Not enough yama
@@ -211,7 +211,7 @@ class Player:
             return []
 
         stolen = self.game.last_dahai
-        from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
+        from_who = self.get_zaichi_from_zaseki(self.game.teban)
 
         candidates = []
         b = []
@@ -232,7 +232,7 @@ class Player:
         return candidates
 
     def list_daiminkan_candidates(self) -> list[Daiminkan]:
-        if self.game.last_dahai is None or self.game.last_teban is None:
+        if self.game.last_dahai is None:
             raise Exception()
 
         # Not enough yama
@@ -253,7 +253,7 @@ class Player:
             return []
 
         stolen = self.game.last_dahai
-        from_who = self.get_zaichi_from_zaseki(self.game.last_teban)
+        from_who = self.get_zaichi_from_zaseki(self.game.teban)
 
         candidates = []
         hais = [hai for hai in self.juntehai if hai.suit == stolen.suit and hai.number == stolen.number]
