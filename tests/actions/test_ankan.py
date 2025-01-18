@@ -27,6 +27,11 @@ class TestEq(unittest.TestCase):
         ankan2 = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
         self.assertEqual(ankan1, ankan2)
 
+    def test_with_ankan_having_different_hais(self):
+        ankan1 = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
+        ankan2 = Ankan(hais=HaiGroup.from_list([4, 5, 6, 7]))
+        self.assertNotEqual(ankan1, ankan2)
+
     def test_with_int(self):
         ankan = Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))
         self.assertNotEqual(ankan, 0)

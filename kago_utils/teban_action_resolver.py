@@ -53,40 +53,30 @@ class TebanActionResolver:
         self.choice[self.game.teban_player.id] = None
 
     def register_tsumoho(self, player: Player, tsumoho: Tsumoho) -> None:
-        if player != self.game.teban_player:
-            return
         if self.choice[player.id] is not None:
             return
         if tsumoho in self.tsumoho_candidates[player.id]:
             self.choice[player.id] = tsumoho
 
     def register_riichi(self, player: Player, riichi: Riichi) -> None:
-        if player != self.game.teban_player:
-            return
         if self.choice[player.id] is not None:
             return
         if riichi in self.riichi_candidates[player.id]:
             self.choice[player.id] = riichi
 
     def register_ankan(self, player: Player, ankan: Ankan) -> None:
-        if player != self.game.teban_player:
-            return
         if self.choice[player.id] is not None:
             return
         if ankan in self.ankan_candidates[player.id]:
             self.choice[player.id] = ankan
 
     def register_kakan(self, player: Player, kakan: Kakan) -> None:
-        if player != self.game.teban_player:
-            return
         if self.choice[player.id] is not None:
             return
         if kakan in self.kakan_candidates[player.id]:
             self.choice[player.id] = kakan
 
     def register_dahai(self, player: Player, dahai: Dahai) -> None:
-        if player != self.game.teban_player:
-            return
         if self.choice[player.id] is not None:
             return
         if dahai in self.dahai_candidates[player.id]:

@@ -101,6 +101,21 @@ class TestResolve(unittest.TestCase):
         resolver.register_dahai(player, resolver.dahai_candidates[player.id][0])
         self.assertIsInstance(resolver.choice[player.id], Dahai)
 
+    def test_when_choice_is_already_registered(self):
+        game = game_factory()
+        player = game.teban_player
+        resolver = game.teban_action_resolver
+
+        player.juntehai = HaiGroup.from_code("123456789m11122z")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+
+        resolver.prepare()
+        resolver.register_tsumoho(player, resolver.tsumoho_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Tsumoho)
+
+        resolver.register_dahai(player, resolver.dahai_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Tsumoho)
+
 
 class TestListTsumohoCandidates(unittest.TestCase):
     def test(self):
