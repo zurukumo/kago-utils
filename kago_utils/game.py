@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from kago_utils.actions import Ankan, Dahai, Riichi, Tsumoho, Waiting
+from kago_utils.actions import Ankan, Dahai, Daiminkan, Kakan, Riichi, Tsumoho, Waiting
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
 from kago_utils.player import Player
@@ -160,3 +160,12 @@ class Game:
     @property
     def teban_player(self) -> Player:
         return self.players[self.teban]
+
+    @property
+    def kan_count(self) -> int:
+        count = 0
+        for player in self.players:
+            for huuro in player.huuros:
+                if isinstance(huuro, (Ankan, Daiminkan, Kakan)):
+                    count += 1
+        return count

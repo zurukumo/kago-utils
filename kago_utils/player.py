@@ -244,12 +244,7 @@ class Player:
             return []
 
         # Four kans exist
-        n_kan = 0
-        for player in self.game.players:
-            for huuro in player.huuros:
-                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
-                    n_kan += 1
-        if n_kan >= 4:
+        if self.game.kan_count >= 4:
             return []
 
         stolen = self.game.last_dahai

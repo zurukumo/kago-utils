@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi, Tsumoho, Waiting
+from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho, Waiting
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
@@ -147,13 +147,7 @@ class TebanActionResolver:
             return []
 
         # Four kans exist
-        # TODO: Move n_kan to `Game` class
-        n_kan = 0
-        for p in self.game.players:
-            for huuro in p.huuros:
-                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
-                    n_kan += 1
-        if n_kan >= 4:
+        if self.game.kan_count >= 4:
             return []
 
         candidates = []
@@ -186,13 +180,7 @@ class TebanActionResolver:
             return []
 
         # Four kans exist
-        # TODO: Move n_kan to `Game` class
-        n_kan = 0
-        for p in self.game.players:
-            for huuro in p.huuros:
-                if isinstance(huuro, (Kakan, Daiminkan, Ankan)):
-                    n_kan += 1
-        if n_kan >= 4:
+        if self.game.kan_count >= 4:
             return []
 
         candidates = []
