@@ -3,7 +3,7 @@ import os
 import pickle
 import unittest
 
-from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi
+from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi, Tsumoho
 from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
@@ -25,6 +25,9 @@ def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
 def game_factory():
     game = Game()
     game.yama.generate()
+    game.kyoku = 0
+    game.honba = 0
+    game.kyoutaku = 0
     game.teban = 0
 
     for i in range(4):
@@ -32,6 +35,45 @@ def game_factory():
         game.add_player(player)
 
     return game
+
+
+class TestListTsumohoCandidates(unittest.TestCase):
+    def test_list_tsumoho_candidates(self):
+        game = game_factory()
+        player = game.players[0]
+        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+
+        player.juntehai = HaiGroup.from_code("123456789m11p123s")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+        self.assertEqual(resolver.list_tsumoho_candidates(player), [Tsumoho()])
+
+    def test_list_tsumoho_candidates_when_not_agari(self):
+        game = game_factory()
+        player = game.players[0]
+        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+
+        player.juntehai = HaiGroup.from_code("123456789m11p123s")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+        self.assertEqual(resolver.list_tsumoho_candidates(player), [Tsumoho()])
+
+        player.juntehai = HaiGroup.from_code("123456789m11p122s")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+        self.assertEqual(resolver.list_tsumoho_candidates(player), [])
+
+    def test_list_tsumoho_candidates_when_not_yakuari(self):
+        game = game_factory()
+        player = game.players[0]
+        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+
+        player.juntehai = HaiGroup.from_code("234567m22p234s")
+        player.huuros = [Chii(hais=HaiGroup.from_code("678s"), stolen=HaiGroup.from_code("6s")[0])]
+        player.last_tsumo = HaiGroup.from_code("2p")[0]
+        self.assertEqual(resolver.list_tsumoho_candidates(player), [Tsumoho()])
+
+        player.juntehai = HaiGroup.from_code("123456m22p234s")
+        player.huuros = [Chii(hais=HaiGroup.from_code("678s"), stolen=HaiGroup.from_code("6s")[0])]
+        player.last_tsumo = HaiGroup.from_code("2p")[0]
+        self.assertEqual(resolver.list_tsumoho_candidates(player), [])
 
 
 class TestListRiichiCandidates(unittest.TestCase):

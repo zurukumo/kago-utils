@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi, Tsumoho, Waiting
+from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.shanten_calculator import ShantenCalculator
@@ -99,6 +100,14 @@ class TsumohoRiichiAnkanKakanDahaiResolver:
         return Waiting()
 
     def list_tsumoho_candidates(self, player: Player) -> list[Tsumoho]:
+        # Not agari
+        if ShantenCalculator(player.juntehai).shanten != -1:
+            return []
+
+        # Not yakuari
+        if not AgariCalculator(self.game, player).ten > 0:
+            return []
+
         return [Tsumoho()]
 
     def list_riichi_candidates(self, player: Player) -> list[Riichi]:
