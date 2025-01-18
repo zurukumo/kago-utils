@@ -1,8 +1,8 @@
 import unittest
 
+from kago_utils.actions import Chii
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
-from kago_utils.huuro import Chii
 from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 

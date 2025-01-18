@@ -3,11 +3,10 @@ import os
 import pickle
 import unittest
 
-from kago_utils.action import Dahai, Riichi
+from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi
 from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
-from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
 from kago_utils.player import Player
 from kago_utils.zaichi import Zaichi
 

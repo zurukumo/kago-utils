@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from typing import Literal
 
-from kago_utils.action import Dahai, Riichi, Tsumoho, Waiting
+from kago_utils.actions import Ankan, Dahai, Riichi, Tsumoho, Waiting
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
-from kago_utils.huuro import Ankan
 from kago_utils.player import Player
 from kago_utils.tsumoho_riichi_ankan_kakan_dahai_resolver import TsumohoRiichiAnkanKakanDahaiResolver
 from kago_utils.yama import Yama

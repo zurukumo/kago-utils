@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from kago_utils.action import Dahai, Riichi, Tsumoho, Waiting
+from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi, Tsumoho, Waiting
 from kago_utils.hai_group import HaiGroup
-from kago_utils.huuro import Ankan, Chii, Daiminkan, Kakan, Pon
 from kago_utils.player import Player
 from kago_utils.shanten_calculator import ShantenCalculator
 
