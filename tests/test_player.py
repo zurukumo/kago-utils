@@ -98,7 +98,7 @@ class TestKakan(unittest.TestCase):
         player.last_tsumo = Hai(3)
         player.huuros = [pon]
 
-        game.tsumoho_riichi_ankan_kakan_dahai_resolver.prepare()
+        game.teban_action_resolver.prepare()
         player.kakan(kakan)
         self.assertIn(kakan, player.huuros)
         self.assertNotIn(pon, player.huuros)
@@ -116,7 +116,7 @@ class TestKakan(unittest.TestCase):
         player.last_tsumo = Hai(3)
         player.huuros = [pon]
 
-        game.tsumoho_riichi_ankan_kakan_dahai_resolver.prepare()
+        game.teban_action_resolver.prepare()
         with self.assertRaises(ValueError):
             player.kakan(kakan)
 
@@ -158,7 +158,7 @@ class TestAnkan(unittest.TestCase):
         player.juntehai = HaiGroup.from_list([0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
         player.last_tsumo = Hai(3)
 
-        game.tsumoho_riichi_ankan_kakan_dahai_resolver.prepare()
+        game.teban_action_resolver.prepare()
         player.ankan(ankan)
         self.assertIn(ankan, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
@@ -174,7 +174,7 @@ class TestAnkan(unittest.TestCase):
         player.last_tsumo = Hai(12)
         player.is_riichi_completed = True
 
-        game.tsumoho_riichi_ankan_kakan_dahai_resolver.prepare()
+        game.teban_action_resolver.prepare()
         with self.assertRaises(ValueError):
             player.ankan(ankan)
 

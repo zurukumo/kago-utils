@@ -109,7 +109,7 @@ class Player:
         raise ValueError("Invalid Pon")
 
     def kakan(self, kakan: Kakan) -> None:
-        for candaidate in self.game.tsumoho_riichi_ankan_kakan_dahai_resolver.kakan_candidates[self.id]:
+        for candaidate in self.game.teban_action_resolver.kakan_candidates[self.id]:
             if (
                 kakan.hais.to_code() == candaidate.hais.to_code()
                 and kakan.stolen == candaidate.stolen
@@ -138,7 +138,7 @@ class Player:
         raise ValueError("Invalid Daiminkan")
 
     def ankan(self, ankan: Ankan) -> None:
-        for candidate in self.game.tsumoho_riichi_ankan_kakan_dahai_resolver.ankan_candidates[self.id]:
+        for candidate in self.game.teban_action_resolver.ankan_candidates[self.id]:
             if ankan.hais.to_code() == candidate.hais.to_code():
                 self.huuros.append(ankan)
                 self.juntehai -= ankan.hais

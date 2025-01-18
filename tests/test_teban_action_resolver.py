@@ -41,7 +41,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
     def test(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p123s")
         player.last_tsumo = HaiGroup.from_code("1m")[0]
@@ -50,7 +50,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
     def test_when_not_agari(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p123s")
         player.last_tsumo = HaiGroup.from_code("1m")[0]
@@ -63,7 +63,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
     def test_when_not_yakuari(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("234567m22p234s")
         player.huuros = [Chii(hais=HaiGroup.from_code("678s"), stolen=HaiGroup.from_code("6s")[0])]
@@ -80,7 +80,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("12346666778899m")
         self.assertEqual(resolver.list_riichi_candidates(player), [Riichi()])
@@ -88,7 +88,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test_when_not_menzen(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456m11p112s")
 
@@ -101,7 +101,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
@@ -114,7 +114,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
@@ -126,7 +126,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test_when_ten_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
@@ -139,7 +139,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
 
@@ -152,7 +152,7 @@ class TestListRiichiCandidates(unittest.TestCase):
     def test_when_not_tenpai(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p111s")
         self.assertEqual(resolver.list_riichi_candidates(player), [Riichi()])
@@ -165,10 +165,10 @@ class TestListAnkanCandidates(unittest.TestCase):
     def test(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/tsumoho_riichi_ankan_kakan_dahai_resolver/ankan.pickle.gz")
+        filepath = os.path.join(current_dir, "data/teban_action_resolver/ankan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
@@ -187,7 +187,7 @@ class TestListAnkanCandidates(unittest.TestCase):
     def test_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("0555m7z")
         player.last_tsumo = HaiGroup.from_code("0m")[0]
@@ -200,7 +200,7 @@ class TestListAnkanCandidates(unittest.TestCase):
     def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("0555m7z")
         player.last_tsumo = HaiGroup.from_code("0m")[0]
@@ -215,7 +215,7 @@ class TestListAnkanCandidates(unittest.TestCase):
         game = game_factory()
         player1 = game.players[0]
         player2 = game.players[1]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player1.juntehai = HaiGroup.from_code("0555m7z")
         player1.last_tsumo = HaiGroup.from_code("0m")[0]
@@ -234,7 +234,7 @@ class TestListAnkanCandidates(unittest.TestCase):
     def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         # Ankan without tsumohai
         player.juntehai = HaiGroup.from_code("1111234m1112223z")
@@ -281,10 +281,10 @@ class TestListKakanCandidates(unittest.TestCase):
     def test(self):
         game = game_factory()
         player = game.teban_player
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/tsumoho_riichi_ankan_kakan_dahai_resolver/kakan.pickle.gz")
+        filepath = os.path.join(current_dir, "data/teban_action_resolver/kakan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
@@ -313,7 +313,7 @@ class TestListKakanCandidates(unittest.TestCase):
     def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.teban_player
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_list([3, 135])
         player.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)]
@@ -328,7 +328,7 @@ class TestListKakanCandidates(unittest.TestCase):
         game = game_factory()
         player1 = game.teban_player
         player2 = player1.kamicha
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player1.juntehai = HaiGroup.from_list([3, 135])
         player1.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(2), from_who=Zaichi.KAMICHA)]
@@ -349,7 +349,7 @@ class TestListDahaiCandidates(unittest.TestCase):
     def test(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
         self.assertEqual(
@@ -359,7 +359,7 @@ class TestListDahaiCandidates(unittest.TestCase):
     def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123456789m11p112s")
         player.last_tsumo = HaiGroup.from_code("1m")[0]
@@ -369,7 +369,7 @@ class TestListDahaiCandidates(unittest.TestCase):
     def test_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("12346666778899m")
         player.riichi()
@@ -380,7 +380,7 @@ class TestListDahaiCandidates(unittest.TestCase):
     def test_right_after_calling_chii(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("123m1112223334z")
         game.last_dahai = HaiGroup.from_code("4m")[0]
@@ -393,7 +393,7 @@ class TestListDahaiCandidates(unittest.TestCase):
     def test_right_after_calling_pon(self):
         game = game_factory()
         player = game.players[0]
-        resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
+        resolver = game.teban_action_resolver
 
         player.juntehai = HaiGroup.from_code("555m1112223334z")
         game.last_dahai = HaiGroup.from_code("0m")[0]

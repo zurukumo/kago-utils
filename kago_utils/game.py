@@ -6,16 +6,16 @@ from kago_utils.actions import Ankan, Dahai, Riichi, Tsumoho, Waiting
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
 from kago_utils.player import Player
-from kago_utils.tsumoho_riichi_ankan_kakan_dahai_resolver import TsumohoRiichiAnkanKakanDahaiResolver
+from kago_utils.teban_action_resolver import TebanActionResolver
 from kago_utils.yama import Yama
 
 
 class Game:
     players: list[Player]
     yama: Yama
-    tsumoho_riichi_ankan_kakan_dahai_resolver: TsumohoRiichiAnkanKakanDahaiResolver
+    teban_action_resolver: TebanActionResolver
 
-    state: Literal["init_hanchan", "init_kyoku", "tsumo", "wait_tsumoho_riichi_ankan_dahai", "rinshan_tsumo", "agari"]
+    state: Literal["init_hanchan", "init_kyoku", "tsumo", "wait_teban_action", "rinshan_tsumo", "agari"]
 
     kyoku: int
     honba: int
@@ -28,7 +28,7 @@ class Game:
     __slots__ = (
         "players",
         "yama",
-        "tsumoho_riichi_ankan_kakan_dahai_resolver",
+        "teban_action_resolver",
         "state",
         "kyoku",
         "honba",
@@ -41,7 +41,7 @@ class Game:
     def __init__(self) -> None:
         self.players = []
         self.yama = Yama()
-        self.tsumoho_riichi_ankan_kakan_dahai_resolver = TsumohoRiichiAnkanKakanDahaiResolver(self)
+        self.teban_action_resolver = TebanActionResolver(self)
 
         self.state = "init_hanchan"
 
@@ -53,8 +53,8 @@ class Game:
                 self.init_kyoku()
             case "tsumo":
                 self.tsumo()
-            case "wait_tsumoho_riichi_ankan_dahai":
-                self.wait_tsumoho_riichi_ankan_dahai()
+            case "wait_teban_action":
+                self.wait_teban_action()
             case "rinshan_tsumo":
                 self.rinshan_tsumo()
 
@@ -89,22 +89,22 @@ class Game:
         self.teban_player.tsumo(tsumo_hai)
 
         # Prepare tsumoho, riichi, ankan and dahai candidates
-        self.tsumoho_riichi_ankan_kakan_dahai_resolver.prepare()
+        self.teban_action_resolver.prepare()
 
         if isinstance(self.teban_player, Bot):
-            self.teban_player.select_tsumoho_riichi_ankan_dahai()
+            self.teban_player.select_teban_action()
 
-        self.state = "wait_tsumoho_riichi_ankan_dahai"
+        self.state = "wait_teban_action"
 
-    def wait_tsumoho_riichi_ankan_dahai(self) -> None:
-        action = self.tsumoho_riichi_ankan_kakan_dahai_resolver.resolve()
+    def wait_teban_action(self) -> None:
+        action = self.teban_action_resolver.resolve()
         match action:
             case Tsumoho():
                 self.teban_player.tsumoho()
                 self.state = "agari"
             case Riichi():
                 self.teban_player.riichi()
-                self.state = "wait_tsumoho_riichi_ankan_dahai"
+                self.state = "wait_teban_action"
             case Ankan():
                 self.teban_player.ankan(action)
                 self.state = "rinshan_tsumo"
@@ -121,12 +121,12 @@ class Game:
         self.teban_player.tsumo(tsumo_hai)
 
         # Prepare tsumoho, riichi, ankan and dahai candidates
-        self.tsumoho_riichi_ankan_kakan_dahai_resolver.prepare()
+        self.teban_action_resolver.prepare()
 
         if isinstance(self.teban_player, Bot):
-            self.teban_player.select_tsumoho_riichi_ankan_dahai()
+            self.teban_player.select_teban_action()
 
-        self.state = "wait_tsumoho_riichi_ankan_dahai"
+        self.state = "wait_teban_action"
 
     #######################
     ### Utility methods ###

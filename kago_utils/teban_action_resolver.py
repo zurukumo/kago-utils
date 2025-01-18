@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from kago_utils.game import Game
 
 
-class TsumohoRiichiAnkanKakanDahaiResolver:
+class TebanActionResolver:
     game: Game
     tsumoho_candidates: dict[str, list[Tsumoho]]
     riichi_candidates: dict[str, list[Riichi]]
