@@ -94,7 +94,7 @@ class TestKakan(unittest.TestCase):
         kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(3), from_who=Zaichi.KAMICHA)
 
         player = game.players[0]
-        player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25])
         player.last_tsumo = Hai(3)
         player.huuros = [pon]
 
@@ -102,7 +102,7 @@ class TestKakan(unittest.TestCase):
         player.kakan(kakan)
         self.assertIn(kakan, player.huuros)
         self.assertNotIn(pon, player.huuros)
-        self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24]))
+        self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25]))
 
     def test_kakan_with_invalid_kakan(self):
         game = game_factory()
@@ -112,7 +112,7 @@ class TestKakan(unittest.TestCase):
         kakan = Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(2), added=Hai(1), from_who=Zaichi.KAMICHA)
 
         player = game.players[0]
-        player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
+        player.juntehai = HaiGroup.from_list([3, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25])
         player.last_tsumo = Hai(3)
         player.huuros = [pon]
 
