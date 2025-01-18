@@ -77,8 +77,8 @@ class AgariCalculator:
     huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     zentehai: HaiGroup
 
-    is_tsumo_agari: bool
-    agarihai: Hai
+    is_tsumoho: bool
+    agari_hai: Hai
     from_who: int
 
     yaku: dict[str, int]
@@ -93,10 +93,10 @@ class AgariCalculator:
         "is_daburon",
         "juntehai",
         "huuros",
-        "agarihai",
+        "agari_hai",
         "from_who",
         "zentehai",
-        "is_tsumo_agari",
+        "is_tsumoho",
         "yaku",
         "ten",
         "han",
@@ -116,21 +116,21 @@ class AgariCalculator:
             if player.last_tsumo is None:
                 raise Exception()
 
-            self.agarihai = player.last_tsumo
+            self.agari_hai = player.last_tsumo
             self.from_who = player.zaseki
         else:
             if game.last_dahai is None or game.last_teban is None:
                 raise Exception()
 
             self.juntehai += game.last_dahai
-            self.agarihai = game.last_dahai
+            self.agari_hai = game.last_dahai
             self.from_who = game.last_teban
 
         self.zentehai = copy.deepcopy(self.juntehai)
         for huuro in self.huuros:
             self.zentehai += huuro.hais
 
-        self.is_tsumo_agari = self.player.zaseki == self.from_who
+        self.is_tsumoho = self.player.zaseki == self.from_who
 
         self.calculate_agari()
 
@@ -163,7 +163,7 @@ class AgariCalculator:
 
         # Calculate ten for regular
         for decomposed_tehai in TehaiDecomposer(
-            self.juntehai, self.huuros, self.agarihai, self.is_tsumo_agari
+            self.juntehai, self.huuros, self.agari_hai, self.is_tsumoho
         ).decompose():
             hu, is_pinhu = self.calculate_hu(decomposed_tehai)
             bubun_yaku = self.get_bubun_yaku_for_regular(decomposed_tehai, is_pinhu)
@@ -215,26 +215,26 @@ class AgariCalculator:
         # Hu by machi type
         for block in blocks:
             # Tanki
-            if block.type == "jantou" and block.agarihai is not None:
+            if block.type == "jantou" and block.agari_hai is not None:
                 hu += 2
             # Penchan(123)
-            if block.type == "shuntsu" and block.hais[0] % 9 == 0 and block.hais[2] == block.agarihai:
+            if block.type == "shuntsu" and block.hais[0] % 9 == 0 and block.hais[2] == block.agari_hai:
                 hu += 2
             # Penchan(789)
-            if block.type == "shuntsu" and block.hais[2] % 9 == 8 and block.hais[0] == block.agarihai:
+            if block.type == "shuntsu" and block.hais[2] % 9 == 8 and block.hais[0] == block.agari_hai:
                 hu += 2
             # Kanchan
-            if block.type == "shuntsu" and block.hais[1] == block.agarihai:
+            if block.type == "shuntsu" and block.hais[1] == block.agari_hai:
                 hu += 2
 
         is_pinhu = hu == 20 and self.player.is_menzen
 
         # Hu by agari type
         # Tsumo(exception for pinhu)
-        if self.is_tsumo_agari and not is_pinhu:
+        if self.is_tsumoho and not is_pinhu:
             hu += 2
         # Menzen ron
-        if not self.is_tsumo_agari and self.player.is_menzen:
+        if not self.is_tsumoho and self.player.is_menzen:
             hu += 10
 
         # Adjust hu when it is kui pinhu
@@ -270,7 +270,7 @@ class AgariCalculator:
 
     def calculate_ten_movement(self, ten: int) -> list[int]:
         ten_movement = [0, 0, 0, 0]
-        if self.is_tsumo_agari:
+        if self.is_tsumoho:
             # Tsumo and Pao
             if self.player.pao_sekinin_player is not None:
                 ten_movement[self.player.zaseki] = ten + self.game.honba * 3 + self.game.kyoutaku * 10
@@ -364,7 +364,7 @@ class AgariCalculator:
                     counter[i] >= 3
                     and counter[i + 8] >= 3
                     and all(counter[i : i + 9])
-                    and counter[self.agarihai.id // 4] in [2, 4]
+                    and counter[self.agari_hai.id // 4] in [2, 4]
                 ):
                     zenbu_yaku["純正九蓮宝燈"] = 13
 
@@ -459,7 +459,7 @@ class AgariCalculator:
 
         if (
             sum(b.type in ("koutsu", "kantsu") and b.minan == "an" for b in blocks) == 4
-            and sum(b.type == "jantou" and b.agarihai is not None for b in blocks) == 1
+            and sum(b.type == "jantou" and b.agari_hai is not None for b in blocks) == 1
         ):
             bubun_yaku["四暗刻単騎"] = 13
 
@@ -481,7 +481,7 @@ class AgariCalculator:
         if all(counter[i] in [1, 2] for i in AgariCalculator.YAOCHUHAI):
             bubun_yaku["国士無双"] = 13
 
-        if all(counter[i] in [1, 2] for i in AgariCalculator.YAOCHUHAI) and counter[self.agarihai.id // 4] == 2:
+        if all(counter[i] in [1, 2] for i in AgariCalculator.YAOCHUHAI) and counter[self.agari_hai.id // 4] == 2:
             bubun_yaku["国士無双13面"] = 13
 
         return bubun_yaku
