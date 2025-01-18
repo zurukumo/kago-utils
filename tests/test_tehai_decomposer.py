@@ -7,7 +7,7 @@ from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 
 class TestDecompose(unittest.TestCase):
-    def test_decompose(self):
+    def test_with_normal_tehai(self):
         juntehai = HaiGroup.from_code("111222333m66677z")
         huuros = []
         decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[0], is_tsumoho=True).decompose())
@@ -34,7 +34,7 @@ class TestDecompose(unittest.TestCase):
             ],
         )
 
-    def test_decompose_with_penchan_kanchan_tehai(self):
+    def test_with_penchan_kanchan_tehai(self):
         juntehai = HaiGroup.from_code("122334m55566677z")
         huuros = []
         decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[3], is_tsumoho=True).decompose())
@@ -61,7 +61,7 @@ class TestDecompose(unittest.TestCase):
             ],
         )
 
-    def test_decompose_with_huuros(self):
+    def test_with_huuros(self):
         juntehai = HaiGroup.from_code("112233m66677z")
         huuros = [Chii(hais=HaiGroup.from_list([2, 6, 10]), stolen=Hai(2))]
         decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[0], is_tsumoho=True).decompose())
@@ -78,7 +78,7 @@ class TestDecompose(unittest.TestCase):
             ],
         )
 
-    def test_decompose_when_ron_agari(self):
+    def test_when_ronho(self):
         juntehai = HaiGroup.from_code("111m44455566677z")
         huuros = []
         decomposed_tehais = list(TehaiDecomposer(juntehai, huuros, juntehai[0], is_tsumoho=False).decompose())

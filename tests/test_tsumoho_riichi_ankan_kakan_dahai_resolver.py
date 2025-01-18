@@ -38,7 +38,7 @@ def game_factory():
 
 
 class TestListTsumohoCandidates(unittest.TestCase):
-    def test_list_tsumoho_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -47,7 +47,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
         player.last_tsumo = HaiGroup.from_code("1m")[0]
         self.assertEqual(resolver.list_tsumoho_candidates(player), [Tsumoho()])
 
-    def test_list_tsumoho_candidates_when_not_agari(self):
+    def test_when_not_agari(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -60,7 +60,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
         player.last_tsumo = HaiGroup.from_code("1m")[0]
         self.assertEqual(resolver.list_tsumoho_candidates(player), [])
 
-    def test_list_tsumoho_candidates_when_not_yakuari(self):
+    def test_when_not_yakuari(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -77,7 +77,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
 
 
 class TestListRiichiCandidates(unittest.TestCase):
-    def test_list_riichi_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -85,7 +85,7 @@ class TestListRiichiCandidates(unittest.TestCase):
         player.juntehai = HaiGroup.from_code("12346666778899m")
         self.assertEqual(resolver.list_riichi_candidates(player), [Riichi()])
 
-    def test_list_riichi_candidates_when_not_menzen(self):
+    def test_when_not_menzen(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -98,7 +98,7 @@ class TestListRiichiCandidates(unittest.TestCase):
         player.huuros = [Chii(hais=HaiGroup.from_code("789s"), stolen=HaiGroup.from_code("789s")[0])]
         self.assertEqual(resolver.list_riichi_candidates(player), [])
 
-    def test_list_riichi_candidates_when_riichi_is_completed(self):
+    def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -111,7 +111,7 @@ class TestListRiichiCandidates(unittest.TestCase):
         player.is_riichi_completed = True
         self.assertEqual(resolver.list_riichi_candidates(player), [])
 
-    def test_list_riichi_candidates_right_after_calling_riichi(self):
+    def test_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -123,7 +123,7 @@ class TestListRiichiCandidates(unittest.TestCase):
         player.riichi()
         self.assertEqual(resolver.list_riichi_candidates(player), [])
 
-    def test_list_riichi_candidates_when_ten_is_not_enough(self):
+    def test_when_ten_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -136,7 +136,7 @@ class TestListRiichiCandidates(unittest.TestCase):
         player.ten = 900
         self.assertEqual(resolver.list_riichi_candidates(player), [])
 
-    def test_list_riichi_candidates_when_yama_is_not_enough(self):
+    def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -149,7 +149,7 @@ class TestListRiichiCandidates(unittest.TestCase):
         game.yama.tsumo_hais = [Hai(i) for i in range(3)]
         self.assertEqual(resolver.list_riichi_candidates(player), [])
 
-    def test_list_riichi_candidates_when_not_tenpai(self):
+    def test_when_not_tenpai(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -162,7 +162,7 @@ class TestListRiichiCandidates(unittest.TestCase):
 
 
 class TestListAnkanCandidates(unittest.TestCase):
-    def test_list_ankan_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -184,7 +184,7 @@ class TestListAnkanCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
-    def test_list_ankan_candidates_right_after_calling_riichi(self):
+    def test_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -197,7 +197,7 @@ class TestListAnkanCandidates(unittest.TestCase):
         player.riichi()
         self.assertEqual(len(resolver.list_ankan_candidates(player)), 0)
 
-    def test_list_ankan_candidates_when_yama_is_not_enough(self):
+    def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -211,7 +211,7 @@ class TestListAnkanCandidates(unittest.TestCase):
         game.yama.tsumo_hais = []
         self.assertEqual(len(resolver.list_ankan_candidates(player)), 0)
 
-    def test_list_ankan_candidates_when_four_kans_exist(self):
+    def test_when_four_kans_exist(self):
         game = game_factory()
         player1 = game.players[0]
         player2 = game.players[1]
@@ -231,7 +231,7 @@ class TestListAnkanCandidates(unittest.TestCase):
         ]
         self.assertEqual(len(resolver.list_ankan_candidates(player1)), 0)
 
-    def test_list_ankan_candidates_when_riichi_is_completed(self):
+    def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -278,7 +278,7 @@ class TestListAnkanCandidates(unittest.TestCase):
 
 
 class TestListKakanCandidates(unittest.TestCase):
-    def test_list_kakan_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.teban_player
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -310,7 +310,7 @@ class TestListKakanCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
-    def test_list_kakan_candidates_when_yama_is_not_enough(self):
+    def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.teban_player
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -324,7 +324,7 @@ class TestListKakanCandidates(unittest.TestCase):
         game.yama.tsumo_hais = []
         self.assertEqual(len(resolver.list_kakan_candidates(player)), 0)
 
-    def test_list_kakan_candidates_when_four_kans_exist(self):
+    def test_when_four_kans_exist(self):
         game = game_factory()
         player1 = game.teban_player
         player2 = player1.kamicha
@@ -346,7 +346,7 @@ class TestListKakanCandidates(unittest.TestCase):
 
 
 class TestListDahaiCandidates(unittest.TestCase):
-    def test_list_dahai_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -356,7 +356,7 @@ class TestListDahaiCandidates(unittest.TestCase):
             resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("123456789m11p112s")]
         )
 
-    def test_list_dahai_candidates_when_riichi_is_completed(self):
+    def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -366,7 +366,7 @@ class TestListDahaiCandidates(unittest.TestCase):
         player.is_riichi_completed = True
         self.assertEqual(resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("1m")])
 
-    def test_list_dahai_candidates_right_after_calling_riichi(self):
+    def test_right_after_calling_riichi(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -377,7 +377,7 @@ class TestListDahaiCandidates(unittest.TestCase):
             resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("14666699m")]
         )
 
-    def test_list_dahai_candidates_right_after_calling_chii(self):
+    def test_right_after_calling_chii(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver
@@ -390,7 +390,7 @@ class TestListDahaiCandidates(unittest.TestCase):
             resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]
         )
 
-    def test_list_dahai_candidates_right_after_calling_pon(self):
+    def test_right_after_calling_pon(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.tsumoho_riichi_ankan_kakan_dahai_resolver

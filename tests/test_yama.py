@@ -5,12 +5,12 @@ from kago_utils.yama import Yama
 
 
 class TestInit(unittest.TestCase):
-    def test_init(self):
+    def test(self):
         Yama()
 
 
 class TestGenerate(unittest.TestCase):
-    def test_generate(self):
+    def test(self):
         yama1 = Yama()
         yama1.generate()
 
@@ -25,7 +25,7 @@ class TestGenerate(unittest.TestCase):
 
 
 class TestTsumo(unittest.TestCase):
-    def test_tsumo(self):
+    def test(self):
         yama = Yama()
         yama.generate()
 
@@ -33,7 +33,7 @@ class TestTsumo(unittest.TestCase):
         self.assertIsInstance(tsumo_hai, Hai)
         self.assertEqual(len(yama.tsumo_hais), 121)
 
-    def test_tsumo_after_10_tsumo_and_2_rinshan_tsumo(self):
+    def test_after_10_tsumo_and_2_rinshan_tsumo(self):
         yama = Yama()
         yama.generate()
 
@@ -44,7 +44,7 @@ class TestTsumo(unittest.TestCase):
 
         yama.tsumo()
 
-    def test_tsumo_after_122_tsumo(self):
+    def test_after_122_tsumo(self):
         yama = Yama()
         yama.generate()
 
@@ -54,7 +54,7 @@ class TestTsumo(unittest.TestCase):
         with self.assertRaises(ValueError):
             yama.tsumo()
 
-    def test_tsumo_after_121_tsumo_and_1_rinshan_tsumo(self):
+    def test_after_121_tsumo_and_1_rinshan_tsumo(self):
         yama = Yama()
         yama.generate()
 
@@ -66,7 +66,7 @@ class TestTsumo(unittest.TestCase):
         with self.assertRaises(ValueError):
             yama.tsumo()
 
-    def test_tsumo_after_118_tsumo_and_4_rinshan_tsumo(self):
+    def test_after_118_tsumo_and_4_rinshan_tsumo(self):
         yama = Yama()
         yama.generate()
 
@@ -80,7 +80,7 @@ class TestTsumo(unittest.TestCase):
 
 
 class TestRinshanTsumo(unittest.TestCase):
-    def test_rinshan_tsumo(self):
+    def test(self):
         yama = Yama()
         yama.generate()
 
@@ -88,7 +88,7 @@ class TestRinshanTsumo(unittest.TestCase):
         self.assertIsInstance(rinshan_hai, Hai)
         self.assertEqual(len(yama.rinshan_hais), 3)
 
-    def test_rinshan_tsumo_after_3_rinshan_tsumo(self):
+    def test_after_3_rinshan_tsumo(self):
         yama = Yama()
         yama.generate()
 
@@ -97,7 +97,7 @@ class TestRinshanTsumo(unittest.TestCase):
 
         yama.rinshan_tsumo()
 
-    def test_rinshan_tsumo_after_4_rinshan_tsumo(self):
+    def test_after_4_rinshan_tsumo(self):
         yama = Yama()
         yama.generate()
 
@@ -109,7 +109,7 @@ class TestRinshanTsumo(unittest.TestCase):
 
 
 class TestOpenDoraHyoujiHai(unittest.TestCase):
-    def test_open_dora_hyouji_hai(self):
+    def test(self):
         yama = Yama()
         yama.generate()
 
@@ -119,8 +119,8 @@ class TestOpenDoraHyoujiHai(unittest.TestCase):
         self.assertEqual(yama.n_open_dora_hyouji_hais, 2)
 
 
-class TestOpenedDoraHyoujiHai(unittest.TestCase):
-    def test_opened_dora_hyouji_hais(self):
+class TestOpenedDoraHyoujiHais(unittest.TestCase):
+    def test(self):
         yama = Yama()
         yama.generate()
 
@@ -130,8 +130,8 @@ class TestOpenedDoraHyoujiHai(unittest.TestCase):
         self.assertEqual(len(yama.opened_dora_hyouji_hais), 2)
 
 
-class TestOpenedUradoraHyoujiHai(unittest.TestCase):
-    def test_opened_uradora_hyouji_hais(self):
+class TestOpenedUradoraHyoujiHais(unittest.TestCase):
+    def test(self):
         yama = Yama()
         yama.generate()
 
@@ -142,7 +142,7 @@ class TestOpenedUradoraHyoujiHai(unittest.TestCase):
 
 
 class TestRestTsumoCount(unittest.TestCase):
-    def test_rest_tsumo_count(self):
+    def test(self):
         yama = Yama()
         yama.generate()
 

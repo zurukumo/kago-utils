@@ -4,25 +4,25 @@ from kago_utils.hai import Hai
 
 
 class TestInit(unittest.TestCase):
-    def test_init_with_valid_id(self):
+    def test(self):
         for id in range(136):
             Hai(id)
 
-    def test_init_with_negative_id(self):
+    def test_with_negative_id(self):
         with self.assertRaises(ValueError):
             Hai(-1)
 
-    def test_init_with_too_large_id(self):
+    def test_with_too_large_id(self):
         with self.assertRaises(ValueError):
             Hai(136)
 
-    def test_init_with_float_id(self):
+    def test_with_float_id(self):
         with self.assertRaises(TypeError):
             Hai(0.0)
 
 
 class TestSuit(unittest.TestCase):
-    def test_suit(self):
+    def test(self):
         for id in range(36):
             self.assertEqual(Hai(id).suit, "m")
         for id in range(36, 72):
@@ -34,13 +34,13 @@ class TestSuit(unittest.TestCase):
 
 
 class TestNumber(unittest.TestCase):
-    def test_number(self):
+    def test(self):
         for id in range(136):
             self.assertEqual(Hai(id).number, (id // 4) % 9 + 1)
 
 
 class TestColor(unittest.TestCase):
-    def test_color(self):
+    def test(self):
         self.assertEqual(Hai(15).color, "b")
         self.assertEqual(Hai(16).color, "r")
         self.assertEqual(Hai(51).color, "b")
@@ -50,7 +50,7 @@ class TestColor(unittest.TestCase):
 
 
 class TestCode(unittest.TestCase):
-    def test_code(self):
+    def test(self):
         codes = (
             ["1m"] * 4
             + ["2m"] * 4
@@ -95,7 +95,7 @@ class TestCode(unittest.TestCase):
 
 
 class TestComparison(unittest.TestCase):
-    def test_comparison(self):
+    def test_with_hai(self):
         self.assertEqual(Hai(0), Hai(0))
         self.assertNotEqual(Hai(0), Hai(1))
         self.assertLess(Hai(0), Hai(1))
@@ -105,12 +105,12 @@ class TestComparison(unittest.TestCase):
         self.assertGreaterEqual(Hai(0), Hai(0))
         self.assertGreaterEqual(Hai(1), Hai(0))
 
-    def test_eq_with_int(self):
+    def test_with_int(self):
         self.assertNotEqual(Hai(0), 0)
 
 
 class TestRepr(unittest.TestCase):
-    def test_repr(self):
+    def test(self):
         self.assertEqual(repr(Hai(0)), "Hai(0)")
 
 

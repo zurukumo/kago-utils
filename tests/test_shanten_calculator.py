@@ -36,22 +36,22 @@ def calculate_shanten_external(juntehai: HaiGroup):
 
 
 class TestInit(unittest.TestCase):
-    def test_init(self):
+    def test(self):
         for juntehai_length in [1, 2, 4, 5, 7, 8, 10, 11, 13, 14]:
             juntehai = HaiGroup.from_list(list(range(juntehai_length)))
             ShantenCalculator(juntehai)
 
-    def test_init_with_juntehai_whose_length_is_invalid(self):
+    def test_when_juntehai_length_is_invalid(self):
         juntehai = HaiGroup.from_list(list(range(3)))
         with self.assertRaises(ValueError):
             ShantenCalculator(juntehai)
 
-    def test_init_with_juntehai_whose_length_is_too_long(self):
+    def test_when_juntehai_length_is_too_long(self):
         juntehai = HaiGroup.from_list(list(range(15)))
         with self.assertRaises(ValueError):
             ShantenCalculator(juntehai)
 
-    def test_init_with_juntehai_having_same_hai(self):
+    def test_when_juntehai_having_same_hai(self):
         juntehai = HaiGroup.from_list(list(range(12)) + [12] * 2)
         with self.assertRaises(ValueError):
             ShantenCalculator(juntehai)
@@ -62,7 +62,7 @@ class TestShantenWithRandomTehai(unittest.TestCase):
     # format: (juntehai_length, n_huuro)
     tehai_patterns = [(14, 0), (13, 0), (11, 1), (10, 1), (8, 2), (7, 2), (5, 3), (4, 3), (2, 4), (1, 4)]
 
-    def test_shanten(self):
+    def test_with_normal(self):
         for juntehai_length, n_huuro in self.tehai_patterns:
             for _ in range(self.n_assertion):
                 juntehai = generate_random_juntehai(juntehai_length)
@@ -71,7 +71,7 @@ class TestShantenWithRandomTehai(unittest.TestCase):
                 msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
                 self.assertEqual(result, expected, msg)
 
-    def test_shanten_honitsu(self):
+    def test_with_honitsu(self):
         for juntehai_length, n_huuro in self.tehai_patterns:
             for _ in range(self.n_assertion):
                 juntehai = generate_random_juntehai_for_honitsu(juntehai_length)
@@ -80,7 +80,7 @@ class TestShantenWithRandomTehai(unittest.TestCase):
                 msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
                 self.assertEqual(result, expected, msg)
 
-    def test_shanten_chinitsu(self):
+    def test_with_chinitsu(self):
         for juntehai_length, n_huuro in self.tehai_patterns:
             for _ in range(self.n_assertion):
                 juntehai = generate_random_juntehai_for_chinitsu(juntehai_length)
@@ -98,7 +98,7 @@ class TestShantenWithAraTehai(unittest.TestCase):
     p_tin_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_tin_10000.txt")
     p_koku_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_koku_10000.txt")
 
-    def test_shanten_normal_10000(self):
+    def test_with_normal_10000(self):
         with open(self.p_normal_10000_txt, "rb") as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
@@ -109,7 +109,7 @@ class TestShantenWithAraTehai(unittest.TestCase):
                 msg = f"juntehai: {juntehai.to_code()}"
                 self.assertEqual(result, expected, msg)
 
-    def test_shanten_hon_10000(self):
+    def test_with_hon_10000(self):
         with open(self.p_hon_10000_txt, "rb") as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
@@ -120,7 +120,7 @@ class TestShantenWithAraTehai(unittest.TestCase):
                 msg = f"juntehai: {juntehai.to_code()}"
                 self.assertEqual(result, expected, msg)
 
-    def test_shanten_tin_10000(self):
+    def test_with_tin_10000(self):
         with open(self.p_tin_10000_txt, "rb") as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
@@ -131,7 +131,7 @@ class TestShantenWithAraTehai(unittest.TestCase):
                 msg = f"juntehai: {juntehai.to_code()}"
                 self.assertEqual(result, expected, msg)
 
-    def test_shanten_koku_10000(self):
+    def test_with_koku_10000(self):
         with open(self.p_koku_10000_txt, "rb") as f:
             for row in f.readlines():
                 problem = list(map(int, row.split()))
@@ -147,7 +147,7 @@ class TestShantenWithHandmadeTehai(unittest.TestCase):
     # format: (juntehai, expected)
     test_cases = [(HaiGroup.from_code("23466669999m111z"), 1), (HaiGroup.from_code("1111345567m111z"), 1)]
 
-    def test_shanten_when_juntehai_length_is_invalid(self):
+    def test(self):
         for juntehai, expected in self.test_cases:
             result = ShantenCalculator(juntehai).shanten
             msg = f"juntehai: {juntehai}"
@@ -163,7 +163,7 @@ class TestShantenWithInvalidTehai(unittest.TestCase):
         HaiGroup.from_code("111m111s111p111z"),
     ]
 
-    def test_shanten(self):
+    def test(self):
         for juntehai in self.test_cases:
             with self.assertRaises(ValueError):
                 ShantenCalculator(juntehai).shanten
@@ -253,7 +253,7 @@ class TestYuukouhaiWithHandmadeTehai(unittest.TestCase):
         ([128], [129, 130, 131]),
     ]
 
-    def test_yuukouhai(self):
+    def test(self):
         for juntehai, expected in self.code_test_cases:
             result = ShantenCalculator(HaiGroup.from_code(juntehai)).yuukouhai.to_code()
             msg = f"juntehai: {juntehai}, expected: {expected}, result: {result}"
@@ -278,7 +278,7 @@ class TestYuukouhaiWithInvalidTehai(unittest.TestCase):
         HaiGroup.from_code("111m111s111p111z"),
     ]
 
-    def test_yuukouhai_when_juntehai_length_is_invalid(self):
+    def test_when_juntehai_length_is_invalid(self):
         for juntehai in self.test_cases:
             with self.assertRaises(ValueError):
                 ShantenCalculator(juntehai).yuukouhai

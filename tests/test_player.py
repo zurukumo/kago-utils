@@ -34,7 +34,7 @@ def game_factory():
 
 
 class TestChii(unittest.TestCase):
-    def test_chii(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -47,7 +47,7 @@ class TestChii(unittest.TestCase):
         self.assertIn(chii, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52]))
 
-    def test_chii_with_invalid_chii(self):
+    def test_with_invalid_chii(self):
         game = game_factory()
         player = game.players[0]
 
@@ -60,7 +60,7 @@ class TestChii(unittest.TestCase):
 
 
 class TestPon(unittest.TestCase):
-    def test_pon(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -73,7 +73,7 @@ class TestPon(unittest.TestCase):
         self.assertIn(pon, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24]))
 
-    def test_pon_with_invalid_pon(self):
+    def test_with_invalid_pon(self):
         game = game_factory()
         player = game.players[0]
 
@@ -86,7 +86,7 @@ class TestPon(unittest.TestCase):
 
 
 class TestKakan(unittest.TestCase):
-    def test_kakan(self):
+    def test(self):
         game = game_factory()
         game.teban = 0
 
@@ -104,7 +104,7 @@ class TestKakan(unittest.TestCase):
         self.assertNotIn(pon, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25]))
 
-    def test_kakan_with_invalid_kakan(self):
+    def test_with_invalid_kakan(self):
         game = game_factory()
         game.teban = 0
 
@@ -122,7 +122,7 @@ class TestKakan(unittest.TestCase):
 
 
 class TestDaiminkan(unittest.TestCase):
-    def test_daiminkan(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -135,7 +135,7 @@ class TestDaiminkan(unittest.TestCase):
         self.assertIn(daiminkan, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
 
-    def test_daiminkan_with_invalid_daiminkan(self):
+    def test_with_invalid_daiminkan(self):
         game = game_factory()
         player = game.players[0]
 
@@ -148,7 +148,7 @@ class TestDaiminkan(unittest.TestCase):
 
 
 class TestAnkan(unittest.TestCase):
-    def test_ankan(self):
+    def test(self):
         game = game_factory()
         game.teban = 0
 
@@ -163,7 +163,7 @@ class TestAnkan(unittest.TestCase):
         self.assertIn(ankan, player.huuros)
         self.assertEqual(player.juntehai, HaiGroup.from_list([4, 5, 6, 8, 9, 10, 12, 13, 14, 16]))
 
-    def test_ankan_with_invalid_ankan(self):
+    def test_with_invalid_ankan(self):
         game = game_factory()
         game.teban = 0
 
@@ -180,14 +180,14 @@ class TestAnkan(unittest.TestCase):
 
 
 class TestIsMenzen(unittest.TestCase):
-    def test_is_menzen_without_huuros(self):
+    def test_without_huuros(self):
         game = game_factory()
         player = game.players[0]
 
         player.juntehai = HaiGroup.from_list(list(range(14)))
         self.assertTrue(player.is_menzen)
 
-    def test_is_menzen_with_chii(self):
+    def test_with_chii(self):
         game = game_factory()
         player = game.players[0]
 
@@ -195,7 +195,7 @@ class TestIsMenzen(unittest.TestCase):
         player.huuros = [Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))]
         self.assertFalse(player.is_menzen)
 
-    def test_is_menzen_with_pon(self):
+    def test_with_pon(self):
         game = game_factory()
         player = game.players[0]
 
@@ -203,7 +203,7 @@ class TestIsMenzen(unittest.TestCase):
         player.huuros = [Pon(hais=HaiGroup.from_list([0, 1, 2]), stolen=Hai(0), from_who=Zaichi.KAMICHA)]
         self.assertFalse(player.is_menzen)
 
-    def test_is_menzen_with_kakan(self):
+    def test_with_kakan(self):
         game = game_factory()
         player = game.players[0]
 
@@ -213,7 +213,7 @@ class TestIsMenzen(unittest.TestCase):
         ]
         self.assertFalse(player.is_menzen)
 
-    def test_is_menzen_with_daiminkan(self):
+    def test_with_daiminkan(self):
         game = game_factory()
         player = game.players[0]
 
@@ -221,7 +221,7 @@ class TestIsMenzen(unittest.TestCase):
         player.huuros = [Daiminkan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), from_who=Zaichi.KAMICHA)]
         self.assertFalse(player.is_menzen)
 
-    def test_is_menzen_with_ankan(self):
+    def test_with_ankan(self):
         game = game_factory()
         player = game.players[0]
 
@@ -229,7 +229,7 @@ class TestIsMenzen(unittest.TestCase):
         player.huuros = [Ankan(hais=HaiGroup.from_list([0, 1, 2, 3]))]
         self.assertTrue(player.is_menzen)
 
-    def test_is_menzen_with_ankan_and_chii(self):
+    def test_with_ankan_and_chii(self):
         game = game_factory()
         player = game.players[0]
 
@@ -242,7 +242,7 @@ class TestIsMenzen(unittest.TestCase):
 
 
 class TestJicha(unittest.TestCase):
-    def test_jicha(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -250,7 +250,7 @@ class TestJicha(unittest.TestCase):
 
 
 class TestKamicha(unittest.TestCase):
-    def test_kamicha(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -258,7 +258,7 @@ class TestKamicha(unittest.TestCase):
 
 
 class TestToimen(unittest.TestCase):
-    def test_toimen(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -266,7 +266,7 @@ class TestToimen(unittest.TestCase):
 
 
 class TestShimocha(unittest.TestCase):
-    def test_shimocha(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -274,7 +274,7 @@ class TestShimocha(unittest.TestCase):
 
 
 class TestListChiiCandidates(unittest.TestCase):
-    def test_list_chii_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -297,7 +297,7 @@ class TestListChiiCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
-    def test_list_chii_candidates_when_yama_is_not_enough(self):
+    def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
 
@@ -311,7 +311,7 @@ class TestListChiiCandidates(unittest.TestCase):
         game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_chii_candidates()), 0)
 
-    def test_list_chii_candidates_when_riichi_is_completed(self):
+    def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
 
@@ -325,7 +325,7 @@ class TestListChiiCandidates(unittest.TestCase):
         player.is_riichi_completed = True
         self.assertEqual(len(player.list_chii_candidates()), 0)
 
-    def test_list_chii_candidates_when_cannot_dahai_after_chii(self):
+    def test_when_cannot_dahai_after_chii(self):
         game = game_factory()
         player = game.players[0]
 
@@ -340,7 +340,7 @@ class TestListChiiCandidates(unittest.TestCase):
 
 
 class TestListPonCandidates(unittest.TestCase):
-    def test_list_pon_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -364,7 +364,7 @@ class TestListPonCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
-    def test_list_pon_candidates_when_yama_is_not_enough(self):
+    def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
 
@@ -378,7 +378,7 @@ class TestListPonCandidates(unittest.TestCase):
         game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_pon_candidates()), 0)
 
-    def test_list_pon_candidates_when_riichi_is_completed(self):
+    def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
 
@@ -394,7 +394,7 @@ class TestListPonCandidates(unittest.TestCase):
 
 
 class TestListDaiminkanCandidates(unittest.TestCase):
-    def test_list_daiminkan_candidates(self):
+    def test(self):
         game = game_factory()
         player = game.players[0]
 
@@ -418,7 +418,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
 
             self.assertIn(expected, candidates)
 
-    def test_list_daiminkan_candidates_when_yama_is_not_enough(self):
+    def test_when_yama_is_not_enough(self):
         game = game_factory()
         player = game.players[0]
 
@@ -432,7 +432,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
         game.yama.tsumo_hais = []
         self.assertEqual(len(player.list_daiminkan_candidates()), 0)
 
-    def test_list_daiminkan_candidates_when_riichi_is_completed(self):
+    def test_when_riichi_is_completed(self):
         game = game_factory()
         player = game.players[0]
 
@@ -446,7 +446,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
         player.is_riichi_completed = True
         self.assertEqual(len(player.list_daiminkan_candidates()), 0)
 
-    def test_list_daiminkan_candidates_when_four_kans_exist(self):
+    def test_when_four_kans_exist(self):
         game = game_factory()
         player1 = game.players[0]
         player2 = game.players[1]

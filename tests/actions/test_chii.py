@@ -6,32 +6,32 @@ from kago_utils.hai_group import HaiGroup
 
 
 class TestInit(unittest.TestCase):
-    def test_init_with_valid_args(self):
+    def test(self):
         Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
 
-    def test_init_with_hais_whose_length_is_not_3(self):
+    def test_with_hais_whose_length_is_not_3(self):
         with self.assertRaises(ValueError):
             Chii(hais=HaiGroup.from_list([0, 4, 8, 12]), stolen=Hai(0))
 
-    def test_init_with_not_consecutive_hais(self):
+    def test_with_not_consecutive_hais(self):
         with self.assertRaises(ValueError):
             Chii(hais=HaiGroup.from_list([0, 4, 12]), stolen=Hai(0))
 
-    def test_init_with_zihai(self):
+    def test_with_zihai(self):
         with self.assertRaises(ValueError):
             Chii(hais=HaiGroup.from_list([27 * 4, 28 * 4, 29 * 4]), stolen=Hai(27 * 4))
 
-    def test_init_with_not_same_suit_hais(self):
+    def test_with_not_same_suit_hais(self):
         with self.assertRaises(ValueError):
             Chii(hais=HaiGroup.from_list([8 * 4, 9 * 4, 10 * 4]), stolen=Hai(8 * 4))
 
-    def test_init_with_hais_which_not_contains_stolen(self):
+    def test_with_hais_which_not_contains_stolen(self):
         with self.assertRaises(ValueError):
             Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(1))
 
 
 class TestKuikaeHais(unittest.TestCase):
-    def test_kuikae_hais(self):
+    def test(self):
         # (hais, expected_when_left_hai_is_stolen, expected_when_middle_hai_is_stolen, expected_when_right_hai_is_stolen)
         test_cases = [
             (
@@ -101,29 +101,29 @@ class TestKuikaeHais(unittest.TestCase):
             self.assertEqual(chii.kuikae_hais, expected3)
 
 
-class TestComparison(unittest.TestCase):
-    def test_eq(self):
+class TestEq(unittest.TestCase):
+    def test_with_same_chii(self):
         chii1 = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         chii2 = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         self.assertEqual(chii1, chii2)
 
-    def test_eq_with_not_same_hais(self):
+    def test_with_not_same_hais(self):
         chii1 = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         chii2 = Chii(hais=HaiGroup.from_list([0, 4, 9]), stolen=Hai(0))
         self.assertNotEqual(chii1, chii2)
 
-    def test_eq_with_not_same_stolen(self):
+    def test_with_not_same_stolen(self):
         chii1 = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         chii2 = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(4))
         self.assertNotEqual(chii1, chii2)
 
-    def test_eq_with_int(self):
+    def test_with_int(self):
         chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         self.assertNotEqual(chii, 0)
 
 
 class TestRepr(unittest.TestCase):
-    def test_repr(self):
+    def test(self):
         chii = Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(0))
         self.assertEqual(
             repr(chii), "Chii(hais=HaiGroup([Hai(0), Hai(4), Hai(8)]), stolen=Hai(0), from_who=Zaichi.KAMICHA)"
