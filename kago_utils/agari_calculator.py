@@ -107,7 +107,7 @@ class AgariCalculator:
         "ten_movement",
     )
 
-    def __init__(self, game: Game, player: Player, is_daburon: bool):
+    def __init__(self, game: Game, player: Player, is_daburon: bool = False):
         self.game = game
         self.player = player
         self.is_daburon = is_daburon
@@ -115,19 +115,22 @@ class AgariCalculator:
         self.juntehai = copy.deepcopy(player.juntehai)
         self.huuros = copy.deepcopy(player.huuros)
 
-        if game.last_teban == player.zaseki:
+        # Ronho
+        if game.teban == player.zaseki:
             if player.last_tsumo is None:
                 raise Exception()
 
             self.agari_hai = player.last_tsumo
             self.from_who = player.zaseki
+
+        # Tsumoho
         else:
-            if game.last_dahai is None or game.last_teban is None:
+            if game.last_dahai is None:
                 raise Exception()
 
             self.juntehai += game.last_dahai
             self.agari_hai = game.last_dahai
-            self.from_who = game.last_teban
+            self.from_who = game.teban
 
         self.zentehai = copy.deepcopy(self.juntehai)
         for huuro in self.huuros:
