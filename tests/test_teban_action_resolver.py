@@ -37,6 +37,71 @@ def game_factory():
     return game
 
 
+class TestResolve(unittest.TestCase):
+    def test_when_tsumoho_is_registered(self):
+        game = game_factory()
+        player = game.teban_player
+        resolver = game.teban_action_resolver
+
+        player.juntehai = HaiGroup.from_code("123456789m11122z")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+
+        resolver.prepare()
+        resolver.register_tsumoho(player, resolver.tsumoho_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Tsumoho)
+
+    def test_when_riichi_is_registered(self):
+        game = game_factory()
+        player = game.teban_player
+        resolver = game.teban_action_resolver
+
+        player.juntehai = HaiGroup.from_code("12345678m111223z")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+
+        resolver.prepare()
+        resolver.register_riichi(player, resolver.riichi_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Riichi)
+
+    def test_when_ankan_is_registered(self):
+        game = game_factory()
+        player = game.teban_player
+        resolver = game.teban_action_resolver
+
+        player.juntehai = HaiGroup.from_code("123456789m11112z")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+
+        resolver.prepare()
+        resolver.register_ankan(player, resolver.ankan_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Ankan)
+
+    def test_when_kakan_is_registered(self):
+        game = game_factory()
+        player = game.teban_player
+        resolver = game.teban_action_resolver
+
+        player.juntehai = HaiGroup.from_code("123406789m11z")
+        player.huuros = [
+            Pon(hais=HaiGroup.from_code("555m"), stolen=HaiGroup.from_code("5m")[0], from_who=Zaichi.KAMICHA)
+        ]
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+
+        resolver.prepare()
+        resolver.register_kakan(player, resolver.kakan_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Kakan)
+
+    def test_when_dahai_is_registered(self):
+        game = game_factory()
+        player = game.teban_player
+        resolver = game.teban_action_resolver
+
+        player.juntehai = HaiGroup.from_code("123456789m11122z")
+        player.last_tsumo = HaiGroup.from_code("1m")[0]
+
+        resolver.prepare()
+        resolver.register_dahai(player, resolver.dahai_candidates[player.id][0])
+        self.assertIsInstance(resolver.choice[player.id], Dahai)
+
+
 class TestListTsumohoCandidates(unittest.TestCase):
     def test(self):
         game = game_factory()
