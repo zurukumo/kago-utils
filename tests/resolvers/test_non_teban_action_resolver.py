@@ -71,7 +71,7 @@ class TestListDaiminkanCandidates(unittest.TestCase):
         resolver = game.non_teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/player/daiminkan.pickle.gz")
+        filepath = os.path.join(current_dir, "../data/resolvers/non_teban_action_resolver/daiminkan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
@@ -147,7 +147,7 @@ class TestListPonCandidates(unittest.TestCase):
         resolver = game.non_teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/player/pon.pickle.gz")
+        filepath = os.path.join(current_dir, "../data/resolvers/non_teban_action_resolver/pon.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
@@ -204,7 +204,7 @@ class TestListChiiCandidates(unittest.TestCase):
         resolver = game.non_teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/player/chii.pickle.gz")
+        filepath = os.path.join(current_dir, "../data/resolvers/non_teban_action_resolver/chii.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 

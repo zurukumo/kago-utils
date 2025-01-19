@@ -248,7 +248,7 @@ class TestListAnkanCandidates(unittest.TestCase):
         resolver = game.teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/teban_action_resolver/ankan.pickle.gz")
+        filepath = os.path.join(current_dir, "../data/resolvers/teban_action_resolver/ankan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 
@@ -364,7 +364,7 @@ class TestListKakanCandidates(unittest.TestCase):
         resolver = game.teban_action_resolver
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(current_dir, "data/teban_action_resolver/kakan.pickle.gz")
+        filepath = os.path.join(current_dir, "../data/resolvers/teban_action_resolver/kakan.pickle.gz")
         with gzip.open(filepath, "rb") as f:
             test_cases = pickle.load(f)
 

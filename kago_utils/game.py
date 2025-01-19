@@ -5,9 +5,8 @@ from typing import Literal
 from kago_utils.actions import Ankan, Dahai, Daiminkan, Kakan, Riichi, Tsumoho, Wait
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
-from kago_utils.non_teban_action_resolver import NonTebanActionResolver
 from kago_utils.player import Player
-from kago_utils.teban_action_resolver import TebanActionResolver
+from kago_utils.resolvers import NonTebanActionResolver, TebanActionResolver
 from kago_utils.yama import Yama
 
 
