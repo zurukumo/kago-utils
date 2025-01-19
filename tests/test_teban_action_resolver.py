@@ -127,7 +127,7 @@ class TestListTsumohoCandidates(unittest.TestCase):
         player.last_tsumo = HaiGroup.from_code("1m")[0]
         self.assertEqual(resolver.list_tsumoho_candidates(player), [Tsumoho()])
 
-    def test_when_not_agari(self):
+    def test_when_nooten(self):
         game = game_factory()
         player = game.players[0]
         resolver = game.teban_action_resolver
@@ -459,28 +459,38 @@ class TestListDahaiCandidates(unittest.TestCase):
 
     def test_right_after_calling_chii(self):
         game = game_factory()
-        player = game.players[0]
+        player1 = game.players[3]
+        player2 = game.players[0]
         resolver = game.teban_action_resolver
 
-        player.juntehai = HaiGroup.from_code("123m1112223334z")
-        game.last_dahai = HaiGroup.from_code("4m")[0]
-        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
-        player.chii(Chii(hais=HaiGroup.from_code("234m"), stolen=HaiGroup.from_code("4m")[0]))
+        game.teban = 3
+        player1.juntehai = HaiGroup.from_code("4m1112223334445z")
+        game.teban_action_resolver.prepare()
+        player1.dahai(Dahai(hai=HaiGroup.from_code("4m")[0]))
+
+        player2.juntehai = HaiGroup.from_code("123m1112223334z")
+        game.non_teban_action_resolver.prepare()
+        player2.chii(Chii(hais=HaiGroup.from_code("234m"), stolen=HaiGroup.from_code("4m")[0]))
         self.assertEqual(
-            resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]
+            resolver.list_dahai_candidates(player2), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]
         )
 
     def test_right_after_calling_pon(self):
         game = game_factory()
-        player = game.players[0]
+        player1 = game.players[3]
+        player2 = game.players[0]
         resolver = game.teban_action_resolver
 
-        player.juntehai = HaiGroup.from_code("555m1112223334z")
-        game.last_dahai = HaiGroup.from_code("0m")[0]
-        game.teban = player.get_zaseki_from_zaichi(Zaichi.KAMICHA)
-        player.pon(Pon(hais=HaiGroup.from_code("055m"), stolen=HaiGroup.from_code("0m")[0], from_who=Zaichi.KAMICHA))
+        game.teban = 3
+        player1.juntehai = HaiGroup.from_code("0m1112223334445z")
+        game.teban_action_resolver.prepare()
+        player1.dahai(Dahai(hai=HaiGroup.from_code("0m")[0]))
+
+        player2.juntehai = HaiGroup.from_code("555m1112223334z")
+        game.non_teban_action_resolver.prepare()
+        player2.pon(Pon(hais=HaiGroup.from_code("055m"), stolen=HaiGroup.from_code("0m")[0], from_who=Zaichi.KAMICHA))
         self.assertEqual(
-            resolver.list_dahai_candidates(player), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]
+            resolver.list_dahai_candidates(player2), [Dahai(hai) for hai in HaiGroup.from_code("1112223334z")]
         )
 
 

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import random
-from itertools import product
 from typing import TYPE_CHECKING, Literal
 
 from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon
@@ -22,7 +20,6 @@ class Player:
     juntehai: HaiGroup
     huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     last_tsumo: Hai | None
-    last_dahai: Hai | None
     is_riichi_completed: bool
     is_right_after_riichi_called: bool
     is_right_after_chii_called: bool
@@ -37,7 +34,6 @@ class Player:
         "juntehai",
         "huuros",
         "last_tsumo",
-        "last_dahai",
         "is_riichi_completed",
         "is_right_after_riichi_called",
         "is_right_after_chii_called",
@@ -54,7 +50,6 @@ class Player:
         self.juntehai = HaiGroup([])
         self.huuros = []
         self.last_tsumo = None
-        self.last_dahai = None
         self.is_riichi_completed = False
         self.is_right_after_riichi_called = False
         self.is_right_after_chii_called = False
@@ -73,15 +68,18 @@ class Player:
     def tsumoho(self) -> None:
         pass
 
+    def ronho(self) -> None:
+        pass
+
     def riichi(self) -> None:
         self.is_right_after_riichi_called = True
 
     def dahai(self, dahai: Dahai) -> None:
         self.juntehai -= dahai.hai
-        self.last_dahai = dahai.hai
+        self.game.last_dahai = dahai.hai
 
     def chii(self, chii: Chii) -> None:
-        for candidate in self.list_chii_candidates():
+        for candidate in self.game.non_teban_action_resolver.chii_candidates[self.id]:
             if (
                 chii.hais.to_code() == candidate.hais.to_code()
                 and chii.stolen == candidate.stolen
@@ -95,7 +93,7 @@ class Player:
         raise ValueError("Invalid Chii")
 
     def pon(self, pon: Pon) -> None:
-        for candidate in self.list_pon_candidates():
+        for candidate in self.game.non_teban_action_resolver.pon_candidates[self.id]:
             if (
                 pon.hais.to_code() == candidate.hais.to_code()
                 and pon.stolen == candidate.stolen
@@ -125,7 +123,7 @@ class Player:
         raise ValueError("Invalid Kakan")
 
     def daiminkan(self, daiminkan: Daiminkan) -> None:
-        for candidate in self.list_daiminkan_candidates():
+        for candidate in self.game.non_teban_action_resolver.daiminkan_candidates[self.id]:
             if (
                 daiminkan.hais.to_code() == candidate.hais.to_code()
                 and daiminkan.stolen == candidate.stolen
@@ -145,117 +143,6 @@ class Player:
                 return
 
         raise ValueError("Invalid Ankan")
-
-    def list_chii_candidates(self) -> list[Chii]:
-        if self.game.last_dahai is None:
-            raise Exception()
-
-        # Not enoguh yama
-        if self.game.yama.rest_tsumo_count == 0:
-            return []
-
-        # Riichi completed
-        if self.is_riichi_completed:
-            return []
-
-        stolen = self.game.last_dahai
-
-        prev2: dict[str, Hai | None] = {"b": None, "r": None}
-        prev1: dict[str, Hai | None] = {"b": None, "r": None}
-        next1: dict[str, Hai | None] = {"b": None, "r": None}
-        next2: dict[str, Hai | None] = {"b": None, "r": None}
-
-        # Shuffle juntehai to select prev2, prev1, next1, and next2 randomly.
-        for hai in random.sample(self.juntehai, len(self.juntehai)):
-            if hai.suit == "z" or hai.suit != stolen.suit:
-                continue
-
-            if hai.number == stolen.number - 2:
-                prev2[hai.color] = hai
-            if hai.number == stolen.number - 1:
-                prev1[hai.color] = hai
-            if hai.number == stolen.number + 1:
-                next1[hai.color] = hai
-            if hai.number == stolen.number + 2:
-                next2[hai.color] = hai
-
-        candidates = []
-        pattern1 = list(product(prev2.values(), prev1.values(), [stolen]))
-        pattern2 = list(product(prev1.values(), [stolen], next1.values()))
-        pattern3 = list(product([stolen], next1.values(), next2.values()))
-        for hai1, hai2, hai3 in pattern1 + pattern2 + pattern3:
-            if hai1 is None or hai2 is None or hai3 is None:
-                continue
-
-            chii = Chii(hais=HaiGroup([hai1, hai2, hai3]), stolen=stolen)
-
-            # Pass if cannot dahai after chii
-            kuikae_hais = self.juntehai & chii.kuikae_hais
-            if len(self.juntehai) - 2 == len(kuikae_hais):
-                continue
-
-            candidates.append(chii)
-
-        return candidates
-
-    def list_pon_candidates(self) -> list[Pon]:
-        if self.game.last_dahai is None:
-            raise Exception()
-
-        # Not enough yama
-        if self.game.yama.rest_tsumo_count == 0:
-            return []
-
-        # Riichi completed
-        if self.is_riichi_completed:
-            return []
-
-        stolen = self.game.last_dahai
-        from_who = self.get_zaichi_from_zaseki(self.game.teban)
-
-        candidates = []
-        b = []
-        r = []
-        # Shuffle juntehai to select b and r randomly.
-        for hai in random.sample(self.juntehai, len(self.juntehai)):
-            if hai.suit == stolen.suit and hai.number == stolen.number:
-                if hai.color == "b":
-                    b.append(hai)
-                else:
-                    r.append(hai)
-
-        if len(b) >= 2:
-            candidates.append(Pon(hais=HaiGroup([stolen, b[0], b[1]]), stolen=stolen, from_who=from_who))
-        if len(b) >= 1 and len(r) >= 1:
-            candidates.append(Pon(hais=HaiGroup([stolen, b[0], r[0]]), stolen=stolen, from_who=from_who))
-
-        return candidates
-
-    def list_daiminkan_candidates(self) -> list[Daiminkan]:
-        if self.game.last_dahai is None:
-            raise Exception()
-
-        # Not enough yama
-        if self.game.yama.rest_tsumo_count == 0:
-            return []
-
-        # Riichi completed
-        if self.is_riichi_completed:
-            return []
-
-        # Four kans exist
-        if self.game.kan_count >= 4:
-            return []
-
-        stolen = self.game.last_dahai
-        from_who = self.get_zaichi_from_zaseki(self.game.teban)
-
-        candidates = []
-        hais = [hai for hai in self.juntehai if hai.suit == stolen.suit and hai.number == stolen.number]
-        if len(hais) >= 3:
-            candidates.append(Daiminkan(hais=HaiGroup(hais + [stolen]), stolen=stolen, from_who=from_who))
-
-        return candidates
 
     @property
     def is_oya(self) -> bool:

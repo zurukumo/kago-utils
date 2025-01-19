@@ -5,6 +5,7 @@ from typing import Literal
 from kago_utils.actions import Ankan, Dahai, Daiminkan, Kakan, Riichi, Tsumoho, Wait
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
+from kago_utils.non_teban_action_resolver import NonTebanActionResolver
 from kago_utils.player import Player
 from kago_utils.teban_action_resolver import TebanActionResolver
 from kago_utils.yama import Yama
@@ -14,6 +15,7 @@ class Game:
     players: list[Player]
     yama: Yama
     teban_action_resolver: TebanActionResolver
+    non_teban_action_resolver: NonTebanActionResolver
 
     state: Literal["init_hanchan", "init_kyoku", "tsumo", "wait_teban_action", "rinshan_tsumo", "agari"]
 
@@ -29,6 +31,7 @@ class Game:
         "players",
         "yama",
         "teban_action_resolver",
+        "non_teban_action_resolver",
         "state",
         "kyoku",
         "honba",
@@ -42,6 +45,7 @@ class Game:
         self.players = []
         self.yama = Yama()
         self.teban_action_resolver = TebanActionResolver(self)
+        self.non_teban_action_resolver = NonTebanActionResolver(self)
 
         self.state = "init_hanchan"
 
@@ -140,8 +144,11 @@ class Game:
     def find_player_by_zaseki(self, zaseki: int) -> Player:
         return self.players[zaseki]
 
-    def get_players_from_oya(self) -> list[Player]:
+    def get_players_from_teban(self) -> list[Player]:
         return [self.players[(self.teban + i) % 4] for i in range(4)]
+
+    def get_players_from_oya(self) -> list[Player]:
+        return [self.players[(self.kyoku + i) % 4] for i in range(4)]
 
     @property
     def bakaze(self) -> Literal["東", "南", "西", "北"]:
