@@ -51,3 +51,6 @@ print(shanten)  # -1
 は、[あらの一人麻雀研究所](https://mahjong.ara.black/etc/shanten/shanten9.htm) からお借りしました。
 
 その他、一部のテストデータは天鳳の牌譜から作成しました。
+
+## Benchmark
+https://zurukumo.github.io/kago-utils/dev/bench/
