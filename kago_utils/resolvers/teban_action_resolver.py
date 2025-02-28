@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho, Wait
+from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.shanten_calculator import ShantenCalculator
+
+from .results import AnkanResult, DahaiResult, KakanResult, Pending, RiichiResult, TsumohoResult
 
 if TYPE_CHECKING:
     from kago_utils.game import Game
@@ -82,12 +84,21 @@ class TebanActionResolver:
         if dahai in self.dahai_candidates[player.id]:
             self.choice[player.id] = dahai
 
-    def resolve(self) -> Tsumoho | Riichi | Ankan | Kakan | Dahai | Wait:
-        choice = self.choice[self.game.teban_player.id]
-        if choice is not None:
-            return choice
+    def resolve(self) -> TsumohoResult | RiichiResult | AnkanResult | KakanResult | DahaiResult | Pending:
+        c = self.choice[self.game.teban_player.id]
+        match c:
+            case Tsumoho():
+                return TsumohoResult(self.game.teban_player, c)
+            case Riichi():
+                return RiichiResult(self.game.teban_player, c)
+            case Ankan():
+                return AnkanResult(self.game.teban_player, c)
+            case Kakan():
+                return KakanResult(self.game.teban_player, c)
+            case Dahai():
+                return DahaiResult(self.game.teban_player, c)
 
-        return Wait()
+        return Pending()
 
     def list_tsumoho_candidates(self, player: Player) -> list[Tsumoho]:
         # Not agari
@@ -110,7 +121,7 @@ class TebanActionResolver:
             return []
 
         # Right after calling riichi
-        if player.is_right_after_riichi_called:
+        if player.is_right_after_riichi:
             return []
 
         # Not enough ten
@@ -129,7 +140,7 @@ class TebanActionResolver:
 
     def list_ankan_candidates(self, player: Player) -> list[Ankan]:
         # Right after calling riichi
-        if player.is_right_after_riichi_called:
+        if player.is_right_after_riichi:
             return []
 
         # Not enough yama
@@ -189,7 +200,7 @@ class TebanActionResolver:
             return [Dahai(player.last_tsumo)]
 
         # Right after calling riichi
-        elif player.is_right_after_riichi_called:
+        elif player.is_right_after_riichi:
             candidates = []
             for hai in player.juntehai:
                 new_juntehai = player.juntehai - hai
@@ -198,7 +209,7 @@ class TebanActionResolver:
             return candidates
 
         # Right after calling chii or pon
-        elif player.is_right_after_chii_called or player.is_right_after_pon_called:
+        elif player.is_right_after_chii or player.is_right_after_pon:
             last_huuro = player.huuros[-1]
             if not isinstance(last_huuro, (Chii, Pon)):
                 raise Exception()

@@ -2,11 +2,22 @@ from __future__ import annotations
 
 from typing import Literal
 
-from kago_utils.actions import Ankan, Dahai, Daiminkan, Kakan, Riichi, Tsumoho, Wait
+from kago_utils.actions import Ankan, Daiminkan, Kakan
 from kago_utils.bot import Bot
 from kago_utils.hai import Hai
 from kago_utils.player import Player
 from kago_utils.resolvers import NonTebanActionResolver, TebanActionResolver
+from kago_utils.resolvers.results import (
+    AnkanResult,
+    ChiiResult,
+    DahaiResult,
+    DaiminkanResult,
+    Pending,
+    PonResult,
+    RiichiResult,
+    RonhoResult,
+    TsumohoResult,
+)
 from kago_utils.yama import Yama
 
 
@@ -16,7 +27,9 @@ class Game:
     teban_action_resolver: TebanActionResolver
     non_teban_action_resolver: NonTebanActionResolver
 
-    state: Literal["init_hanchan", "init_kyoku", "tsumo", "wait_teban_action", "rinshan_tsumo", "agari"]
+    state: Literal[
+        "init_hanchan", "init_kyoku", "tsumo", "wait_teban_action", "rinshan_tsumo", "wait_non_teban_action", "agari"
+    ]
 
     kyoku: int
     honba: int
@@ -60,6 +73,10 @@ class Game:
                 self.wait_teban_action()
             case "rinshan_tsumo":
                 self.rinshan_tsumo()
+            case "wait_non_teban_action":
+                self.wait_non_teban_action()
+            case "agari":
+                self.agari()
 
     def init_hanchan(self) -> None:
         self.kyoku = 0
@@ -91,32 +108,37 @@ class Game:
         tsumo_hai = self.yama.tsumo()
         self.teban_player.tsumo(tsumo_hai)
 
-        # Prepare tsumoho, riichi, ankan and dahai candidates
+        # Prepare teban action candidates
         self.teban_action_resolver.prepare()
-
         if isinstance(self.teban_player, Bot):
             self.teban_player.select_teban_action()
 
         self.state = "wait_teban_action"
 
     def wait_teban_action(self) -> None:
-        action = self.teban_action_resolver.resolve()
-        match action:
-            case Tsumoho():
-                self.teban_player.tsumoho()
+        result = self.teban_action_resolver.resolve()
+        if isinstance(result, Pending):
+            return
+
+        match result:
+            case TsumohoResult():
+                result.player.tsumoho()
                 self.state = "agari"
-            case Riichi():
-                self.teban_player.riichi()
+            case RiichiResult():
+                result.player.riichi()
                 self.state = "wait_teban_action"
-            case Ankan():
-                self.teban_player.ankan(action)
+            case AnkanResult():
+                result.player.ankan(result.action)
                 self.state = "rinshan_tsumo"
-            case Dahai():
-                self.teban_player.dahai(action)
-                self.teban, self.last_teban = (self.teban + 1) % 4, self.teban
-                self.state = "tsumo"
-            case Wait():
-                pass
+            case DahaiResult():
+                result.player.dahai(result.action)
+
+                # Prepare non teban action candidates
+                self.non_teban_action_resolver.prepare()
+                if isinstance(self.teban_player, Bot):
+                    self.teban_player.select_non_teban_action()
+
+                self.state = "wait_non_teban_action"
 
     def rinshan_tsumo(self) -> None:
         # Rinshan tsumo
@@ -130,6 +152,32 @@ class Game:
             self.teban_player.select_teban_action()
 
         self.state = "wait_teban_action"
+
+    def wait_non_teban_action(self) -> None:
+        result = self.non_teban_action_resolver.resolve()
+        if isinstance(result, Pending):
+            return
+
+        match result:
+            case RonhoResult():
+                for player, _ in result.actions:
+                    player.ronho()
+                self.state = "agari"
+            case DaiminkanResult():
+                result.player.daiminkan(result.action)
+                self.teban = result.player.zaseki
+                self.state = "rinshan_tsumo"
+            case PonResult():
+                result.player.pon(result.action)
+                self.teban = result.player.zaseki
+                self.state = "wait_teban_action"
+            case ChiiResult():
+                result.player.chii(result.action)
+                self.teban = result.player.zaseki
+                self.state = "wait_teban_action"
+
+    def agari(self) -> None:
+        pass
 
     #######################
     ### Utility methods ###

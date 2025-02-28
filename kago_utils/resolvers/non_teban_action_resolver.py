@@ -4,12 +4,14 @@ import random
 from itertools import product
 from typing import TYPE_CHECKING
 
-from kago_utils.actions import Chii, Daiminkan, Pon, Ronho, Skip, Wait
+from kago_utils.actions import Chii, Daiminkan, Pon, Ronho, Skip
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.shanten_calculator import ShantenCalculator
+
+from .results import ChiiResult, DaiminkanResult, Pending, PonResult, RonhoResult
 
 if TYPE_CHECKING:
     from kago_utils.game import Game
@@ -91,32 +93,28 @@ class NonTebanActionResolver:
         if skip in self.skip_candidates[player.id]:
             self.choice[player.id] = skip
 
-    def resolve(self) -> list[Ronho] | Daiminkan | Pon | Chii | Skip | Wait:
+    def resolve(self) -> RonhoResult | DaiminkanResult | PonResult | ChiiResult | Pending:
+        ronho_choice_count = 0
+        daiminkan_choice_count = 0
+        pon_choice_count = 0
+        chii_choice_count = 0
         rest_ronho_candidate_count = 0
         rest_daiminkan_candidate_count = 0
         rest_pon_candidate_count = 0
         rest_chii_candidate_count = 0
-        rest_skip_candidate_count = 0
-        ronho_choices: list[Ronho] = []
-        daiminkan_choices: list[Daiminkan] = []
-        pon_choices: list[Pon] = []
-        chii_choices: list[Chii] = []
-        skip_choices: list[Skip] = []
 
         for player in self.game.get_players_from_teban():
-            choice = self.choice[player.id]
-            if choice is not None:
-                match choice:
+            c = self.choice[player.id]
+            if c is not None:
+                match c:
                     case Ronho():
-                        ronho_choices.append(choice)
+                        ronho_choice_count += 1
                     case Daiminkan():
-                        daiminkan_choices.append(choice)
+                        daiminkan_choice_count += 1
                     case Pon():
-                        pon_choices.append(choice)
+                        pon_choice_count += 1
                     case Chii():
-                        chii_choices.append(choice)
-                    case Skip():
-                        skip_choices.append(choice)
+                        chii_choice_count += 1
             else:
                 if self.ronho_candidates[player.id]:
                     rest_ronho_candidate_count += 1
@@ -126,40 +124,46 @@ class NonTebanActionResolver:
                     rest_pon_candidate_count += 1
                 if self.chii_candidates[player.id]:
                     rest_chii_candidate_count += 1
-                if self.skip_candidates[player.id]:
-                    rest_skip_candidate_count += 1
 
-        if ronho_choices or rest_ronho_candidate_count > 0:
-            if rest_ronho_candidate_count > 0:
-                return Wait()
-            else:
-                return ronho_choices
+        if rest_ronho_candidate_count > 0:
+            return Pending()
 
-        if daiminkan_choices or rest_daiminkan_candidate_count > 0:
-            if rest_daiminkan_candidate_count > 0:
-                return Wait()
-            else:
-                return daiminkan_choices[0]
+        if ronho_choice_count > 0:
+            actions = []
+            for player in self.game.get_players_from_teban():
+                c = self.choice[player.id]
+                if isinstance(c, Ronho):
+                    actions.append((player, c))
+            return RonhoResult(actions)
 
-        if pon_choices or rest_pon_candidate_count > 0:
-            if rest_pon_candidate_count > 0:
-                return Wait()
-            else:
-                return pon_choices[0]
+        if rest_daiminkan_candidate_count > 0:
+            return Pending()
 
-        if chii_choices or rest_chii_candidate_count > 0:
-            if rest_chii_candidate_count > 0:
-                return Wait()
-            else:
-                return chii_choices[0]
+        if daiminkan_choice_count > 0:
+            for player in self.game.get_players_from_teban():
+                c = self.choice[player.id]
+                if isinstance(c, Daiminkan):
+                    return DaiminkanResult(player, c)
 
-        if skip_choices or rest_skip_candidate_count > 0:
-            if rest_skip_candidate_count > 0:
-                return Wait()
-            else:
-                return Skip()
+        if rest_pon_candidate_count > 0:
+            return Pending()
 
-        return Wait()
+        if pon_choice_count > 0:
+            for player in self.game.get_players_from_teban():
+                c = self.choice[player.id]
+                if isinstance(c, Pon):
+                    return PonResult(player, c)
+
+        if rest_chii_candidate_count > 0:
+            return Pending()
+
+        if chii_choice_count > 0:
+            for player in self.game.get_players_from_teban():
+                c = self.choice[player.id]
+                if isinstance(c, Chii):
+                    return ChiiResult(player, c)
+
+        return Pending()
 
     def list_ronho_candidates(self, player: Player) -> list[Ronho]:
         # Not agari

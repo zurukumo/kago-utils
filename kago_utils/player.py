@@ -21,9 +21,9 @@ class Player:
     huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     last_tsumo: Hai | None
     is_riichi_completed: bool
-    is_right_after_riichi_called: bool
-    is_right_after_chii_called: bool
-    is_right_after_pon_called: bool
+    is_right_after_riichi: bool
+    is_right_after_chii: bool
+    is_right_after_pon: bool
     is_right_after_rinshan_tsumo: bool
 
     __slots__ = (
@@ -35,9 +35,9 @@ class Player:
         "huuros",
         "last_tsumo",
         "is_riichi_completed",
-        "is_right_after_riichi_called",
-        "is_right_after_chii_called",
-        "is_right_after_pon_called",
+        "is_right_after_riichi",
+        "is_right_after_chii",
+        "is_right_after_pon",
         "is_right_after_rinshan_tsumo",
     )
 
@@ -51,9 +51,9 @@ class Player:
         self.huuros = []
         self.last_tsumo = None
         self.is_riichi_completed = False
-        self.is_right_after_riichi_called = False
-        self.is_right_after_chii_called = False
-        self.is_right_after_pon_called = False
+        self.is_right_after_riichi = False
+        self.is_right_after_chii = False
+        self.is_right_after_pon = False
 
     def tsumo(self, hai: Hai) -> None:
         self.juntehai += hai
@@ -72,7 +72,7 @@ class Player:
         pass
 
     def riichi(self) -> None:
-        self.is_right_after_riichi_called = True
+        self.is_right_after_riichi = True
 
     def dahai(self, dahai: Dahai) -> None:
         self.juntehai -= dahai.hai
@@ -87,7 +87,7 @@ class Player:
             ):
                 self.huuros.append(chii)
                 self.juntehai -= chii.hais - chii.stolen
-                self.is_right_after_chii_called = True
+                self.is_right_after_chii = True
                 return
 
         raise ValueError("Invalid Chii")
@@ -101,7 +101,7 @@ class Player:
             ):
                 self.huuros.append(pon)
                 self.juntehai -= pon.hais - pon.stolen
-                self.is_right_after_pon_called = True
+                self.is_right_after_pon = True
                 return
 
         raise ValueError("Invalid Pon")

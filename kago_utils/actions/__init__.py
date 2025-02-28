@@ -8,18 +8,5 @@ from .riichi import Riichi
 from .ronho import Ronho
 from .skip import Skip
 from .tsumoho import Tsumoho
-from .wait import Wait
 
-__all__ = (
-    "Ankan",
-    "Chii",
-    "Dahai",
-    "Daiminkan",
-    "Kakan",
-    "Pon",
-    "Riichi",
-    "Ronho",
-    "Skip",
-    "Tsumoho",
-    "Wait",
-)
+__all__ = ("Ankan", "Chii", "Dahai", "Daiminkan", "Kakan", "Pon", "Riichi", "Ronho", "Skip", "Tsumoho")
