@@ -1,29 +1,21 @@
-import unittest
-
 from kago_utils.actions import Riichi
 
 
-class TestInit(unittest.TestCase):
-    def test(self):
-        Riichi()
+def test_init():
+    Riichi()
 
 
-class TestEq(unittest.TestCase):
-    def test_with_riichi(self):
-        riichi1 = Riichi()
-        riichi2 = Riichi()
-        self.assertEqual(riichi1, riichi2)
-
-    def test_with_int(self):
-        riichi = Riichi()
-        self.assertNotEqual(riichi, 0)
+def test_eq_with_riichi():
+    riichi1 = Riichi()
+    riichi2 = Riichi()
+    assert riichi1 == riichi2
 
 
-class TestRepr(unittest.TestCase):
-    def test(self):
-        riichi = Riichi()
-        self.assertEqual(repr(riichi), "Riichi()")
+def test_eq_with_int():
+    riichi = Riichi()
+    assert riichi != 0
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_repr():
+    riichi = Riichi()
+    assert repr(riichi) == "Riichi()"

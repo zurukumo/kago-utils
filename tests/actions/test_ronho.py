@@ -1,29 +1,21 @@
-import unittest
-
 from kago_utils.actions import Ronho
 
 
-class TestInit(unittest.TestCase):
-    def test(self):
-        Ronho()
+def test_init():
+    Ronho()
 
 
-class TestEq(unittest.TestCase):
-    def test_with_ronho(self):
-        ronho1 = Ronho()
-        ronho2 = Ronho()
-        self.assertEqual(ronho1, ronho2)
-
-    def test_with_int(self):
-        ronho = Ronho()
-        self.assertNotEqual(ronho, 0)
+def test_eq_with_ronho():
+    ronho1 = Ronho()
+    ronho2 = Ronho()
+    assert ronho1 == ronho2
 
 
-class TestRepr(unittest.TestCase):
-    def test(self):
-        ronho = Ronho()
-        self.assertEqual(repr(ronho), "Ronho()")
+def test_eq_with_int():
+    ronho = Ronho()
+    assert ronho != 0
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_repr():
+    ronho = Ronho()
+    assert repr(ronho) == "Ronho()"

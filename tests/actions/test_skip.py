@@ -1,29 +1,21 @@
-import unittest
-
 from kago_utils.actions import Skip
 
 
-class TestInit(unittest.TestCase):
-    def test(self):
-        Skip()
+def test_init():
+    Skip()
 
 
-class TestEq(unittest.TestCase):
-    def test_with_skip(self):
-        skip1 = Skip()
-        skip2 = Skip()
-        self.assertEqual(skip1, skip2)
-
-    def test_with_int(self):
-        skip = Skip()
-        self.assertNotEqual(skip, 0)
+def test_eq_with_skip():
+    skip1 = Skip()
+    skip2 = Skip()
+    assert skip1 == skip2
 
 
-class TestRepr(unittest.TestCase):
-    def test(self):
-        skip = Skip()
-        self.assertEqual(repr(skip), "Skip()")
+def test_eq_with_int():
+    skip = Skip()
+    assert skip != 0
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_repr():
+    skip = Skip()
+    assert repr(skip) == "Skip()"
