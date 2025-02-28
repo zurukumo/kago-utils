@@ -8,6 +8,10 @@ on:
     branches:
       - '**'
 
+permissions:
+  deployments: write
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -31,6 +35,17 @@ jobs:
 
       - name: Run test
         run: python -m pipenv run test
+
+      - name: Run benchmark
+        run: python -m pipenv run benchmark
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'pytest'
+          output-file-path: output.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
 
       - name: Run typecheck
         run: python -m pipenv run typecheck

@@ -296,3 +296,12 @@ def test_yuukouhai_when_juntehai_length_is_invalid():
     for juntehai in testcases:
         with pytest.raises(ValueError):
             ShantenCalculator(juntehai).yuukouhai
+
+
+def test_shanten_benchmark(benchmark):
+    def calculate_shanten_1000times():
+        for _ in range(1000):
+            juntehai = generate_random_juntehai(14)
+            ShantenCalculator(juntehai).shanten
+
+    benchmark(calculate_shanten_1000times)

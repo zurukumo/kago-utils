@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+pytest-benchmark = "*"
 
 [dev-packages]
 mypy = "*"
@@ -16,7 +17,8 @@ shanten-tools = "*"
 python_version = "3.12"
 
 [scripts]
-test = "python -m pytest"
+test = "python -m pytest --benchmark-skip"
+benchmark = "python -m pytest --benchmark-only --benchmark-json output.json"
 lint = "python -m ruff check"
 format = "python -m ruff format --diff"
 typecheck = "python -m mypy ."
