@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pytest-benchmark = "*"
 
 [dev-packages]
 mypy = "*"
 numpy = "< 2.0.0"
 pytest = "*"
+pytest-benchmark = "*"
+pytest-cov = "*"
 ruff = "*"
 shanten-tools = "*"
 
