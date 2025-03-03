@@ -33,8 +33,14 @@ jobs:
       - name: Install dependencies
         run: python -m pipenv install --dev
 
-      - name: Run test
-        run: python -m pipenv run test
+      - name: Run test with coverage
+        run: pipenv run python -m pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app --benchmark-skip tests/ | tee pytest-coverage.txt
+
+      - name: Comment Coverage
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+            pytest-coverage-path: pytest-coverage.txt
+            junitxml-path: ./pytest.xml
 
       - name: Run benchmark
         run: python -m pipenv run benchmark
