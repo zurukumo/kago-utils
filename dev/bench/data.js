@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741060471785,
+  "lastUpdate": 1741060768605,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -143,6 +143,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.005048438226419267",
             "extra": "mean: 1.0816795706000106 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fa57eccd54310a5e57a3ede27d652383fef2819e",
+          "message": "Merge pull request #46 from zurukumo/feat/test-cov\n\npytest-cov",
+          "timestamp": "2025-03-04T12:55:59+09:00",
+          "tree_id": "9811d13d0c5a1863087babcda06d5ccf5c52fb0e",
+          "url": "https://github.com/zurukumo/kago-utils/commit/fa57eccd54310a5e57a3ede27d652383fef2819e"
+        },
+        "date": 1741060768220,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten_calculator.py::test_shanten_benchmark",
+            "value": 0.9250030570564814,
+            "unit": "iter/sec",
+            "range": "stddev: 0.01528228448772595",
+            "extra": "mean: 1.0810775081999964 sec\nrounds: 5"
           }
         ]
       }
