@@ -35,24 +35,28 @@ def calculate_shanten_external(juntehai: HaiGroup):
     return external_shanten(np.array(juntehai, dtype=np.uint8)) - 1
 
 
+@pytest.mark.no_cover
 def test_init():
     for juntehai_length in [1, 2, 4, 5, 7, 8, 10, 11, 13, 14]:
         juntehai = HaiGroup.from_list(list(range(juntehai_length)))
         ShantenCalculator(juntehai)
 
 
+@pytest.mark.no_cover
 def test_init_when_juntehai_length_is_invalid():
     juntehai = HaiGroup.from_list(list(range(3)))
     with pytest.raises(ValueError):
         ShantenCalculator(juntehai)
 
 
+@pytest.mark.no_cover
 def test_init_when_juntehai_length_is_too_long():
     juntehai = HaiGroup.from_list(list(range(15)))
     with pytest.raises(ValueError):
         ShantenCalculator(juntehai)
 
 
+@pytest.mark.no_cover
 def test_init_when_juntehai_having_same_hai():
     juntehai = HaiGroup.from_list(list(range(12)) + [12] * 2)
     with pytest.raises(ValueError):
@@ -74,6 +78,7 @@ shanten_params = [
 
 
 @pytest.mark.parametrize("juntehai_length, n_huuro", shanten_params)
+@pytest.mark.no_cover
 def test_shanten_with_normal(juntehai_length, n_huuro):
     for _ in range(10000):
         juntehai = generate_random_juntehai(juntehai_length)
@@ -84,6 +89,7 @@ def test_shanten_with_normal(juntehai_length, n_huuro):
 
 
 @pytest.mark.parametrize("juntehai_length, n_huuro", shanten_params)
+@pytest.mark.no_cover
 def test_shanten_with_honitsu(juntehai_length, n_huuro):
     for _ in range(10000):
         juntehai = generate_random_juntehai_for_honitsu(juntehai_length)
@@ -94,6 +100,7 @@ def test_shanten_with_honitsu(juntehai_length, n_huuro):
 
 
 @pytest.mark.parametrize("juntehai_length, n_huuro", shanten_params)
+@pytest.mark.no_cover
 def test_shanten_with_chinitsu(juntehai_length, n_huuro):
     for _ in range(10000):
         juntehai = generate_random_juntehai_for_chinitsu(juntehai_length)
@@ -104,6 +111,7 @@ def test_shanten_with_chinitsu(juntehai_length, n_huuro):
 
 
 # ref: https://mahjong.ara.black/etc/shanten/shanten9.htm
+@pytest.mark.no_cover
 def test_shanten_with_p_normal_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     p_normal_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_normal_10000.txt")
@@ -118,6 +126,7 @@ def test_shanten_with_p_normal_10000_txt():
             assert result == expected, msg
 
 
+@pytest.mark.no_cover
 def test_shanten_with_p_hon_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     p_hon_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_hon_10000.txt")
@@ -132,6 +141,7 @@ def test_shanten_with_p_hon_10000_txt():
             assert result == expected, msg
 
 
+@pytest.mark.no_cover
 def test_shanten_with_p_tin_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     p_tin_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_tin_10000.txt")
@@ -146,6 +156,7 @@ def test_shanten_with_p_tin_10000_txt():
             assert result == expected, msg
 
 
+@pytest.mark.no_cover
 def test_shanten_with_p_koku_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     p_koku_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_koku_10000.txt")
@@ -160,6 +171,7 @@ def test_shanten_with_p_koku_10000_txt():
             assert result == expected, msg
 
 
+@pytest.mark.no_cover
 def test_shanten_with_handmade_tehai():
     # format: (juntehai, expected)
     testcases = [
@@ -172,6 +184,7 @@ def test_shanten_with_handmade_tehai():
         assert result == expected, msg
 
 
+@pytest.mark.no_cover
 def test_shanten_with_invalid_tehai():
     testcases = [
         HaiGroup.from_code(""),
@@ -185,6 +198,7 @@ def test_shanten_with_invalid_tehai():
             ShantenCalculator(juntehai).shanten
 
 
+@pytest.mark.no_cover
 def test_yuukouhai_with_handmade_tehai():
     # format: (juntehai, expected)
     code_testcases: list[tuple[str, str]] = [
@@ -280,6 +294,7 @@ def test_yuukouhai_with_handmade_tehai():
         assert result == expected, msg
 
 
+@pytest.mark.no_cover
 def test_yuukouhai_when_juntehai_length_is_invalid():
     testcases = [
         HaiGroup.from_code(""),
@@ -298,6 +313,7 @@ def test_yuukouhai_when_juntehai_length_is_invalid():
             ShantenCalculator(juntehai).yuukouhai
 
 
+@pytest.mark.no_cover
 def test_shanten_benchmark(benchmark):
     def calculate_shanten_1000times():
         for _ in range(1000):
