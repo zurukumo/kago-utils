@@ -80,8 +80,12 @@ class ShantenCalculator:
     def __load_patterns(cls) -> None:
         if cls.suuhai_distance_table is None or cls.zihai_distance_table is None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            suuhai_distance_table_path = os.path.join(current_dir, "data/suuhai_distance_table.pickle.gz")
-            zihai_distance_table_path = os.path.join(current_dir, "data/zihai_distance_table.pickle.gz")
+            suuhai_distance_table_path = os.path.join(
+                current_dir, "resources/distance_tables/suuhai_distance_table.pickle.gz"
+            )
+            zihai_distance_table_path = os.path.join(
+                current_dir, "resources/distance_tables/zihai_distance_table.pickle.gz"
+            )
 
             with gzip.open(suuhai_distance_table_path, "rb") as f:
                 cls.suuhai_distance_table = pickle.load(f)

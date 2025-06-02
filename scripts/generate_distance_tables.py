@@ -93,7 +93,7 @@ class DistanceTableGenerator:
 
     def save_table(self) -> None:
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_dir, f"../kago_utils/data/{self.filename}")
+        file_path = os.path.join(current_dir, f"../kago_utils/resources/distance_tables/{self.filename}")
         with gzip.open(file_path, "wb") as f:
             pickle.dump(dict(self.distance_table), f)
 
