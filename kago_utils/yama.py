@@ -17,37 +17,40 @@ class Yama:
         self.dora_hyouji_hais = []
         self.n_open_dora_hyouji_hais = 1
 
-    def generate(self) -> None:
+    def shuffle(self) -> list[Hai]:
         hais = [Hai(id) for id in range(136)]
         random.shuffle(hais)
+        return hais
 
-        self.tsumo_hais = hais[0:122]
-        self.rinshan_hais = hais[122:126]
-        self.dora_hyouji_hais = hais[126:136]
+    def generate(self) -> None:
+        hais = self.shuffle()
+        self.rinshan_hais = hais[0:4]
+        self.dora_hyouji_hais = hais[4:14]
+        self.tsumo_hais = hais[14:136]
         self.n_open_dora_hyouji_hais = 1
 
     def tsumo(self) -> Hai:
         if len(self.tsumo_hais) + len(self.rinshan_hais) == 4:
             raise ValueError("There is no tsumo hai.")
 
-        return self.tsumo_hais.pop(0)
+        return self.tsumo_hais.pop()
 
     def rinshan_tsumo(self) -> Hai:
         if len(self.rinshan_hais) == 0:
             raise ValueError("There is no rinshan tsumo hai.")
 
-        return self.rinshan_hais.pop(0)
+        return self.rinshan_hais.pop()
 
     def open_dora_hyouji_hai(self) -> None:
         self.n_open_dora_hyouji_hais += 1
 
     @property
     def opened_dora_hyouji_hais(self) -> list[Hai]:
-        return self.dora_hyouji_hais[0 : self.n_open_dora_hyouji_hais * 2 : 2]
+        return self.dora_hyouji_hais[1 : self.n_open_dora_hyouji_hais * 2 : 2]
 
     @property
     def opened_uradora_hyouji_hais(self) -> list[Hai]:
-        return self.dora_hyouji_hais[1 : self.n_open_dora_hyouji_hais * 2 : 2]
+        return self.dora_hyouji_hais[0 : self.n_open_dora_hyouji_hais * 2 : 2]
 
     @property
     def rest_tsumo_count(self) -> int:
