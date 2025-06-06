@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741060768605,
+  "lastUpdate": 1749236070597,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -174,6 +174,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.01528228448772595",
             "extra": "mean: 1.0810775081999964 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "0d1c086aa0b4a37f5ce95dab51a46db9fb9b29e7",
+          "message": "feat: Implemented is_similar_to method in Pon and Chii classes",
+          "timestamp": "2025-06-07T03:50:32+09:00",
+          "tree_id": "2c5f932396e6f651206399a1ac1727a728a82761",
+          "url": "https://github.com/zurukumo/kago-utils/commit/0d1c086aa0b4a37f5ce95dab51a46db9fb9b29e7"
+        },
+        "date": 1749236069752,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten_calculator.py::test_shanten_benchmark",
+            "value": 0.9029983654918845,
+            "unit": "iter/sec",
+            "range": "stddev: 0.006283718015989528",
+            "extra": "mean: 1.1074217165999811 sec\nrounds: 5"
           }
         ]
       }
