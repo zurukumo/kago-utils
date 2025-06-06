@@ -250,6 +250,10 @@ class NonTebanActionResolver:
         if player.is_riichi_completed:
             return []
 
+        # Not Shimocha
+        if player != self.game.teban_player.shimocha:
+            return []
+
         stolen = self.game.last_dahai
 
         prev2: dict[str, Hai | None] = {"b": None, "r": None}

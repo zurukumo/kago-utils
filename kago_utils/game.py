@@ -37,7 +37,6 @@ class Game:
 
     teban: int
     last_teban: int | None
-    last_dahai: Hai | None
 
     __slots__ = (
         "players",
@@ -50,7 +49,6 @@ class Game:
         "kyoutaku",
         "teban",
         "last_teban",
-        "last_dahai",
     )
 
     def __init__(self) -> None:
@@ -88,7 +86,6 @@ class Game:
     def init_kyoku(self) -> None:
         self.teban = self.kyoku % 4
         self.last_teban = None
-        self.last_dahai = None
 
         # Haipai
         self.yama.generate()
@@ -223,3 +220,7 @@ class Game:
                 if isinstance(huuro, (Ankan, Daiminkan, Kakan)):
                     count += 1
         return count
+
+    @property
+    def last_dahai(self) -> Hai | None:
+        return self.teban_player.last_dahai

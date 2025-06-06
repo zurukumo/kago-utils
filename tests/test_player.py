@@ -72,7 +72,7 @@ def test_daiminkan():
 
     player = game.players[0]
     player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
-    game.last_dahai = Hai(3)
+    player.kamicha.last_dahai = Hai(3)
 
     game.non_teban_action_resolver.prepare()
     player.daiminkan(daiminkan)
@@ -88,7 +88,7 @@ def test_daiminkan_with_invalid_daiminkan():
 
     player = game.players[0]
     player.juntehai = HaiGroup.from_list([0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16])
-    game.last_dahai = Hai(3)
+    player.kamicha.last_dahai = Hai(3)
 
     game.non_teban_action_resolver.prepare()
     with pytest.raises(ValueError):
@@ -139,7 +139,7 @@ def test_pon():
 
     player = game.players[0]
     player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
-    game.last_dahai = Hai(2)
+    player.kamicha.last_dahai = Hai(2)
 
     game.non_teban_action_resolver.prepare()
     player.pon(pon)
@@ -155,7 +155,7 @@ def test_pon_with_invalid_pon():
 
     player = game.players[0]
     player.juntehai = HaiGroup.from_list([0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24])
-    game.last_dahai = Hai(2)
+    player.kamicha.last_dahai = Hai(2)
 
     game.non_teban_action_resolver.prepare()
     with pytest.raises(ValueError):
@@ -170,7 +170,7 @@ def test_chii():
 
     player = game.players[0]
     player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
-    game.last_dahai = Hai(0)
+    player.kamicha.last_dahai = Hai(0)
 
     game.non_teban_action_resolver.prepare()
     player.chii(chii)
@@ -186,7 +186,7 @@ def test_chii_with_invalid_chii():
 
     player = game.players[0]
     player.juntehai = HaiGroup.from_list([4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52])
-    game.last_dahai = Hai(0)
+    player.kamicha.last_dahai = Hai(0)
 
     game.non_teban_action_resolver.prepare()
     with pytest.raises(ValueError):

@@ -20,6 +20,7 @@ class Player:
     juntehai: HaiGroup
     huuros: list[Chii | Pon | Kakan | Daiminkan | Ankan]
     last_tsumo: Hai | None
+    last_dahai: Hai | None
     is_riichi_completed: bool
     is_right_after_riichi: bool
     is_right_after_chii: bool
@@ -34,6 +35,7 @@ class Player:
         "juntehai",
         "huuros",
         "last_tsumo",
+        "last_dahai",
         "is_riichi_completed",
         "is_right_after_riichi",
         "is_right_after_chii",
@@ -50,6 +52,7 @@ class Player:
         self.juntehai = HaiGroup([])
         self.huuros = []
         self.last_tsumo = None
+        self.last_dahai = None
         self.is_riichi_completed = False
         self.is_right_after_riichi = False
         self.is_right_after_chii = False
@@ -76,7 +79,7 @@ class Player:
 
     def dahai(self, dahai: Dahai) -> None:
         self.juntehai -= dahai.hai
-        self.game.last_dahai = dahai.hai
+        self.last_dahai = dahai.hai
 
     def chii(self, chii: Chii) -> None:
         for candidate in self.game.non_teban_action_resolver.chii_candidates[self.id]:
