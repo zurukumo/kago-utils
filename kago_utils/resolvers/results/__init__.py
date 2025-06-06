@@ -7,6 +7,7 @@ from .pending import Pending
 from .pon_result import PonResult
 from .riichi_result import RiichiResult
 from .ronho_result import RonhoResult
+from .skip_result import SkipResult
 from .tsumoho_result import TsumohoResult
 
 __all__ = (
@@ -18,6 +19,7 @@ __all__ = (
     "PonResult",
     "RiichiResult",
     "RonhoResult",
+    "SkipResult",
     "TsumohoResult",
     "Pending",
 )

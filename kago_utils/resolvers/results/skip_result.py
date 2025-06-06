@@ -1,0 +1,2 @@
+class SkipResult:
+    pass

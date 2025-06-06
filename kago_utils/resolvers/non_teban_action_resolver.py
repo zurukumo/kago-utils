@@ -11,7 +11,7 @@ from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.shanten_calculator import ShantenCalculator
 
-from .results import ChiiResult, DaiminkanResult, Pending, PonResult, RonhoResult
+from .results import ChiiResult, DaiminkanResult, Pending, PonResult, RonhoResult, SkipResult
 
 if TYPE_CHECKING:
     from kago_utils.game import Game
@@ -97,15 +97,17 @@ class NonTebanActionResolver:
         if skip in self.skip_candidates[player.id]:
             self.choice[player.id] = skip
 
-    def resolve(self) -> RonhoResult | DaiminkanResult | PonResult | ChiiResult | Pending:
+    def resolve(self) -> RonhoResult | DaiminkanResult | PonResult | ChiiResult | SkipResult | Pending:
         ronho_choice_count = 0
         daiminkan_choice_count = 0
         pon_choice_count = 0
         chii_choice_count = 0
+        skip_choice_count = 0
         rest_ronho_candidate_count = 0
         rest_daiminkan_candidate_count = 0
         rest_pon_candidate_count = 0
         rest_chii_candidate_count = 0
+        rest_skip_candidate_count = 0
 
         for player in self.game.get_players_from_teban():
             c = self.choice[player.id]
@@ -119,6 +121,8 @@ class NonTebanActionResolver:
                         pon_choice_count += 1
                     case Chii():
                         chii_choice_count += 1
+                    case Skip():
+                        skip_choice_count += 1
             else:
                 if self.ronho_candidates[player.id]:
                     rest_ronho_candidate_count += 1
@@ -128,6 +132,8 @@ class NonTebanActionResolver:
                     rest_pon_candidate_count += 1
                 if self.chii_candidates[player.id]:
                     rest_chii_candidate_count += 1
+                if self.skip_candidates[player.id]:
+                    rest_skip_candidate_count += 1
 
         if rest_ronho_candidate_count > 0:
             return Pending()
@@ -166,6 +172,12 @@ class NonTebanActionResolver:
                 c = self.choice[player.id]
                 if isinstance(c, Chii):
                     return ChiiResult(player, c)
+
+        if rest_skip_candidate_count > 0:
+            return Pending()
+
+        if skip_choice_count > 0:
+            return SkipResult()
 
         return Pending()
 
