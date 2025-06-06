@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749236070597,
+  "lastUpdate": 1749245282318,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -205,6 +205,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.006283718015989528",
             "extra": "mean: 1.1074217165999811 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "94eea3cb087b74ecc42c84bd00848e1b48d0dad6",
+          "message": "feat: Implemented SkipResult class",
+          "timestamp": "2025-06-07T06:24:35+09:00",
+          "tree_id": "f2b4d536b76b74e089d82657d8bcd30b1cdc4890",
+          "url": "https://github.com/zurukumo/kago-utils/commit/94eea3cb087b74ecc42c84bd00848e1b48d0dad6"
+        },
+        "date": 1749245281997,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten_calculator.py::test_shanten_benchmark",
+            "value": 0.9064112942809329,
+            "unit": "iter/sec",
+            "range": "stddev: 0.004375678872578408",
+            "extra": "mean: 1.1032519192000052 sec\nrounds: 5"
           }
         ]
       }
