@@ -2,23 +2,12 @@ import gzip
 import os
 import pickle
 
-from kago_utils.actions import Ankan, Chii, Dahai, Daiminkan, Kakan, Pon, Riichi, Tsumoho
+from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho
 from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.zaichi import Zaichi
-
-
-# This function simplifies the representation of huuro.
-# In Tenhou, the structure of huuro is randomized, likely to prevent reading of opponents' player.
-# Therefore, we need to simplify the structure for testing purposes.
-# For example, if hais 0, 1, and 4 are in player, and the upper player discards hai 8,
-# the player can form a Chii using 0, 4, 8 or 1, 4, 8. The specific arrangement is random.
-# So, when comparing Tenhou’s game records in tests, we need to convert sequences like 0, 4, 8 or 1, 4, 8
-# into a standardized format, such as kuro1m|kuro2m|kuro3m, for accurate comparison.
-def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
-    return "|".join([hai.code for hai in huuro.hais])
 
 
 def game_factory():
@@ -265,8 +254,8 @@ def test_list_ankan_candidates():
         player.juntehai = juntehai
         player.last_tsumo = juntehai[-1]
 
-        candidates = map(simplify_huuro, resolver.list_ankan_candidates(player))
-        expected = simplify_huuro(Ankan(hais=hais))
+        candidates = resolver.list_ankan_candidates(player)
+        expected = Ankan(hais=hais)
 
         assert expected in candidates
 
@@ -394,8 +383,8 @@ def test_list_kakan_candidates():
         player.juntehai = juntehai
         player.huuros = huuros
 
-        candidates = map(simplify_huuro, resolver.list_kakan_candidates(player))
-        expected = simplify_huuro(Kakan(hais=hais, stolen=stolen, added=added, from_who=from_who))
+        candidates = resolver.list_kakan_candidates(player)
+        expected = Kakan(hais=hais, stolen=stolen, added=added, from_who=from_who)
 
         assert expected in candidates
 

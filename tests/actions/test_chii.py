@@ -34,6 +34,20 @@ def test_init_with_hais_which_not_contains_stolen():
         Chii(hais=HaiGroup.from_list([0, 4, 8]), stolen=Hai(1))
 
 
+def test_is_similar_to():
+    chii1 = Chii(hais=HaiGroup.from_list([12, 16, 20]), stolen=Hai(20))
+    chii2 = Chii(hais=HaiGroup.from_list([13, 16, 20]), stolen=Hai(20))
+    chii3 = Chii(hais=HaiGroup.from_list([12, 17, 20]), stolen=Hai(20))
+    chii4 = Chii(hais=HaiGroup.from_list([13, 17, 20]), stolen=Hai(20))
+
+    assert chii1.is_similar_to(chii2)
+    assert not chii1.is_similar_to(chii3)
+    assert not chii1.is_similar_to(chii4)
+    assert not chii2.is_similar_to(chii3)
+    assert not chii2.is_similar_to(chii4)
+    assert chii3.is_similar_to(chii4)
+
+
 def test_kuikae_hais():
     # (hais, expected_when_left_hai_is_stolen, expected_when_middle_hai_is_stolen, expected_when_right_hai_is_stolen)
     test_cases = [

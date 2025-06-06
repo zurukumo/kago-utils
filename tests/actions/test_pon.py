@@ -71,6 +71,16 @@ def test_to_kakan():
     assert kakan == Kakan(hais=HaiGroup.from_list([0, 1, 2, 3]), stolen=Hai(0), added=Hai(3), from_who=Zaichi.KAMICHA)
 
 
+def test_is_similar_to():
+    pon1 = Pon(hais=HaiGroup.from_list([16, 17, 19]), stolen=Hai(19), from_who=Zaichi.KAMICHA)
+    pon2 = Pon(hais=HaiGroup.from_list([16, 18, 19]), stolen=Hai(19), from_who=Zaichi.KAMICHA)
+    pon3 = Pon(hais=HaiGroup.from_list([17, 18, 19]), stolen=Hai(19), from_who=Zaichi.KAMICHA)
+
+    assert pon1.is_similar_to(pon2)
+    assert not pon1.is_similar_to(pon3)
+    assert not pon2.is_similar_to(pon3)
+
+
 def test_kuikae_hais():
     # (hais, expected)
     test_cases = [

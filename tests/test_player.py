@@ -8,17 +8,6 @@ from kago_utils.player import Player
 from kago_utils.zaichi import Zaichi
 
 
-# This function simplifies the representation of huuro.
-# In Tenhou, the structure of huuro is randomized, likely to prevent reading of opponents' player.
-# Therefore, we need to simplify the structure for testing purposes.
-# For example, if hais 0, 1, and 4 are in player, and the upper player discards hai 8,
-# the player can form a Chii using 0, 4, 8 or 1, 4, 8. The specific arrangement is random.
-# So, when comparing Tenhou’s game records in tests, we need to convert sequences like 0, 4, 8 or 1, 4, 8
-# into a standardized format, such as kuro1m|kuro2m|kuro3m, for accurate comparison.
-def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
-    return "|".join([hai.code for hai in huuro.hais])
-
-
 def game_factory():
     game = Game()
     game.yama.generate()

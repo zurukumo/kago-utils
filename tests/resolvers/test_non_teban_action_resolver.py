@@ -2,23 +2,12 @@ import gzip
 import os
 import pickle
 
-from kago_utils.actions import Ankan, Chii, Daiminkan, Kakan, Pon, Ronho
+from kago_utils.actions import Ankan, Chii, Daiminkan, Pon, Ronho
 from kago_utils.game import Game
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.zaichi import Zaichi
-
-
-# This function simplifies the representation of huuro.
-# In Tenhou, the structure of huuro is randomized, likely to prevent reading of opponents' player.
-# Therefore, we need to simplify the structure for testing purposes.
-# For example, if hais 0, 1, and 4 are in player, and the upper player discards hai 8,
-# the player can form a Chii using 0, 4, 8 or 1, 4, 8. The specific arrangement is random.
-# So, when comparing Tenhou’s game records in tests, we need to convert sequences like 0, 4, 8 or 1, 4, 8
-# into a standardized format, such as kuro1m|kuro2m|kuro3m, for accurate comparison.
-def simplify_huuro(huuro: Chii | Pon | Kakan | Daiminkan | Ankan) -> str:
-    return "|".join([hai.code for hai in huuro.hais])
 
 
 def setup_game():
@@ -80,8 +69,8 @@ def test_list_daiminkan_candidates():
 
         non_teban_player.juntehai = juntehai
 
-        candidates = map(simplify_huuro, resolver.list_daiminkan_candidates(non_teban_player))
-        expected = simplify_huuro(Daiminkan(hais=hais, stolen=stolen, from_who=from_who))
+        candidates = resolver.list_daiminkan_candidates(non_teban_player)
+        expected = Daiminkan(hais=hais, stolen=stolen, from_who=from_who)
 
         assert expected in candidates
 
@@ -146,10 +135,10 @@ def test_list_pon_candidates():
 
         non_teban_player.juntehai = juntehai
 
-        candidates = map(simplify_huuro, resolver.list_pon_candidates(non_teban_player))
-        expected = simplify_huuro(Pon(hais=hais, stolen=stolen, from_who=from_who))
+        candidates = resolver.list_pon_candidates(non_teban_player)
+        expected = Pon(hais=hais, stolen=stolen, from_who=from_who)
 
-        assert expected in candidates
+        assert any(expected.is_similar_to(candidate) for candidate in candidates)
 
 
 def test_list_pon_candidates_when_yama_is_not_enough():
@@ -197,10 +186,10 @@ def test_list_chii_candidates():
 
         non_teban_player.juntehai = juntehai
 
-        candidates = map(simplify_huuro, resolver.list_chii_candidates(non_teban_player))
-        expected = simplify_huuro(Chii(hais=hais, stolen=stolen))
+        candidates = resolver.list_chii_candidates(non_teban_player)
+        expected = Chii(hais=hais, stolen=stolen)
 
-        assert expected in candidates
+        assert any(expected.is_similar_to(candidate) for candidate in candidates)
 
 
 def test_list_chii_candidates_when_yama_is_not_enough():

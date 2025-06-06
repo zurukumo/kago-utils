@@ -72,6 +72,19 @@ class Chii:
 
         return hais
 
+    def is_similar_to(self, other: object) -> bool:
+        if not isinstance(other, Chii):
+            return False
+
+        return all(
+            (
+                self.hais.to_code() == other.hais.to_code(),
+                self.stolen == other.stolen,
+                self.from_who == other.from_who,
+            )
+        )
+        return self.stolen == other.stolen and self.from_who == other.from_who
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Chii):
             return all((self.hais == other.hais, self.stolen == other.stolen, self.from_who == other.from_who))

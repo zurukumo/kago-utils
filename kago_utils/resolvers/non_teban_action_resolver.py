@@ -78,14 +78,18 @@ class NonTebanActionResolver:
     def register_pon(self, player: Player, pon: Pon) -> None:
         if self.choice[player.id] is not None:
             return
-        if pon in self.pon_candidates[player.id]:
-            self.choice[player.id] = pon
+        for candidate in self.pon_candidates[player.id]:
+            if pon.is_similar_to(candidate):
+                self.choice[player.id] = pon
+                return
 
     def register_chii(self, player: Player, chii: Chii) -> None:
         if self.choice[player.id] is not None:
             return
-        if chii in self.chii_candidates[player.id]:
-            self.choice[player.id] = chii
+        for candidate in self.chii_candidates[player.id]:
+            if chii.is_similar_to(candidate):
+                self.choice[player.id] = chii
+                return
 
     def register_skip(self, player: Player, skip: Skip) -> None:
         if self.choice[player.id] is not None:

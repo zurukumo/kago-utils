@@ -67,6 +67,18 @@ class Pon:
             from_who=self.from_who,
         )
 
+    def is_similar_to(self, other: object) -> bool:
+        if not isinstance(other, Pon):
+            return False
+
+        return all(
+            (
+                self.hais.to_code() == other.hais.to_code(),
+                self.stolen == other.stolen,
+                self.from_who == other.from_who,
+            )
+        )
+
     @property
     def kuikae_hais(self) -> HaiGroup:
         id = self.hais[0].id - self.hais[0].id % 4
