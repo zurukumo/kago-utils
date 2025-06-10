@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749245282318,
+  "lastUpdate": 1749563721250,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -236,6 +236,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.004375678872578408",
             "extra": "mean: 1.1032519192000052 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "a16748400a9f45726f745eabcbfc4770ac418df1",
+          "message": "feat: Implemented Game class",
+          "timestamp": "2025-06-10T22:49:47+09:00",
+          "tree_id": "769093bc4226308540b858e097196a8ee69317b5",
+          "url": "https://github.com/zurukumo/kago-utils/commit/a16748400a9f45726f745eabcbfc4770ac418df1"
+        },
+        "date": 1749563720902,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten_calculator.py::test_shanten_benchmark",
+            "value": 0.8975280108507218,
+            "unit": "iter/sec",
+            "range": "stddev: 0.003020860488315513",
+            "extra": "mean: 1.1141713549999963 sec\nrounds: 5"
           }
         ]
       }
