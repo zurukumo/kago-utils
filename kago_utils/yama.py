@@ -24,7 +24,7 @@ class Yama:
 
     def generate(self) -> None:
         hais = self.shuffle()
-        self.rinshan_hais = hais[0:4]
+        self.rinshan_hais = [hais[2], hais[3], hais[0], hais[1]]
         self.dora_hyouji_hais = hais[4:14]
         self.tsumo_hais = hais[14:136]
         self.n_open_dora_hyouji_hais = 1

@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from kago_utils.actions import Ankan, Chii, Dahai, Kakan, Pon, Riichi, Tsumoho
+from kago_utils.actions import Ankan, Chii, Dahai, Kakan, KyuushuKyuuhai, Pon, Riichi, Tsumoho
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
 from kago_utils.shanten_calculator import ShantenCalculator
 
-from .results import AnkanResult, DahaiResult, KakanResult, Pending, RiichiResult, TsumohoResult
+from .results import AnkanResult, DahaiResult, KakanResult, KyuushuKyuuhaiResult, Pending, RiichiResult, TsumohoResult
 
 if TYPE_CHECKING:
     from kago_utils.game import Game
@@ -21,7 +21,8 @@ class TebanActionResolver:
     ankan_candidates: dict[str, list[Ankan]]
     kakan_candidates: dict[str, list[Kakan]]
     dahai_candidates: dict[str, list[Dahai]]
-    choice: dict[str, Tsumoho | Riichi | Ankan | Kakan | Dahai | None]
+    kyuushu_kyuuhai_candidates: dict[str, list[KyuushuKyuuhai]]
+    choice: dict[str, Tsumoho | Riichi | Ankan | Kakan | Dahai | KyuushuKyuuhai | None]
 
     __slots__ = (
         "game",
@@ -30,6 +31,7 @@ class TebanActionResolver:
         "ankan_candidates",
         "kakan_candidates",
         "dahai_candidates",
+        "kyuushu_kyuuhai_candidates",
         "choice",
     )
 
@@ -42,6 +44,7 @@ class TebanActionResolver:
         self.ankan_candidates = {player.id: [] for player in self.game.players}
         self.kakan_candidates = {player.id: [] for player in self.game.players}
         self.dahai_candidates = {player.id: [] for player in self.game.players}
+        self.kyuushu_kyuuhai_candidates = {player.id: [] for player in self.game.players}
         self.choice = {player.id: None for player in self.game.players}
 
     def prepare(self) -> None:
@@ -52,6 +55,9 @@ class TebanActionResolver:
         self.ankan_candidates[self.game.teban_player.id] = self.list_ankan_candidates(self.game.teban_player)
         self.kakan_candidates[self.game.teban_player.id] = self.list_kakan_candidates(self.game.teban_player)
         self.dahai_candidates[self.game.teban_player.id] = self.list_dahai_candidates(self.game.teban_player)
+        self.kyuushu_kyuuhai_candidates[self.game.teban_player.id] = self.list_kyuushu_kyuuhai_candidates(
+            self.game.teban_player
+        )
         self.choice[self.game.teban_player.id] = None
 
     def register_tsumoho(self, player: Player, tsumoho: Tsumoho) -> None:
@@ -84,7 +90,15 @@ class TebanActionResolver:
         if dahai in self.dahai_candidates[player.id]:
             self.choice[player.id] = dahai
 
-    def resolve(self) -> TsumohoResult | RiichiResult | AnkanResult | KakanResult | DahaiResult | Pending:
+    def register_kyuushu_kyuuhai(self, player: Player, kyuushu_kyuuhai: KyuushuKyuuhai) -> None:
+        if self.choice[player.id] is not None:
+            return
+        if kyuushu_kyuuhai in self.kyuushu_kyuuhai_candidates[player.id]:
+            self.choice[player.id] = kyuushu_kyuuhai
+
+    def resolve(
+        self,
+    ) -> TsumohoResult | RiichiResult | AnkanResult | KakanResult | DahaiResult | KyuushuKyuuhaiResult | Pending:
         c = self.choice[self.game.teban_player.id]
         match c:
             case Tsumoho():
@@ -97,6 +111,8 @@ class TebanActionResolver:
                 return KakanResult(self.game.teban_player, c)
             case Dahai():
                 return DahaiResult(self.game.teban_player, c)
+            case KyuushuKyuuhai():
+                return KyuushuKyuuhaiResult(self.game.teban_player, c)
 
         return Pending()
 
@@ -222,3 +238,18 @@ class TebanActionResolver:
 
         else:
             return [Dahai(hai) for hai in player.juntehai]
+
+    def list_kyuushu_kyuuhai_candidates(self, player: Player) -> list[KyuushuKyuuhai]:
+        # Huuro exists
+        if self.game.huuro_count != 0:
+            return []
+
+        # Not first teban
+        if len(player.kawa) != 0:
+            return []
+
+        # Not KyuushuKyuuhai
+        if sum(hai.suit == "z" or hai.number in [1, 9] for hai in player.juntehai) < 9:
+            return []
+
+        return [KyuushuKyuuhai()]

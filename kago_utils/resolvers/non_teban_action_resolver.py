@@ -182,11 +182,11 @@ class NonTebanActionResolver:
         return Pending()
 
     def list_ronho_candidates(self, player: Player) -> list[Ronho]:
+        if self.game.last_dahai is None:
+            raise Exception()
+
         # Not agari
-        if (
-            self.game.last_dahai is not None
-            and ShantenCalculator(player.juntehai + self.game.last_dahai).shanten != -1
-        ):
+        if ShantenCalculator(player.juntehai + self.game.last_dahai).shanten != -1:
             return []
 
         # Not yakuari

@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING
 from kago_utils.actions import Ankan, Chii, Daiminkan, Kakan, Pon
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
-from kago_utils.player import Player
 from kago_utils.tehai_decomposer import TehaiBlock, TehaiDecomposer
 
 if TYPE_CHECKING:
     from kago_utils.game import Game
+    from kago_utils.player import Player
 
 
 class AgariCalculator:
@@ -115,21 +115,22 @@ class AgariCalculator:
         self.juntehai = copy.deepcopy(player.juntehai)
         self.huuros = copy.deepcopy(player.huuros)
 
-        # Ronho
+        # Tsumoho
         if game.teban == player.zaseki:
-            if player.last_tsumo is None:
-                raise Exception()
-
+            assert player.last_tsumo is not None
             self.agari_hai = player.last_tsumo
             self.from_who = player.zaseki
 
-        # Tsumoho
+        # Ronho
         else:
-            if game.last_dahai is None:
-                raise Exception()
-
-            self.juntehai += game.last_dahai
-            self.agari_hai = game.last_dahai
+            if not player.chankan_flg:
+                assert game.last_dahai is not None
+                self.juntehai += game.last_dahai
+                self.agari_hai = game.last_dahai
+            else:
+                assert game.last_added_hai is not None
+                self.juntehai += game.last_added_hai
+                self.agari_hai = game.last_added_hai
             self.from_who = game.teban
 
         self.zentehai = copy.deepcopy(self.juntehai)
@@ -168,11 +169,9 @@ class AgariCalculator:
                 max_yaku = yaku
 
         # Calculate ten for regular
-        for decomposed_tehai in TehaiDecomposer(
-            self.juntehai, self.huuros, self.agari_hai, self.is_tsumoho
-        ).decompose():
-            hu, is_pinhu = self.calculate_hu(decomposed_tehai)
-            bubun_yaku = self.get_bubun_yaku_for_regular(decomposed_tehai, is_pinhu)
+        for blocks in TehaiDecomposer(self.juntehai, self.huuros, self.agari_hai, self.is_tsumoho).decompose():
+            hu, is_pinhu = self.calculate_hu(blocks)
+            bubun_yaku = self.get_bubun_yaku_for_regular(blocks, is_pinhu)
 
             yaku = self.adjust_yaku(jokyo_yaku, zenbu_yaku, bubun_yaku)
             if yaku is None:
@@ -325,6 +324,46 @@ class AgariCalculator:
 
     def get_jokyo_yaku(self) -> dict[str, int]:
         jokyo_yaku = AgariCalculator.initialize_yaku()
+        counter = self.zentehai.to_counter34()
+
+        jokyo_yaku["門前清自摸和"] = 1 if self.player.is_menzen and self.is_tsumoho else 0
+
+        jokyo_yaku["立直"] = 1 if self.player.is_riichi_completed else 0
+
+        jokyo_yaku["一発"] = 1 if self.player.ippatsu_flg else 0
+
+        jokyo_yaku["槍槓"] = 1 if self.player.chankan_flg else 0
+
+        jokyo_yaku["嶺上開花"] = 1 if self.player.rinshankaihou_flg else 0
+
+        jokyo_yaku["海底摸月"] = (
+            1 if not self.player.rinshankaihou_flg and self.is_tsumoho and self.game.yama.rest_tsumo_count == 0 else 0
+        )
+
+        jokyo_yaku["河底撈魚"] = 1 if not self.is_tsumoho and self.game.yama.rest_tsumo_count == 0 else 0
+
+        jokyo_yaku["両立直"] = 2 if self.player.dabururiichi_flg else 0
+
+        jokyo_yaku["天和"] = (
+            13 if self.player.is_oya and self.game.huuro_count == 0 and len(self.player.kawa) == 0 else 0
+        )
+
+        jokyo_yaku["地和"] = (
+            13 if not self.player.is_oya and self.game.huuro_count == 0 and len(self.player.kawa) == 0 else 0
+        )
+
+        jokyo_yaku["ドラ"] = sum(
+            counter[i]
+            for i in AgariCalculator.calculate_doras(HaiGroup(self.game.yama.opened_dora_hyouji_hais).to_list34())
+        )
+        if self.player.is_riichi_completed:
+            jokyo_yaku["裏ドラ"] = sum(
+                counter[i]
+                for i in AgariCalculator.calculate_doras(
+                    HaiGroup(self.game.yama.opened_uradora_hyouji_hais).to_list34()
+                )
+            )
+        jokyo_yaku["赤ドラ"] = sum(1 for hai in self.zentehai.hais if hai.color == "r")
 
         # TODO: Not implemented yet
         return jokyo_yaku
@@ -541,3 +580,22 @@ class AgariCalculator:
     @classmethod
     def initialize_yaku(cls) -> dict[str, int]:
         return dict((yaku, 0) for yaku in cls.YAKU)
+
+    @classmethod
+    def calculate_doras(cls, hyouji_hais: list[int]) -> list[int]:
+        doras = []
+        for hai in hyouji_hais:
+            if hai == 8:
+                doras.append(0)
+            elif hai == 17:
+                doras.append(9)
+            elif hai == 26:
+                doras.append(18)
+            elif hai == 30:
+                doras.append(27)
+            elif hai == 33:
+                doras.append(31)
+            else:
+                doras.append(hai + 1)
+
+        return doras
