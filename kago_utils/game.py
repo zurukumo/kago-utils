@@ -288,8 +288,7 @@ class Game:
             if player == self.teban_player:
                 continue
             if isinstance(player, Bot):
-                # TODO: 実装する
-                pass
+                player.select_chankan_action()
 
         self.update_state("wait_chankan_action")
 
