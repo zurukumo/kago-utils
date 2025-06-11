@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749648616996,
+  "lastUpdate": 1749651774890,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -298,6 +298,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.004016484579063834",
             "extra": "mean: 1.0858123937999948 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "86b3f49b98de68106e60ad28d1aa0c64f396148c",
+          "message": "fix: Treat special ryuukyoku as renchan",
+          "timestamp": "2025-06-11T23:17:35+09:00",
+          "tree_id": "78f5054c3306b70caa7b852cab8cb7e54ed1e262",
+          "url": "https://github.com/zurukumo/kago-utils/commit/86b3f49b98de68106e60ad28d1aa0c64f396148c"
+        },
+        "date": 1749651774580,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 0.8994325314303858,
+            "unit": "iter/sec",
+            "range": "stddev: 0.003340508917298197",
+            "extra": "mean: 1.1118121315999985 sec\nrounds: 5"
           }
         ]
       }
