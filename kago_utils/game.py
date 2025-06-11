@@ -429,6 +429,7 @@ class Game:
 
     def kyuushu_kyuuhai(self) -> None:
         self.honba += 1
+        self.is_renchan = True
 
         if self.is_syuukyoku:
             self.update_state("syuukyoku")
@@ -437,6 +438,7 @@ class Game:
 
     def yoncha_riichi(self) -> None:
         self.honba += 1
+        self.is_renchan = True
 
         if self.is_syuukyoku:
             self.update_state("syuukyoku")
@@ -445,6 +447,7 @@ class Game:
 
     def suuhuu_renda(self) -> None:
         self.honba += 1
+        self.is_renchan = True
 
         if self.is_syuukyoku:
             self.update_state("syuukyoku")
@@ -453,6 +456,7 @@ class Game:
 
     def suukan_sanryou(self) -> None:
         self.honba += 1
+        self.is_renchan = True
 
         if self.is_syuukyoku:
             self.update_state("syuukyoku")
@@ -461,6 +465,7 @@ class Game:
 
     def sancha_houra(self) -> None:
         self.honba += 1
+        self.is_renchan = True
 
         if self.is_syuukyoku:
             self.update_state("syuukyoku")
