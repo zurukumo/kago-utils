@@ -31,22 +31,22 @@ print(tehai1 == tehai2 == tehai3)  # True
 ### 向聴数の計算
 ```python
 from kago_utils.hai_group import HaiGroup
-from kago_utils.shanten_calculator import ShantenCalculator
+from kago_utils.shanten import calculate_shanten
 
 # 手牌
 tehai = HaiGroup.from_code("123m456p789s11122z")
 
 # 向聴数
-shanten = ShantenCalculator(tehai).shanten
+shanten = calculate_shanten(tehai)
 print(shanten)  # -1
 ```
 
 
 ## 謝辞
-- `tests/data/p_hon_10000.txt`
-- `tests/data/p_koku_10000.txt`
-- `tests/data/p_normal_10000.txt`
-- `tests/data/p_tin_10000.txt`
+- `tests/data/shanten/p_hon_10000.txt`
+- `tests/data/shanten/p_koku_10000.txt`
+- `tests/data/shanten/p_normal_10000.txt`
+- `tests/data/shanten/p_tin_10000.txt`
 
 は、[あらの一人麻雀研究所](https://mahjong.ara.black/etc/shanten/shanten9.htm) からお借りしました。
 
