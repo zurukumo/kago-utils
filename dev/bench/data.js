@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749563721250,
+  "lastUpdate": 1749648616996,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -267,6 +267,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.003020860488315513",
             "extra": "mean: 1.1141713549999963 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "107a03d456fd4278703c3a8d91d1965992e02178",
+          "message": "refactor: Convert class-based implementation to function-based",
+          "timestamp": "2025-06-11T22:26:55+09:00",
+          "tree_id": "b35384a90c4c78ab131fa1a4786d97f816779820",
+          "url": "https://github.com/zurukumo/kago-utils/commit/107a03d456fd4278703c3a8d91d1965992e02178"
+        },
+        "date": 1749648616638,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 0.9209694102867264,
+            "unit": "iter/sec",
+            "range": "stddev: 0.004016484579063834",
+            "extra": "mean: 1.0858123937999948 sec\nrounds: 5"
           }
         ]
       }
