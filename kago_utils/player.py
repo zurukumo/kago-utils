@@ -7,7 +7,7 @@ from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.kawa import Kawa
-from kago_utils.shanten_calculator import ShantenCalculator
+from kago_utils.shanten import calculate_shanten
 from kago_utils.zaichi import Zaichi
 
 if TYPE_CHECKING:
@@ -235,7 +235,7 @@ class Player:
 
     @property
     def is_tenpai(self) -> bool:
-        shanten = ShantenCalculator(juntehai=self.juntehai).shanten
+        shanten = calculate_shanten(juntehai=self.juntehai)
         return shanten == 0
 
     @property

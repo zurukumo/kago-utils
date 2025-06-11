@@ -9,7 +9,7 @@ from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai import Hai
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
-from kago_utils.shanten_calculator import ShantenCalculator
+from kago_utils.shanten import calculate_shanten
 
 from .results import ChiiResult, DaiminkanResult, Pending, PonResult, RonhoResult, SkipResult
 
@@ -186,7 +186,7 @@ class NonTebanActionResolver:
             raise Exception()
 
         # Not agari
-        if ShantenCalculator(player.juntehai + self.game.last_dahai).shanten != -1:
+        if calculate_shanten(player.juntehai + self.game.last_dahai) != -1:
             return []
 
         # Not yakuari

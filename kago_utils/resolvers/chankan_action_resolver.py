@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from kago_utils.actions import Ronho, Skip
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.player import Player
-from kago_utils.shanten_calculator import ShantenCalculator
+from kago_utils.shanten import calculate_shanten
 
 from .results import Pending, RonhoResult, SkipResult
 
@@ -104,7 +104,7 @@ class ChankanActionResolver:
             raise Exception()
 
         # Not agari
-        if ShantenCalculator(player.juntehai + self.game.last_added_hai).shanten != -1:
+        if calculate_shanten(player.juntehai + self.game.last_added_hai) != -1:
             return []
 
         # Not yakuari

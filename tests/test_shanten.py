@@ -6,7 +6,7 @@ import pytest
 from shanten_tools import shanten as external_shanten
 
 from kago_utils.hai_group import HaiGroup
-from kago_utils.shanten_calculator import ShantenCalculator
+from kago_utils.shanten import calculate_shanten, calculate_yuukouhai
 
 
 def generate_random_juntehai(juntehai_length: int):
@@ -36,31 +36,17 @@ def calculate_shanten_external(juntehai: HaiGroup):
 
 
 @pytest.mark.no_cover
-def test_init():
+def test_calculate_shanten():
     for juntehai_length in [1, 2, 4, 5, 7, 8, 10, 11, 13, 14]:
         juntehai = HaiGroup.from_list(list(range(juntehai_length)))
-        ShantenCalculator(juntehai)
+        calculate_shanten(juntehai)
 
 
 @pytest.mark.no_cover
-def test_init_when_juntehai_length_is_invalid():
-    juntehai = HaiGroup.from_list(list(range(3)))
-    with pytest.raises(ValueError):
-        ShantenCalculator(juntehai)
-
-
-@pytest.mark.no_cover
-def test_init_when_juntehai_length_is_too_long():
+def test_calculate_shanten_when_juntehai_length_is_too_long():
     juntehai = HaiGroup.from_list(list(range(15)))
     with pytest.raises(ValueError):
-        ShantenCalculator(juntehai)
-
-
-@pytest.mark.no_cover
-def test_init_when_juntehai_having_same_hai():
-    juntehai = HaiGroup.from_list(list(range(12)) + [12] * 2)
-    with pytest.raises(ValueError):
-        ShantenCalculator(juntehai)
+        calculate_shanten(juntehai)
 
 
 shanten_params = [
@@ -79,10 +65,10 @@ shanten_params = [
 
 @pytest.mark.parametrize("juntehai_length, n_huuro", shanten_params)
 @pytest.mark.no_cover
-def test_shanten_with_normal(juntehai_length, n_huuro):
+def test_calculate_shanten_with_normal(juntehai_length, n_huuro):
     for _ in range(10000):
         juntehai = generate_random_juntehai(juntehai_length)
-        result = ShantenCalculator(juntehai).shanten
+        result = calculate_shanten(juntehai)
         expected = calculate_shanten_external(juntehai)
         msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
         assert result == expected, msg
@@ -90,10 +76,10 @@ def test_shanten_with_normal(juntehai_length, n_huuro):
 
 @pytest.mark.parametrize("juntehai_length, n_huuro", shanten_params)
 @pytest.mark.no_cover
-def test_shanten_with_honitsu(juntehai_length, n_huuro):
+def test_calculate_shanten_with_honitsu(juntehai_length, n_huuro):
     for _ in range(10000):
         juntehai = generate_random_juntehai_for_honitsu(juntehai_length)
-        result = ShantenCalculator(juntehai).shanten
+        result = calculate_shanten(juntehai)
         expected = calculate_shanten_external(juntehai)
         msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
         assert result == expected, msg
@@ -101,10 +87,10 @@ def test_shanten_with_honitsu(juntehai_length, n_huuro):
 
 @pytest.mark.parametrize("juntehai_length, n_huuro", shanten_params)
 @pytest.mark.no_cover
-def test_shanten_with_chinitsu(juntehai_length, n_huuro):
+def test_calculate_shanten_with_chinitsu(juntehai_length, n_huuro):
     for _ in range(10000):
         juntehai = generate_random_juntehai_for_chinitsu(juntehai_length)
-        result = ShantenCalculator(juntehai).shanten
+        result = calculate_shanten(juntehai)
         expected = calculate_shanten_external(juntehai)
         msg = f"juntehai: {juntehai.to_code()}, n_huuro: {n_huuro}"
         assert result == expected, msg
@@ -112,80 +98,76 @@ def test_shanten_with_chinitsu(juntehai_length, n_huuro):
 
 # ref: https://mahjong.ara.black/etc/shanten/shanten9.htm
 @pytest.mark.no_cover
-def test_shanten_with_p_normal_10000_txt():
+def test_calculate_shanten_with_p_normal_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_normal_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_normal_10000.txt")
+    p_normal_10000_txt = os.path.join(current_dir, "data/shanten/p_normal_10000.txt")
     with open(p_normal_10000_txt, "rb") as f:
         for row in f.readlines():
             problem = list(map(int, row.split()))
             juntehai = HaiGroup.from_list34(problem[:14])
-            shanten = ShantenCalculator(juntehai)
-            result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
-            expected = problem[14:]
+            result = calculate_shanten(juntehai)
+            expected = min(problem[14:])
             msg = f"juntehai: {juntehai.to_code()}"
             assert result == expected, msg
 
 
 @pytest.mark.no_cover
-def test_shanten_with_p_hon_10000_txt():
+def test_calculate_shanten_with_p_hon_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_hon_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_hon_10000.txt")
+    p_hon_10000_txt = os.path.join(current_dir, "data/shanten/p_hon_10000.txt")
     with open(p_hon_10000_txt, "rb") as f:
         for row in f.readlines():
             problem = list(map(int, row.split()))
             juntehai = HaiGroup.from_list34(problem[:14])
-            shanten = ShantenCalculator(juntehai)
-            result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
-            expected = problem[14:]
+            result = calculate_shanten(juntehai)
+            expected = min(problem[14:])
             msg = f"juntehai: {juntehai.to_code()}"
             assert result == expected, msg
 
 
 @pytest.mark.no_cover
-def test_shanten_with_p_tin_10000_txt():
+def test_calculate_shanten_with_p_tin_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_tin_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_tin_10000.txt")
+    p_tin_10000_txt = os.path.join(current_dir, "data/shanten/p_tin_10000.txt")
     with open(p_tin_10000_txt, "rb") as f:
         for row in f.readlines():
             problem = list(map(int, row.split()))
             juntehai = HaiGroup.from_list34(problem[:14])
-            shanten = ShantenCalculator(juntehai)
-            result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
-            expected = problem[14:]
+            result = calculate_shanten(juntehai)
+            expected = min(problem[14:])
             msg = f"juntehai: {juntehai.to_code()}"
             assert result == expected, msg
 
 
 @pytest.mark.no_cover
-def test_shanten_with_p_koku_10000_txt():
+def test_calculate_shanten_with_p_koku_10000_txt():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    p_koku_10000_txt = os.path.join(current_dir, "data/shanten_calculator/p_koku_10000.txt")
+    p_koku_10000_txt = os.path.join(current_dir, "data/shanten/p_koku_10000.txt")
     with open(p_koku_10000_txt, "rb") as f:
         for row in f.readlines():
             problem = list(map(int, row.split()))
             juntehai = HaiGroup.from_list34(problem[:14])
-            shanten = ShantenCalculator(juntehai)
-            result = [shanten.regular_shanten, shanten.kokushimusou_shanten, shanten.chiitoitsu_shanten]
-            expected = problem[14:]
+            result = calculate_shanten(juntehai)
+            expected = min(problem[14:])
             msg = f"juntehai: {juntehai.to_code()}"
             assert result == expected, msg
 
 
 @pytest.mark.no_cover
-def test_shanten_with_handmade_tehai():
+def test_calculate_shanten_with_handmade_tehai():
     # format: (juntehai, expected)
     testcases = [
         (HaiGroup.from_code("23466669999m111z"), 1),
         (HaiGroup.from_code("1111345567m111z"), 1),
     ]
     for juntehai, expected in testcases:
-        result = ShantenCalculator(juntehai).shanten
+        result = calculate_shanten(juntehai)
         msg = f"juntehai: {juntehai}"
         assert result == expected, msg
 
 
 @pytest.mark.no_cover
-def test_shanten_with_invalid_tehai():
+def test_calculate_shanten_with_invalid_tehai():
     testcases = [
         HaiGroup.from_code(""),
         HaiGroup.from_code("111m"),
@@ -195,7 +177,7 @@ def test_shanten_with_invalid_tehai():
     ]
     for juntehai in testcases:
         with pytest.raises(ValueError):
-            ShantenCalculator(juntehai).shanten
+            calculate_shanten(juntehai)
 
 
 @pytest.mark.no_cover
@@ -284,12 +266,12 @@ def test_yuukouhai_with_handmade_tehai():
     ]
 
     for juntehai, expected in code_testcases:
-        result = ShantenCalculator(HaiGroup.from_code(juntehai)).yuukouhai.to_code()
+        result = calculate_yuukouhai(HaiGroup.from_code(juntehai)).to_code()
         msg = f"juntehai: {juntehai}, expected: {expected}, result: {result}"
         assert result == expected, msg
 
     for juntehai, expected in list_testcases:
-        result = ShantenCalculator(HaiGroup.from_list(juntehai)).yuukouhai.to_list()
+        result = calculate_yuukouhai(HaiGroup.from_list(juntehai)).to_list()
         msg = f"juntehai: {juntehai}, expected: {expected}, result: {result}"
         assert result == expected, msg
 
@@ -310,14 +292,14 @@ def test_yuukouhai_when_juntehai_length_is_invalid():
 
     for juntehai in testcases:
         with pytest.raises(ValueError):
-            ShantenCalculator(juntehai).yuukouhai
+            calculate_yuukouhai(juntehai)
 
 
 @pytest.mark.no_cover
-def test_shanten_benchmark(benchmark):
+def test_calculate_shanten_benchmark(benchmark):
     def calculate_shanten_1000times():
         for _ in range(1000):
             juntehai = generate_random_juntehai(14)
-            ShantenCalculator(juntehai).shanten
+            calculate_shanten(juntehai)
 
     benchmark(calculate_shanten_1000times)

@@ -463,6 +463,7 @@ def test_list_dahai_candidates_right_after_calling_chii():
 
     game.teban = 3
     player1.juntehai = HaiGroup.from_code("4m1112223334445z")
+    player1.last_tsumo = player1.juntehai[0]
     game.teban_action_resolver.prepare()
     player1.dahai(Dahai(hai=HaiGroup.from_code("4m")[0]))
 
@@ -480,6 +481,7 @@ def test_list_dahai_candidates_right_after_calling_pon():
 
     game.teban = 3
     player1.juntehai = HaiGroup.from_code("0m1112223334445z")
+    player1.last_tsumo = player1.juntehai[0]
     game.teban_action_resolver.prepare()
     player1.dahai(Dahai(hai=HaiGroup.from_code("0m")[0]))
 

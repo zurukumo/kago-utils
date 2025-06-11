@@ -6,7 +6,7 @@ from kago_utils.actions import Ankan, Chii, Dahai, Kakan, KyuushuKyuuhai, Pon, R
 from kago_utils.agari_calculator import AgariCalculator
 from kago_utils.hai_group import HaiGroup
 from kago_utils.player import Player
-from kago_utils.shanten_calculator import ShantenCalculator
+from kago_utils.shanten import calculate_shanten, calculate_yuukouhai
 
 from .results import AnkanResult, DahaiResult, KakanResult, KyuushuKyuuhaiResult, Pending, RiichiResult, TsumohoResult
 
@@ -118,7 +118,7 @@ class TebanActionResolver:
 
     def list_tsumoho_candidates(self, player: Player) -> list[Tsumoho]:
         # Not agari
-        if ShantenCalculator(player.juntehai).shanten != -1:
+        if calculate_shanten(player.juntehai) != -1:
             return []
 
         # Not yakuari
@@ -149,12 +149,14 @@ class TebanActionResolver:
             return []
 
         # Not tenpai
-        if ShantenCalculator(player.juntehai).shanten > 0:
+        if calculate_shanten(player.juntehai) > 0:
             return []
 
         return [Riichi()]
 
     def list_ankan_candidates(self, player: Player) -> list[Ankan]:
+        assert player.last_tsumo is not None
+
         # Right after calling riichi
         if player.is_right_after_riichi:
             return []
@@ -170,15 +172,17 @@ class TebanActionResolver:
         candidates = []
         counter = player.juntehai.to_counter34()
 
-        # When riichi completed, only ankan that does not change shanten and machihais is allowed
+        # When riichi completed, only ankan that does not change shanten and machi is allowed
         if player.is_riichi_completed:
-            if player.last_tsumo is not None and counter[player.last_tsumo.id // 4] >= 4:
+            if counter[player.last_tsumo.id // 4] >= 4:
                 base_id = player.last_tsumo.id // 4 * 4
                 ankan = Ankan(hais=HaiGroup.from_list([base_id, base_id + 1, base_id + 2, base_id + 3]))
 
-                shanten1 = ShantenCalculator(player.juntehai - player.last_tsumo)
-                shanten2 = ShantenCalculator(player.juntehai - ankan.hais)
-                if shanten1.shanten == shanten2.shanten and shanten1.yuukouhai == shanten2.yuukouhai:
+                shanten1 = calculate_shanten(player.juntehai - player.last_tsumo)
+                shanten2 = calculate_shanten(player.juntehai - ankan.hais)
+                yuukouhai1 = calculate_yuukouhai(player.juntehai - ankan.hais)
+                yuukouhai2 = calculate_yuukouhai(player.juntehai - player.last_tsumo)
+                if shanten1 == shanten2 and yuukouhai1 == yuukouhai2:
                     candidates.append(ankan)
 
         # Otherwise, all ankans are allowed
@@ -220,7 +224,7 @@ class TebanActionResolver:
             candidates = []
             for hai in player.juntehai:
                 new_juntehai = player.juntehai - hai
-                if ShantenCalculator(new_juntehai).shanten == 0:
+                if calculate_shanten(new_juntehai) == 0:
                     candidates.append(Dahai(hai))
             return candidates
 
