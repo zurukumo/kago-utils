@@ -301,6 +301,9 @@ class Game:
             self.update_state("ronho")
             return
 
+        # When not ronho, ippatsu is cleared
+        self.reset_ippatsu_flg()
+
         if isinstance(result, SkipResult):
             self.update_state("rinshan_tsumo")
             return

@@ -47,14 +47,12 @@ class ChankanActionResolver:
             self.choice[player.id] = None
 
     def register_ronho(self, player: Player, ronho: Ronho) -> None:
-        # print("ronhoが登録されました")
         if self.choice[player.id] is not None:
             return
         if ronho in self.ronho_candidates[player.id]:
             self.choice[player.id] = ronho
 
     def register_skip(self, player: Player, skip: Skip) -> None:
-        # print("skipが登録されました")
         if self.choice[player.id] is not None:
             return
         if skip in self.skip_candidates[player.id]:

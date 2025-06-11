@@ -161,7 +161,6 @@ class Player:
                     self.huuros[i] = kakan
                     self.juntehai -= kakan.added
                     self.last_added_hai = kakan.added
-                    self.game.reset_ippatsu_flg()
                     self.game.set_chankan_flg()
                     if self.is_right_after_minkan:
                         self.game.yama.open_dora_hyouji_hai()
