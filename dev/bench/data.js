@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749844330571,
+  "lastUpdate": 1749844723834,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -639,6 +639,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00007205214068291743",
             "extra": "mean: 17.95515498077057 msec\nrounds: 52"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "1520de4aa9cbcf355c1e7789b714d5371c5edb19",
+          "message": "feat: Convert distance_table.txt to .c",
+          "timestamp": "2025-06-14T04:57:00+09:00",
+          "tree_id": "5ddd511a773265de0fca8ee47517c67e587ba67e",
+          "url": "https://github.com/zurukumo/kago-utils/commit/1520de4aa9cbcf355c1e7789b714d5371c5edb19"
+        },
+        "date": 1749844723513,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 54.737579852606125,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00019613845706398375",
+            "extra": "mean: 18.26898453846035 msec\nrounds: 52"
           }
         ]
       }
