@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: python -m pipenv install --dev
 
+      - name: Build C extensions
+        run: pipenv run python setup.py build_ext --inplace
+
       - name: Run test with coverage
         run: pipenv run python -m pytest --junitxml=pytest.xml --cov=kago_utils --cov-report=term-missing:skip-covered --benchmark-skip | tee pytest-coverage.txt
 

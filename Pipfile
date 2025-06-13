@@ -13,6 +13,7 @@ pytest = "*"
 pytest-benchmark = "*"
 pytest-cov = "*"
 ruff = "*"
+setuptools = "*"
 shanten-tools = "*"
 
 [requires]
