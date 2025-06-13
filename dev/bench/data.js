@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749837847592,
+  "lastUpdate": 1749838004943,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -391,6 +391,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00016062299497771282",
             "extra": "mean: 18.01256567272715 msec\nrounds: 55"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "6c368a74bc2c50b7d0ae9e6854ac2d94f5de0250",
+          "message": "fix: Test workflow for C",
+          "timestamp": "2025-06-14T03:05:30+09:00",
+          "tree_id": "53dd38c564ef1560b8669f751ed757844cce8245",
+          "url": "https://github.com/zurukumo/kago-utils/commit/6c368a74bc2c50b7d0ae9e6854ac2d94f5de0250"
+        },
+        "date": 1749838004623,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 54.76036508296409,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00014690191778248972",
+            "extra": "mean: 18.261383000003033 msec\nrounds: 54"
           }
         ]
       }
