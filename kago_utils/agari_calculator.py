@@ -345,11 +345,15 @@ class AgariCalculator:
         jokyo_yaku["両立直"] = 2 if self.player.dabururiichi_flg else 0
 
         jokyo_yaku["天和"] = (
-            13 if self.player.is_oya and self.game.huuro_count == 0 and len(self.player.kawa) == 0 else 0
+            13
+            if self.is_tsumoho and self.game.huuro_count == 0 and len(self.player.kawa) == 0 and self.player.is_oya
+            else 0
         )
 
         jokyo_yaku["地和"] = (
-            13 if not self.player.is_oya and self.game.huuro_count == 0 and len(self.player.kawa) == 0 else 0
+            13
+            if self.is_tsumoho and self.game.huuro_count == 0 and len(self.player.kawa) == 0 and not self.player.is_oya
+            else 0
         )
 
         jokyo_yaku["ドラ"] = sum(
