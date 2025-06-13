@@ -1,30 +1,29 @@
-import gzip
+import csv
 import os
-import pickle
 import time
-from heapq import heappop, heappush
+from collections import deque
 from itertools import combinations_with_replacement, product
 from typing import Literal
 
 
 class DistanceTableGenerator:
-    def __init__(self, type: Literal["suuhai", "zihai"]) -> None:
-        self.distance_table: dict[tuple[tuple[int, ...], int], int] = dict()
-        self.heap_queue: list[tuple[int, list[int], int]] = []
-
-        match type:
+    def __init__(self, _type: Literal["suuhai", "zihai"]) -> None:
+        match _type:
             case "suuhai":
                 self.n_hai_kind = 9
                 self.max_n_shuntsu = 4
                 self.max_n_koutsu = 4
                 self.max_n_jantou = 1
-                self.filename = "suuhai_distance_table.pickle.gz"
+                self.filename = "suuhai_distance_table.txt"
             case "zihai":
                 self.n_hai_kind = 7
                 self.max_n_shuntsu = 0
                 self.max_n_koutsu = 4
                 self.max_n_jantou = 1
-                self.filename = "zihai_distance_table.pickle.gz"
+                self.filename = "zihai_distance_table.txt"
+
+        self.distance_table = [[8] * (5**self.n_hai_kind) for _ in range(10)]
+        self.queue: deque[tuple[int, list[int], int]] = deque()
 
     def list_agari_patterns(self) -> list[list[int]]:
         patterns = []
@@ -53,29 +52,44 @@ class DistanceTableGenerator:
                     patterns.append(pattern)
         return patterns
 
-    def update_table_and_queue(self, distance: int, pattern: list[int], length: int) -> None:
-        key = (tuple(pattern), length)
-        if key not in self.distance_table or distance < self.distance_table[key]:
-            self.distance_table[key] = distance
-            heappush(self.heap_queue, (distance, pattern, length))
+    def generate_length_key(self, length: int) -> int:
+        if length % 3 == 2:
+            return (length - 2) * 2 // 3
+        else:
+            return (length - 3) * 2 // 3 + 1
+
+    def generate_pattern_key(self, pattern: list[int]) -> int:
+        k = 0
+        for p in pattern:
+            k = k * 5 + p
+        return k
 
     def generate(self) -> None:
         # Initialize
         for pattern in self.list_agari_patterns():
             distance, pattern, length = 0, pattern, sum(pattern)
-            self.update_table_and_queue(distance, pattern, length)
+            self.queue.append((distance, pattern, length))
+            lkey = self.generate_length_key(length)
+            pkey = self.generate_pattern_key(pattern)
+            self.distance_table[lkey][pkey] = distance
 
         # Dijkstra
-        while self.heap_queue:
-            distance, pattern, length = heappop(self.heap_queue)
-            if distance > self.distance_table[(tuple(pattern), length)]:
+        while self.queue:
+            distance, pattern, length = self.queue.popleft()
+            lkey = self.generate_length_key(length)
+            pkey = self.generate_pattern_key(pattern)
+            if distance > self.distance_table[lkey][pkey]:
                 continue
 
             # Decreasing the number of hais increases the distance
             for i in range(self.n_hai_kind):
                 if pattern[i] > 0:
                     pattern[i] -= 1
-                    self.update_table_and_queue(distance + 1, pattern.copy(), length)
+                    lkey = self.generate_length_key(length)
+                    pkey = self.generate_pattern_key(pattern)
+                    if distance + 1 < self.distance_table[lkey][pkey]:
+                        self.distance_table[lkey][pkey] = distance + 1
+                        self.queue.append((distance + 1, pattern.copy(), length))
                     pattern[i] += 1
 
             # When the number of hais is 14, can't increase the number of hais
@@ -86,7 +100,11 @@ class DistanceTableGenerator:
             for i in range(self.n_hai_kind):
                 if pattern[i] < 4:
                     pattern[i] += 1
-                    self.update_table_and_queue(distance, pattern.copy(), length)
+                    lkey = self.generate_length_key(length)
+                    pkey = self.generate_pattern_key(pattern)
+                    if distance < self.distance_table[lkey][pkey]:
+                        self.distance_table[lkey][pkey] = distance
+                        self.queue.appendleft((distance, pattern.copy(), length))
                     pattern[i] -= 1
 
         self.save_table()
@@ -94,8 +112,9 @@ class DistanceTableGenerator:
     def save_table(self) -> None:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_dir, f"../kago_utils/resources/distance_tables/{self.filename}")
-        with gzip.open(file_path, "wb") as f:
-            pickle.dump(dict(self.distance_table), f)
+        with open(file_path, "w") as f:
+            writer = csv.writer(f, delimiter=" ")
+            writer.writerows(self.distance_table)
 
 
 if __name__ == "__main__":
