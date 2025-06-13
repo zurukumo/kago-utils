@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749651774890,
+  "lastUpdate": 1749837709810,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -329,6 +329,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.003340508917298197",
             "extra": "mean: 1.1118121315999985 sec\nrounds: 5"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "6cee0a6871ccf209e13e28a4457b5cba046a2f8b",
+          "message": "feat: Install setuptools",
+          "timestamp": "2025-06-14T03:00:06+09:00",
+          "tree_id": "614e05c31676a308ac6e44fa457e9d395a844a8f",
+          "url": "https://github.com/zurukumo/kago-utils/commit/6cee0a6871ccf209e13e28a4457b5cba046a2f8b"
+        },
+        "date": 1749837708968,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 55.109042388466584,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00004288915050250167",
+            "extra": "mean: 18.145842436363644 msec\nrounds: 55"
           }
         ]
       }
