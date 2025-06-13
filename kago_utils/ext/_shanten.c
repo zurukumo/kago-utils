@@ -1,56 +1,8 @@
 #define PY_SSIZE_T_CLEAN
+#include "../resources/distance_tables/suuhai_distance_table.c"
+#include "../resources/distance_tables/zihai_distance_table.c"
 #include <Python.h>
 #include <stdbool.h>
-
-#define SUUHAI_TABLE_SIZE 1953125
-#define ZIHAI_TABLE_SIZE 78125
-
-int suuhai_table[10][SUUHAI_TABLE_SIZE];
-int zihai_table[10][ZIHAI_TABLE_SIZE];
-
-static int load_suuhai_table() {
-  FILE *fp = fopen("kago_utils/resources/distance_tables/suuhai_distance_table.txt", "r");
-  if (!fp) {
-    perror("fopen");
-    PyErr_SetString(PyExc_IOError, "Could not open suuhai table file");
-    return 0;
-  }
-
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < SUUHAI_TABLE_SIZE; ++j) {
-      if (fscanf(fp, "%d", &suuhai_table[i][j]) != 1) {
-        fclose(fp);
-        PyErr_SetString(PyExc_IOError, "Invalid suuhai table format");
-        return 0;
-      }
-    }
-  }
-
-  fclose(fp);
-  return 1;
-}
-
-static int load_zihai_table() {
-  FILE *fp = fopen("kago_utils/resources/distance_tables/zihai_distance_table.txt", "r");
-  if (!fp) {
-    perror("fopen");
-    PyErr_SetString(PyExc_IOError, "Could not open zihai table file");
-    return 0;
-  }
-
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < ZIHAI_TABLE_SIZE; ++j) {
-      if (fscanf(fp, "%d", &zihai_table[i][j]) != 1) {
-        fclose(fp);
-        PyErr_SetString(PyExc_IOError, "Invalid zihai table format");
-        return 0;
-      }
-    }
-  }
-
-  fclose(fp);
-  return 1;
-}
 
 static int get_length_key(int length) {
   if (length % 3 == 2) {
@@ -209,10 +161,4 @@ static PyMethodDef ShantenMethods[] = {
 
 static struct PyModuleDef shantenmodule = {PyModuleDef_HEAD_INIT, "_shanten", NULL, -1, ShantenMethods};
 
-PyMODINIT_FUNC PyInit__shanten(void) {
-  if (!load_suuhai_table() || !load_zihai_table()) {
-    return NULL;
-  }
-
-  return PyModule_Create(&shantenmodule);
-}
+PyMODINIT_FUNC PyInit__shanten(void) { return PyModule_Create(&shantenmodule); }

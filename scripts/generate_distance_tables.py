@@ -1,4 +1,3 @@
-import csv
 import os
 import time
 from collections import deque
@@ -8,19 +7,19 @@ from typing import Literal
 
 class DistanceTableGenerator:
     def __init__(self, _type: Literal["suuhai", "zihai"]) -> None:
+        self.type = _type
+        self.filename = f"{_type}_distance_table.c"
         match _type:
             case "suuhai":
                 self.n_hai_kind = 9
                 self.max_n_shuntsu = 4
                 self.max_n_koutsu = 4
                 self.max_n_jantou = 1
-                self.filename = "suuhai_distance_table.txt"
             case "zihai":
                 self.n_hai_kind = 7
                 self.max_n_shuntsu = 0
                 self.max_n_koutsu = 4
                 self.max_n_jantou = 1
-                self.filename = "zihai_distance_table.txt"
 
         self.distance_table = [[8] * (5**self.n_hai_kind) for _ in range(10)]
         self.queue: deque[tuple[int, list[int], int]] = deque()
@@ -113,8 +112,12 @@ class DistanceTableGenerator:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(current_dir, f"../kago_utils/resources/distance_tables/{self.filename}")
         with open(file_path, "w") as f:
-            writer = csv.writer(f, delimiter=" ")
-            writer.writerows(self.distance_table)
+            f.write(f"static int {self.type}_table[10][{5**self.n_hai_kind}] ={{")
+            for i in range(10):
+                f.write("{")
+                f.write(",".join(map(str, self.distance_table[i])))
+                f.write("},")
+            f.write("};")
 
 
 if __name__ == "__main__":
