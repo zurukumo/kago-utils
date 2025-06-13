@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749843441099,
+  "lastUpdate": 1749844330571,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -608,6 +608,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00007909695311436177",
             "extra": "mean: 18.4214267843143 msec\nrounds: 51"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "35630e5005748491da22fbb687b337522de047d9",
+          "message": "fix: Remove unused import",
+          "timestamp": "2025-06-14T04:50:48+09:00",
+          "tree_id": "79b645ccb3bd1765be803e76512965074911f900",
+          "url": "https://github.com/zurukumo/kago-utils/commit/35630e5005748491da22fbb687b337522de047d9"
+        },
+        "date": 1749844330224,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 55.69431180465832,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00007205214068291743",
+            "extra": "mean: 17.95515498077057 msec\nrounds: 52"
           }
         ]
       }
