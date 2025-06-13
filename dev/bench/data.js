@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1749838229893,
+  "lastUpdate": 1749838693322,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -453,6 +453,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00007165242228748387",
             "extra": "mean: 18.245134327272893 msec\nrounds: 55"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "ade53c0342bbf0aa14966b6cb3ca59c48705efdd",
+          "message": "feat: add verbose flag",
+          "timestamp": "2025-06-14T03:16:39+09:00",
+          "tree_id": "2e8e1b30325d3ece69b7a121300e7cba5b9ce9e8",
+          "url": "https://github.com/zurukumo/kago-utils/commit/ade53c0342bbf0aa14966b6cb3ca59c48705efdd"
+        },
+        "date": 1749838692792,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 55.33189648470361,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00007097584919618472",
+            "extra": "mean: 18.072758454546154 msec\nrounds: 55"
           }
         ]
       }
