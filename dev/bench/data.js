@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750090702174,
+  "lastUpdate": 1750090905602,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -701,6 +701,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.0008203566693266413",
             "extra": "mean: 18.335693673079206 msec\nrounds: 52"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "3fd663e97c334157915702aa6e1f946316a9e959",
+          "message": "fix: Generating shanten table when install",
+          "timestamp": "2025-06-17T01:19:35+09:00",
+          "tree_id": "c8ff32eb527a6dc612544ba1871e4f16a41336d4",
+          "url": "https://github.com/zurukumo/kago-utils/commit/3fd663e97c334157915702aa6e1f946316a9e959"
+        },
+        "date": 1750090905100,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 55.03144745607296,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00007314191042548496",
+            "extra": "mean: 18.171428269231278 msec\nrounds: 52"
           }
         ]
       }
