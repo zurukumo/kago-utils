@@ -243,12 +243,6 @@ class Game:
                     self.update_state("yoncha_riichi")
                     return
 
-        # When not ronho and after kakan or daiminkan, open dora
-        for player in self.players:
-            if player.is_right_after_minkan:
-                self.yama.open_dora_hyouji_hai()
-                player.is_right_after_minkan = False
-
         # Suuhuu Renda
         first_dahais = [player.kawa[0] for player in self.players if len(player.kawa) > 0]
         if (
