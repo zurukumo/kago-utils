@@ -562,12 +562,22 @@ class Game:
         # Normal
         if self.kyoku >= 8 and any(player.ten >= 30000 for player in self.players) and not self.is_renchan:
             return True
-        # Agariyame
+        # Agariyame Nanba
         elif (
             self.kyoku >= 7
             and self.oya.ten > max(player.ten for player in self.players if not player.is_oya)
             and self.oya.ten >= 30000
             and self.is_renchan
+            and self.state in ["agari", "ryuukyoku", "nagashi_mangan"]
+        ):
+            return True
+        # Agariyame Shaba
+        elif (
+            self.kyoku >= 8
+            and self.oya.ten >= max(player.ten for player in self.players)
+            and self.oya.ten >= 30000
+            and self.is_renchan
+            and self.state in ["agari", "ryuukyoku", "nagashi_mangan"]
         ):
             return True
         # Tobi
