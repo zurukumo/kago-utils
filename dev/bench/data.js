@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750170134435,
+  "lastUpdate": 1750171127078,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -763,6 +763,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00014052091470784087",
             "extra": "mean: 18.266935098037663 msec\nrounds: 51"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "fbc5e35f0813119e0a02dc53a0a0c385ae50cbd9",
+          "message": "fix: Remove distance table from sdist",
+          "timestamp": "2025-06-17T23:37:09+09:00",
+          "tree_id": "8d6adc113f0c8aa617bd7cc63a2a527079510aea",
+          "url": "https://github.com/zurukumo/kago-utils/commit/fbc5e35f0813119e0a02dc53a0a0c385ae50cbd9"
+        },
+        "date": 1750171126723,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 54.682865744403244,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00006292018895567808",
+            "extra": "mean: 18.28726396078372 msec\nrounds: 51"
           }
         ]
       }
