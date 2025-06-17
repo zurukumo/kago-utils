@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1750171127078,
+  "lastUpdate": 1750175350403,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -794,6 +794,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00006292018895567808",
             "extra": "mean: 18.28726396078372 msec\nrounds: 51"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "distinct": true,
+          "id": "5275f3e3adee63f7d0a867ffa3303e44bc1ca470",
+          "message": "fix: Correct timing logic for opening kan dora",
+          "timestamp": "2025-06-16T23:40:22+09:00",
+          "tree_id": "5489a749ee72fcfb99a4fc2d76828d2bc0b6d907",
+          "url": "https://github.com/zurukumo/kago-utils/commit/5275f3e3adee63f7d0a867ffa3303e44bc1ca470"
+        },
+        "date": 1750175349460,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 55.00263384965544,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00005938390083579249",
+            "extra": "mean: 18.180947529411167 msec\nrounds: 51"
           }
         ]
       }
