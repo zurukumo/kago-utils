@@ -5,7 +5,7 @@ Mahjong library for Python.
 
 ## インストール
 ```sh
-pip install kago-utils
+pip install git+https://github.com/zurukumo/kago-utils.git
 ```
 
 ## 使い方
