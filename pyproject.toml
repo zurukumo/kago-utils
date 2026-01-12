@@ -27,3 +27,8 @@ Issues = "https://github.com/zurukumo/kago-utils/issues"
 version_scheme = "post-release"
 local_scheme = "no-local-version"
 
+[tool.setuptools.package-data]
+kago_utils = [
+  "resources/distance_tables/*.txt",
+]
+

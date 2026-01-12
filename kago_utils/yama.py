@@ -8,14 +8,22 @@ class Yama:
     rinshan_hais: list[Hai]
     dora_hyouji_hais: list[Hai]
     n_open_dora_hyouji_hais: int
+    pending_kan_dora_countdowns: list[int]
 
-    __slot__ = ("tsumo_hais", "rinshan_hais", "dora_hyouji_hais", "n_open_dora_hyouji_hais")
+    __slot__ = (
+        "tsumo_hais",
+        "rinshan_hais",
+        "dora_hyouji_hais",
+        "n_open_dora_hyouji_hais",
+        "pending_kan_dora_countdowns",
+    )
 
     def __init__(self) -> None:
         self.tsumo_hais = []
         self.rinshan_hais = []
         self.dora_hyouji_hais = []
         self.n_open_dora_hyouji_hais = 1
+        self.pending_kan_dora_countdowns = []
 
     def shuffle(self) -> list[Hai]:
         hais = [Hai(id) for id in range(136)]
@@ -28,6 +36,7 @@ class Yama:
         self.dora_hyouji_hais = hais[4:14]
         self.tsumo_hais = hais[14:136]
         self.n_open_dora_hyouji_hais = 1
+        self.pending_kan_dora_countdowns = []
 
     def tsumo(self) -> Hai:
         if len(self.tsumo_hais) + len(self.rinshan_hais) == 4:
@@ -40,6 +49,18 @@ class Yama:
             raise ValueError("There is no rinshan tsumo hai.")
 
         return self.rinshan_hais.pop()
+
+    def append_pending_kan_dora(self, countdown: int) -> None:
+        self.pending_kan_dora_countdowns.append(countdown)
+
+    def reduce_pending_kan_dora_countdowns(self, countdown: int) -> None:
+        new_pending_kan_dora_countdowns = []
+        for pending_countdown in self.pending_kan_dora_countdowns:
+            if pending_countdown > countdown:
+                new_pending_kan_dora_countdowns.append(pending_countdown - countdown)
+            else:
+                self.open_dora_hyouji_hai()
+        self.pending_kan_dora_countdowns = new_pending_kan_dora_countdowns
 
     def open_dora_hyouji_hai(self) -> None:
         self.n_open_dora_hyouji_hais += 1

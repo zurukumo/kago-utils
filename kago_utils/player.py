@@ -49,9 +49,8 @@ class Player:
         "last_added_hai",
         "is_riichi_completed",
         "is_right_after_riichi",
-        "is_right_after_pon",
         "is_right_after_chii",
-        "is_right_after_minkan",
+        "is_right_after_pon",
         "ippatsu_flg",
         "chankan_flg",
         "rinshankaihou_flg",
@@ -75,7 +74,6 @@ class Player:
         self.is_right_after_riichi = False
         self.is_right_after_chii = False
         self.is_right_after_pon = False
-        self.is_right_after_minkan = False
         self.ippatsu_flg = False
         self.chankan_flg = False
         self.rinshankaihou_flg = False
@@ -91,6 +89,7 @@ class Player:
         self.last_tsumo = hai
         self.rinshankaihou_flg = True
         self.game.reset_chankan_flg()
+        self.game.yama.reduce_pending_kan_dora_countdowns(1)
 
     def tsumoho(self) -> None:
         agari = AgariCalculator(game=self.game, player=self, is_daburon=False)
@@ -126,9 +125,7 @@ class Player:
             self.nagashi_mangan_flg = False
         self.is_right_after_chii = False
         self.is_right_after_pon = False
-        if self.is_right_after_minkan:
-            self.game.yama.open_dora_hyouji_hai()
-            self.is_right_after_minkan = False
+        self.game.yama.reduce_pending_kan_dora_countdowns(2)
 
     def chii(self, chii: Chii) -> None:
         for candidate in self.game.non_teban_action_resolver.chii_candidates[self.id]:
@@ -162,9 +159,7 @@ class Player:
                     self.juntehai -= kakan.added
                     self.last_added_hai = kakan.added
                     self.game.set_chankan_flg()
-                    if self.is_right_after_minkan:
-                        self.game.yama.open_dora_hyouji_hai()
-                    self.is_right_after_minkan = True
+                    self.game.yama.append_pending_kan_dora(2)
                     return
 
         raise ValueError("Invalid Kakan")
@@ -175,9 +170,7 @@ class Player:
             self.juntehai -= daiminkan.hais - daiminkan.stolen
             self.game.reset_ippatsu_flg()
             self.find_player_by_zaichi(daiminkan.from_who).nagashi_mangan_flg = False
-            if self.is_right_after_minkan:
-                self.game.yama.open_dora_hyouji_hai()
-            self.is_right_after_minkan = True
+            self.game.yama.append_pending_kan_dora(2)
             return
 
         raise ValueError("Invalid Daiminkan")
@@ -187,9 +180,6 @@ class Player:
             self.huuros.append(ankan)
             self.juntehai -= ankan.hais
             self.game.reset_ippatsu_flg()
-            if self.is_right_after_minkan:
-                self.game.yama.open_dora_hyouji_hai()
-                self.is_right_after_minkan = False
             self.game.yama.open_dora_hyouji_hai()
             return
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from kago_utils.ext._shanten import (
+from kago_utils.ext import (
     calculate_chiitoitsu_shanten,
     calculate_kokushimusou_shanten,
     calculate_regular_shanten,

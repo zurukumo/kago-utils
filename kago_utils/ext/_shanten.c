@@ -1,55 +1,112 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#define SUUHAI_TABLE_SIZE 1953125
-#define ZIHAI_TABLE_SIZE 78125
+#define SUUHAI_WIDTH 1953125 // 5^9
+#define ZIHAI_WIDTH 78125    // 5^7
 
-int suuhai_table[10][SUUHAI_TABLE_SIZE];
-int zihai_table[10][ZIHAI_TABLE_SIZE];
+static int *suuhai_table = NULL;
+static int *zihai_table = NULL;
 
-static int load_suuhai_table() {
-  FILE *fp = fopen("kago_utils/resources/distance_tables/suuhai_distance_table.txt", "r");
+static int parse_txt_into_table(const char *path, int *dest, size_t expected_count) {
+  FILE *fp = fopen(path, "rb");
   if (!fp) {
-    perror("fopen");
-    PyErr_SetString(PyExc_IOError, "Could not open suuhai table file");
-    return 0;
+    return -1;
   }
 
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < SUUHAI_TABLE_SIZE; ++j) {
-      if (fscanf(fp, "%d", &suuhai_table[i][j]) != 1) {
-        fclose(fp);
-        PyErr_SetString(PyExc_IOError, "Invalid suuhai table format");
-        return 0;
+  const size_t BUF_SIZE = 1 << 20; // 1 MiB
+  char *buf = (char *)malloc(BUF_SIZE);
+  if (!buf) {
+    fclose(fp);
+    return -2;
+  }
+
+  size_t count = 0;
+  int value = 0;
+  int in_number = 0;
+
+  for (;;) {
+    size_t n = fread(buf, 1, BUF_SIZE, fp);
+    if (n == 0)
+      break;
+    for (size_t i = 0; i < n; i++) {
+      char c = buf[i];
+      if (c >= '0' && c <= '9') {
+        in_number = 1;
+        value = c - '0';
+      } else {
+        if (in_number) {
+          if (count >= expected_count) {
+            free(buf);
+            fclose(fp);
+            return -3;
+          }
+          dest[count++] = value;
+          value = 0;
+          in_number = 0;
+        }
       }
     }
   }
 
+  if (in_number) {
+    if (count >= expected_count) {
+      free(buf);
+      fclose(fp);
+      return -3;
+    }
+    dest[count++] = value;
+  }
+
+  free(buf);
   fclose(fp);
-  return 1;
+  return (count == expected_count) ? 0 : -4;
 }
 
-static int load_zihai_table() {
-  FILE *fp = fopen("kago_utils/resources/distance_tables/zihai_distance_table.txt", "r");
-  if (!fp) {
-    perror("fopen");
-    PyErr_SetString(PyExc_IOError, "Could not open zihai table file");
-    return 0;
+static PyObject *init_tables_from_txt(PyObject *self, PyObject *args) {
+  const char *suuhai_path = NULL;
+  const char *zihai_path = NULL;
+  if (!PyArg_ParseTuple(args, "ss", &suuhai_path, &zihai_path)) {
+    return NULL;
   }
 
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < ZIHAI_TABLE_SIZE; ++j) {
-      if (fscanf(fp, "%d", &zihai_table[i][j]) != 1) {
-        fclose(fp);
-        PyErr_SetString(PyExc_IOError, "Invalid zihai table format");
-        return 0;
-      }
-    }
+  const size_t suuhai_count = (size_t)10 * (size_t)SUUHAI_WIDTH;
+  const size_t zihai_count = (size_t)10 * (size_t)ZIHAI_WIDTH;
+
+  if (suuhai_table) {
+    free(suuhai_table);
+    suuhai_table = NULL;
+  }
+  if (zihai_table) {
+    free(zihai_table);
+    zihai_table = NULL;
   }
 
-  fclose(fp);
-  return 1;
+  suuhai_table = (int *)malloc(suuhai_count * sizeof(int));
+  zihai_table = (int *)malloc(zihai_count * sizeof(int));
+  if (!suuhai_table || !zihai_table) {
+    free(suuhai_table);
+    free(zihai_table);
+    suuhai_table = NULL;
+    zihai_table = NULL;
+    PyErr_NoMemory();
+    return NULL;
+  }
+
+  int rc1 = parse_txt_into_table(suuhai_path, suuhai_table, suuhai_count);
+  int rc2 = parse_txt_into_table(zihai_path, zihai_table, zihai_count);
+  if (rc1 != 0 || rc2 != 0) {
+    free(suuhai_table);
+    free(zihai_table);
+    suuhai_table = NULL;
+    zihai_table = NULL;
+    PyErr_SetString(PyExc_ValueError, "Failed to load distance tables from text files");
+    return NULL;
+  }
+
+  Py_RETURN_NONE;
 }
 
 static int get_length_key(int length) {
@@ -62,13 +119,17 @@ static int get_length_key(int length) {
 
 static int get_pattern_key(const int *pattern, int len) {
   int k = 0;
-  for (int i = 0; i < len; ++i) {
+  for (int i = 0; i < len; i++) {
     k = k * 5 + pattern[i];
   }
   return k;
 }
 
 static PyObject *calculate_regular_shanten(PyObject *self, PyObject *args) {
+  if (!suuhai_table || !zihai_table) {
+    PyErr_SetString(PyExc_RuntimeError, "Distance tables not initialized");
+    return NULL;
+  }
   PyObject *counter_obj;
   if (!PyArg_ParseTuple(args, "O!", &PyList_Type, &counter_obj)) {
     return NULL;
@@ -80,19 +141,19 @@ static PyObject *calculate_regular_shanten(PyObject *self, PyObject *args) {
   int zihai_pattern[7] = {0};
   int total = 0;
 
-  for (int i = 0; i < 9; ++i) {
+  for (int i = 0; i < 9; i++) {
     manzu_pattern[i] = PyLong_AsLong(PyList_GetItem(counter_obj, i));
     total += manzu_pattern[i];
   }
-  for (int i = 0; i < 9; ++i) {
+  for (int i = 0; i < 9; i++) {
     pinzu_pattern[i] = PyLong_AsLong(PyList_GetItem(counter_obj, i + 9));
     total += pinzu_pattern[i];
   }
-  for (int i = 0; i < 9; ++i) {
+  for (int i = 0; i < 9; i++) {
     souzu_pattern[i] = PyLong_AsLong(PyList_GetItem(counter_obj, i + 18));
     total += souzu_pattern[i];
   }
-  for (int i = 0; i < 7; ++i) {
+  for (int i = 0; i < 7; i++) {
     zihai_pattern[i] = PyLong_AsLong(PyList_GetItem(counter_obj, i + 27));
     total += zihai_pattern[i];
   }
@@ -105,13 +166,13 @@ static PyObject *calculate_regular_shanten(PyObject *self, PyObject *args) {
 
   int min_shanten = 8;
 
-  for (int n_manzu_mentsu = 0; n_manzu_mentsu <= n_menstu; ++n_manzu_mentsu) {
-    for (int n_pinzu_mentsu = 0; n_pinzu_mentsu <= n_menstu - n_manzu_mentsu; ++n_pinzu_mentsu) {
-      for (int n_souzu_mentsu = 0; n_souzu_mentsu <= n_menstu - n_manzu_mentsu - n_pinzu_mentsu; ++n_souzu_mentsu) {
+  for (int n_manzu_mentsu = 0; n_manzu_mentsu <= n_menstu; n_manzu_mentsu++) {
+    for (int n_pinzu_mentsu = 0; n_pinzu_mentsu <= n_menstu - n_manzu_mentsu; n_pinzu_mentsu++) {
+      for (int n_souzu_mentsu = 0; n_souzu_mentsu <= n_menstu - n_manzu_mentsu - n_pinzu_mentsu; n_souzu_mentsu++) {
         int n_zihai_mentsu = n_menstu - n_manzu_mentsu - n_pinzu_mentsu - n_souzu_mentsu;
-        for (int n_manzu_jantou = 0; n_manzu_jantou <= 1; ++n_manzu_jantou) {
-          for (int n_pinzu_jantou = 0; n_pinzu_jantou <= 1 - n_manzu_jantou; ++n_pinzu_jantou) {
-            for (int n_souzu_jantou = 0; n_souzu_jantou <= 1 - n_manzu_jantou - n_pinzu_jantou; ++n_souzu_jantou) {
+        for (int n_manzu_jantou = 0; n_manzu_jantou <= 1; n_manzu_jantou++) {
+          for (int n_pinzu_jantou = 0; n_pinzu_jantou <= 1 - n_manzu_jantou; n_pinzu_jantou++) {
+            for (int n_souzu_jantou = 0; n_souzu_jantou <= 1 - n_manzu_jantou - n_pinzu_jantou; n_souzu_jantou++) {
               int n_zihai_jantou = 1 - n_manzu_jantou - n_pinzu_jantou - n_souzu_jantou;
 
               int manzu_length = n_manzu_mentsu * 3 + n_manzu_jantou * 2;
@@ -119,14 +180,17 @@ static PyObject *calculate_regular_shanten(PyObject *self, PyObject *args) {
               int souzu_length = n_souzu_mentsu * 3 + n_souzu_jantou * 2;
               int zihai_length = n_zihai_mentsu * 3 + n_zihai_jantou * 2;
 
-              int manzu_distance =
-                  manzu_length == 0 ? 0 : suuhai_table[get_length_key(manzu_length)][manzu_pattern_key];
-              int pinzu_distance =
-                  pinzu_length == 0 ? 0 : suuhai_table[get_length_key(pinzu_length)][pinzu_pattern_key];
-              int souzu_distance =
-                  souzu_length == 0 ? 0 : suuhai_table[get_length_key(souzu_length)][souzu_pattern_key];
+              int manzu_distance = manzu_length == 0
+                                       ? 0
+                                       : suuhai_table[get_length_key(manzu_length) * SUUHAI_WIDTH + manzu_pattern_key];
+              int pinzu_distance = pinzu_length == 0
+                                       ? 0
+                                       : suuhai_table[get_length_key(pinzu_length) * SUUHAI_WIDTH + pinzu_pattern_key];
+              int souzu_distance = souzu_length == 0
+                                       ? 0
+                                       : suuhai_table[get_length_key(souzu_length) * SUUHAI_WIDTH + souzu_pattern_key];
               int zihai_distance =
-                  zihai_length == 0 ? 0 : zihai_table[get_length_key(zihai_length)][zihai_pattern_key];
+                  zihai_length == 0 ? 0 : zihai_table[get_length_key(zihai_length) * ZIHAI_WIDTH + zihai_pattern_key];
 
               int shanten = manzu_distance + pinzu_distance + souzu_distance + zihai_distance - 1;
               if (shanten < min_shanten)
@@ -148,7 +212,7 @@ static PyObject *calculate_chiitoitsu_shanten(PyObject *self, PyObject *args) {
   }
 
   int counter[34], total = 0;
-  for (int i = 0; i < 34; ++i) {
+  for (int i = 0; i < 34; i++) {
     counter[i] = PyLong_AsLong(PyList_GetItem(counter_obj, i));
     total += counter[i];
   }
@@ -156,7 +220,7 @@ static PyObject *calculate_chiitoitsu_shanten(PyObject *self, PyObject *args) {
     return PyLong_FromLong(9999);
 
   int n_toitsu = 0, n_unique_hai = 0;
-  for (int i = 0; i < 34; ++i) {
+  for (int i = 0; i < 34; i++) {
     if (counter[i] >= 2)
       n_toitsu++;
     if (counter[i] >= 1)
@@ -174,7 +238,7 @@ static PyObject *calculate_kokushimusou_shanten(PyObject *self, PyObject *args) 
   }
 
   int counter[34], total = 0;
-  for (int i = 0; i < 34; ++i) {
+  for (int i = 0; i < 34; i++) {
     counter[i] = PyLong_AsLong(PyList_GetItem(counter_obj, i));
     total += counter[i];
   }
@@ -189,7 +253,7 @@ static PyObject *calculate_kokushimusou_shanten(PyObject *self, PyObject *args) 
   };
   int n_yaochu_hai = 0;
   bool has_toitsu = false;
-  for (int i = 0; i < 13; ++i) {
+  for (int i = 0; i < 13; i++) {
     int idx = yaochu_hais[i];
     if (counter[idx] >= 1)
       n_yaochu_hai++;
@@ -202,6 +266,7 @@ static PyObject *calculate_kokushimusou_shanten(PyObject *self, PyObject *args) 
 }
 
 static PyMethodDef ShantenMethods[] = {
+    {"init_tables_from_txt", init_tables_from_txt, METH_VARARGS, "Initialize distance tables from .txt files"},
     {"calculate_regular_shanten", calculate_regular_shanten, METH_VARARGS, "Calculate regular shanten number"},
     {"calculate_chiitoitsu_shanten", calculate_chiitoitsu_shanten, METH_VARARGS, "Calculate chiitoitsu shanten"},
     {"calculate_kokushimusou_shanten", calculate_kokushimusou_shanten, METH_VARARGS, "Calculate kokushimusou shanten"},
@@ -209,10 +274,4 @@ static PyMethodDef ShantenMethods[] = {
 
 static struct PyModuleDef shantenmodule = {PyModuleDef_HEAD_INIT, "_shanten", NULL, -1, ShantenMethods};
 
-PyMODINIT_FUNC PyInit__shanten(void) {
-  if (!load_suuhai_table() || !load_zihai_table()) {
-    return NULL;
-  }
-
-  return PyModule_Create(&shantenmodule);
-}
+PyMODINIT_FUNC PyInit__shanten(void) { return PyModule_Create(&shantenmodule); }
