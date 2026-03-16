@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773678257382,
+  "lastUpdate": 1773678561780,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -945,6 +945,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00030681572170111445",
             "extra": "mean: 18.159757127273224 msec\nrounds: 55"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zurukumo@gmail.com",
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4f9d1ab5f36c229344650a4c8474f858fa095133",
+          "message": "Merge pull request #47 from zurukumo/feature/publish-for-windows-and-macos\n\nPyPIクロスプラットフォーム対応",
+          "timestamp": "2026-03-17T01:28:01+09:00",
+          "tree_id": "089459a75c0fd0fcb28a8333694cfc20640a0321",
+          "url": "https://github.com/zurukumo/kago-utils/commit/4f9d1ab5f36c229344650a4c8474f858fa095133"
+        },
+        "date": 1773678560683,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 58.573562161038744,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00011627811124252363",
+            "extra": "mean: 17.07254882758638 msec\nrounds: 58"
           }
         ]
       }
