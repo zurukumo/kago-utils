@@ -32,3 +32,6 @@ kago_utils = [
   "resources/distance_tables/*.txt",
 ]
 
+[tool.cibuildwheel]
+build = "cp312-*"
+
