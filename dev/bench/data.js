@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768233284930,
+  "lastUpdate": 1773678257382,
   "repoUrl": "https://github.com/zurukumo/kago-utils",
   "entries": {
     "Benchmark": [
@@ -918,6 +918,33 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.0001400280357876658",
             "extra": "mean: 17.922779563632087 msec\nrounds: 55"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "committer": {
+            "name": "zurukumo",
+            "username": "zurukumo"
+          },
+          "id": "f78d28aa51221da3db6b1ae5c6f66c92e14fb8c2",
+          "message": "PyPIクロスプラットフォーム対応",
+          "timestamp": "2026-01-12T15:53:50Z",
+          "url": "https://github.com/zurukumo/kago-utils/pull/47/commits/f78d28aa51221da3db6b1ae5c6f66c92e14fb8c2"
+        },
+        "date": 1773678257069,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/test_shanten.py::test_calculate_shanten_benchmark",
+            "value": 55.06681576143716,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00030681572170111445",
+            "extra": "mean: 18.159757127273224 msec\nrounds: 55"
           }
         ]
       }
